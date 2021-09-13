@@ -1,6 +1,6 @@
 # LEARNNING LPIC-1 101-500
 
-![download-linux-1024x576](https://user-images.githubusercontent.com/62715900/120332929-950dfd80-c2c5-11eb-9629-094d5bd209ac.png)
+![101-500_ Linux Administrator - 101 (LPIC-1 101)](https://user-images.githubusercontent.com/62715900/133132076-c84f0bad-5475-4c3a-9cb4-c9403234778c.png)
 
 >This project aims to help students or professionals to learn the main concepts of GNU \ Linux and free software\
 Some GNU \ Linux distributions like Debian and RPM will be covered\
