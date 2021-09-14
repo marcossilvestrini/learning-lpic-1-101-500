@@ -92,15 +92,21 @@ Installation and configuration of some packages will also be covered\
 ##### lspci - list all PCI devices
 
 ```sh
-#list all devices devices connected
+
+#get some device for examples
+id=`lspci | cut -c 1-8 | tail -n 1`
+
+#show all devices connected
 lspci
 
-#show kernel drivers
+#show detail for specific device
+lspci -s $id -v
+
+#show kernel drivers for all devices connected
 lspci -k
 
-#example list detail for specific device
-device=`lspci | cut -c 1-8 | tail -n 1`| cut -c 1-8
-lspci -s $device -v
+#show kernel driver for specific device
+lspci -s $id -k
 ```
 
 ##### lsusb - list USB devices
@@ -110,12 +116,32 @@ lspci -s $device -v
 sudo apt-get install usbutils
 sudo yum install usbutils
 
-#list all usb devices connected
+#get some device for examples
+id=`lsusb | cut -c 24-32 | head -n 1`
+
+#show all usb devices connected
 lsusb
+
+#show USB device hierarchy as a tree
+lsusb -t
+
+#show detail for specific device
+lsusb -vd $id
 ```
 
-- modprobe
-- lsmod
+##### lsmod -  Show the status of modules in the Linux Kernel
+
+```sh
+#show all modules
+lsmod
+```
+
+#### modprobe - Add and remove modules from the Linux Kernel
+
+```sh
+#remove module
+modprobe -r snd-hda-intel
+```
 
 ### 101.2 Boot the system
 
