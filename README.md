@@ -71,6 +71,7 @@ Installation and configuration of some packages will also be covered\
 - [DistroTest](https://distrotest.net/index.php)
 - [Katacoda](https://www.katacoda.com/)
 - [PCI ID Repository](https://pci-ids.ucw.cz)
+- [USB ID Repository](http://www.linux-usb.org/usb-ids.html)
 - [LPIC-1 101-500 Objectives](https://www.lpi.org/our-certifications/exam-101-objectives)
 - [Learning Materials LPIC-1 101-500](https://learning.lpi.org/en/learning-materials/101-500/)
 - [Moc Exam By ITexams](https://www.itexams.com/exam/101-500)
@@ -83,9 +84,17 @@ Installation and configuration of some packages will also be covered\
 
 - /sys/
 - /proc/
+- /proc/cpuinfo
+- /proc/interrupts
+- /proc/ioports
+- /proc/dma
 - /dev/
 - /usr/share/hwdata/usb.ids
 - /usr/share/hwdata/pci.ids
+- /etc/modprobe.conf
+- /etc/modprobe.d/<module_name>.conf
+- /etc/modprobe.d/blacklist.conf
+- /etc/udev/rules.d/
 
 #### Important Commands\Programs of topic 101.1
 
@@ -139,27 +148,79 @@ lsmod
 #### modprobe - Add and remove modules from the Linux Kernel
 
 ```sh
-#remove module
+#unload module
 modprobe -r snd-hda-intel
+```
+
+##### modinfo - Show information about a Linux Kernel module
+
+```sh
+#show all info
+modinfo video
+
+#show resume info
+modinfo -p video
 ```
 
 ### 101.2 Boot the system
 
 #### Important Files of topic 101.2
 
-- foo
+- /etc/default/grub
+- /boot/grub/grub.cfg
+- /proc/cmdline
+- /etc/fstab
+- /var/log/
+- /var/log/journal/
 
 #### Important Commands\Programs of topic 101.2
 
-- dmesg
-- journalctl
+##### grub-mkconfig - generate a GRUB configuration file
+
+```sh
+#load new grub settings in file /etc/default/grub
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+##### dmesg - print or control the kernel ring buffer
+
+```sh
+#show all messages
+sudo dmesg
+
+#enable  human-readable  output.
+sudo dmesg -H
+
+#clear all messages
+sudo dmesg --clear
+```
+
+##### journalctl - Query the systemd journal
+
+```sh
+#show all mesages
+sudo journalctl
+
+#show messages for actual boot
+sudo journalctl -b 0
+
+#show messages from the previous initialization
+sudo journalctl -b -1
+
+#show the messages from the initialization before that and so on
+sudo journalctl -b -2
+```
+
+#### Cited subjects in topic 101.2
+
 - BIOS
 - UEFI
+- MBR
 - bootloader
 - kernel
+- SysVinit
 - initramfs
 - init
-- SysVinit
 - systemd
 
 ### 101.3 Change runlevels / boot targets and shutdown or reboot system
@@ -209,8 +270,6 @@ modprobe -r snd-hda-intel
 - menu.lst
 - grub.cfg
 - grub.conf
-
-#### Important Commands
 
 #### Import Commands\Programs of topic 102.2
 
