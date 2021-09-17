@@ -231,15 +231,105 @@ sudo journalctl -b -2
 - /etc/init.d/
 - /etc/systemd/
 - /usr/lib/systemd/
+- /run/utmp
+- /etc/systemd/system/default.target
+- /etc/systemd/logind.conf
+- /etc/shutdown.allow
 
 #### Import Commands\Programs of topic 101.3
 
+##### - Change SysV runlevel
+
+```sh
+#change level mode for 1
+sudo telinit 1
+
+#reload deamon configuration - /etc/inittab
+sudo telinit q
+```
+
+##### runlevel - Print previous and current SysV runlevel
+
+```sh
+sudo runlevel
+```
+
+##### - systemctl
+
+```sh
+#Starts unit.
+systemctl start apache2.service
+
+#Stops unit.
+systemctl stop apache2.service
+
+#Restarts unit.
+systemctl restart apache2.service
+
+#Shows the state of unit, including if it is running or not.
+systemctl status apache2.service
+
+#Shows active if unit is running or inactive otherwise.
+systemctl is-active apache2.service
+
+#Enables unit, that is, unit will load during system initialization.
+systemctl enable apache2.service
+
+#unit will not start with the system.
+systemctl disable apache2.service
+
+#Verifies if unit starts with the system. The answer is stored in the variable $?.
+#The value 0 indicates that unit  starts with the system and the value 1 indicates
+#that unit does not starts with the system.
+systemctl is-enabled apache2.service
+
+#alter default runlevel \ default target
+systemctl set-default multi-user.target
+
+#determine what your system’s default boot target
+systemctl get-default
+
+#list all units available
+systemctl list-unit-files
+
+#list units available now
+systemctl list-units
+
+#list service units only
+systemctl list-unit-files --type service
+
+#shutdown system
+sudo systemctl poweroff
+
+#reboot system
+sudo systemctl reboot
+```
+
+##### shutdown - Halt, power-off or reboot the machine
+
+```sh
+#reboot system
+shutdown -r
+shutdown -r now
+```
+
+##### wall - write a message to all users
+
+```sh
+#send message for all users
+wall "Helo guys!!!"
+
+#use file with messages
+wall < wall-message.txt
+```
+
+#### Cited subjects in topic 101.3
+
+- SysV
+- UpStart
 - init
-- shutdown
-- telinit
 - systemd
-- systemctl
-- wall
+
 
 ## Topic 102: Linux Installation and Package Management
 
