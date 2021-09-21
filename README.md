@@ -330,7 +330,6 @@ wall < wall-message.txt
 - init
 - systemd
 
-
 ## Topic 102: Linux Installation and Package Management
 
 ### 102.1 Design hard disk layout
@@ -341,6 +340,8 @@ wall < wall-message.txt
 - /var filesystem
 - /home filesystem
 - /boot filesystem
+- /var/www/html
+- /var/lib/mysql
 
 #### Import Commands\Programs of topic 102.1
 
