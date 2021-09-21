@@ -1,0 +1,37 @@
+Guided Exercises
+
+1 - On Linux systems, where are the files for the GRUB bootloader stored?
+R:
+Em /boot/grub.
+
+2 - Where should the boot partition end to ensure that a PC will always be able to load the kernel?
+R:
+Antes do cilindro 1024.
+
+3 - Where is the EFI partition usually mounted?
+R:
+Em /boot/efi.
+
+4 - When manually mounting a filesystem, under which directory should it usually be mounted?
+R:
+Em /mnt. Porém, isso não é obrigatório. Podemos montar uma partição no diretório que quisermos.
+
+Explorational Exercises
+
+1 - What is the smallest unit inside of a Volume Group?
+R:
+Os Grupos de Volumes são subdivididos em extensões.
+
+2 - How is the size of a Logical Volume defined?
+R:
+Pelo tamanho das extensões físicas multiplicado pelo número de extensões no volume.
+
+3 - On a disk formatted with the MBR partitioning scheme, which is the ID of the EFI System Partition?
+R:
+A ID é 0xEF.
+
+4 - Besides swap partitions, how can you quickly increase swap space on a Linux system?
+R:
+Podem ser usados arquivos de troca.
+
+

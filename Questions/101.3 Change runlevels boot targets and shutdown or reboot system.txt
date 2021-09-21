@@ -1,0 +1,46 @@
+Guided Exercises
+
+1 - How could the telinit command be used to reboot the system?
+
+R:
+O comando telinit 6 alterna para o nível de execução 6, ou seja, reinicia o sistema.
+
+2 - What will happen to the services related to the file /etc/rc1.d/K90network when the system enters runlevel 1?
+
+R:
+Como mostra a letra K no início do nome do arquivo, os serviços relacionados serão interrompidos.
+
+3 - Using command systemctl, how could a user verify if the unit sshd.service is running?
+
+R:
+Com o comando systemctl status sshd.service ou systemctl is-active sshd.service.
+
+4 - In a systemd based system, what command must be executed to enable activation of the unit sshd.service
+during system initialization?
+
+R:
+O comando systemctl enable sshd.service, executado pelo root.
+
+Explorational Exercises
+
+1 - In a SysV based system, suppose the default runlevel defined in /etc/inittab is 3,
+but the system always starts in runlevel 1. What is the probable cause for that?
+
+R:
+Os parâmetros 1 ou S podem estar presentes na lista de parâmetros do kernel.
+
+2 - Although the file /sbin/init can be found in systemd based systems,
+it is only a symbolic link to another executable file. In such systems,
+what is the file pointed by /sbin/init?
+
+R:
+O binário principal do systemd: /lib/systemd/systemd.
+
+3 - How can the default system target be verified in a systemd based system?
+
+R:
+O link simbólico /etc/systemd/system/default.target aponta para o arquivo da unidade definido como destino padrão.
+Também é possível usar o comando systemctl get-default.
+
+4 - How can a system reboot scheduled with the shutdown command be canceled?
+Usaríamos o comando shutdown -c
