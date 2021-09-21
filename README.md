@@ -343,10 +343,6 @@ wall < wall-message.txt
 - /var/www/html
 - /var/lib/mysql
 
-#### Import Commands\Programs of topic 102.1
-
--foo
-
 #### Cited subjects in topic 102.1
 
 - EFI System Partition (ESP)
@@ -358,18 +354,40 @@ wall < wall-message.txt
 
 #### Important Files of topic 102.2
 
-- menu.lst
-- grub.cfg
-- grub.conf
+- /boot/grub/grub.cfg
+- /boot/grub/menu.lst
+- /boot/grub/i386-pc
+- /boot/grub/locale
+- /boot/grub/fonts
+- /etc/default/grub
+- /boot/efi
+- /etc/grub.d
 
 #### Import Commands\Programs of topic 102.2
 
-- grub-install
+- fdisk - manipulate disk partition table
+
+```sh
+#show all partitions in primary device
+sudo fdisk -l /dev/sda
+```
+
+- Find UUID of block device \ filesystem
+
+```sh
+ls -l /dev/disk/by-uuid/
+```
+
+
+- grub-install - install GRUB to a device
+- update-grub, update-grub2 - stub for grub-mkconfig
 - grub-mkconfig
 
 #### Cited subjects in topic 102.2
 
 - MBR
+- GRUB 2
+- GRUB Legacy
 
 ### 102.3 Manage shared libraries
 
