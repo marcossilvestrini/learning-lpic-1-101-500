@@ -72,6 +72,7 @@ Installation and configuration of some packages will also be covered\
 - [Katacoda](https://www.katacoda.com/)
 - [PCI ID Repository](https://pci-ids.ucw.cz)
 - [USB ID Repository](http://www.linux-usb.org/usb-ids.html)
+- [Grub Boot](https://docs.fedoraproject.org/en-US/quick-docs/bootloading-with-grub2/)
 - [LPIC-1 101-500 Objectives](https://www.lpi.org/our-certifications/exam-101-objectives)
 - [Learning Materials LPIC-1 101-500](https://learning.lpi.org/en/learning-materials/101-500/)
 - [Moc Exam By ITexams](https://www.itexams.com/exam/101-500)
@@ -222,6 +223,16 @@ sudo journalctl -b -2
 - initramfs
 - init
 - systemd
+
+#### Using the GRUB2 boot prompt(panic kernel case)
+
+In this case, I use filesystem partition with LVM\
+Partition Map:
+
+
+```sh
+
+```
 
 ### 101.3 Change runlevels / boot targets and shutdown or reboot system
 
