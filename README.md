@@ -227,15 +227,67 @@ sudo journalctl -b -2
 #### Using the GRUB2 boot prompt(panic kernel case)
 
 In this case, I use filesystem partition with LVM\
-
-Partition Map:\
+Partition Map:
 
 ![fs_map](https://user-images.githubusercontent.com/62715900/134416632-30661eff-6a50-4ff9-8da7-98b3355f96e3.png)
 
 After you boot the machine and enter in grub shell(press c after power on machine)...
 
-```sh
+##### Load the XFS and LVM modules
 
+```sh
+grub> insmod xfs
+grub> insmod lvm
+```
+
+##### List the drives which GRUB2 sees:
+
+```sh
+grub> ls
+```
+![image](https://user-images.githubusercontent.com/62715900/134421176-366c443e-8bfa-49df-83db-daa7f78a7a09.png)
+
+
+##### Examine the output to understand the partition table of the /dev/sda device.The following example shows a DOS partition table with three partitions:
+
+```sh
+grub> ls -l
+```
+red: LVM partition table\
+green: DOS partition table\
+![image](https://user-images.githubusercontent.com/62715900/134421568-92bf41dd-7530-416c-acd8-1250e3d169b3.png)
+
+##### Probe each partition of the drive and locate your vmlinuz and initramfs files.
+
+```sh
+grub> ls (hd0,1)/
+```
+![image](https://user-images.githubusercontent.com/62715900/134422418-08805d84-727f-49cc-835a-8c79d0b61b21.png)
+
+##### Set the root partition
+
+```sh
+grub> set root=(hd0,1)
+```
+This command tells the bootloader, that the root partition is the first partition on the first drive. This would correspond to the /dev/sda1 device.
+
+##### Set the desired kernel(set root filesystem in lvm mapper).
+
+```sh
+grub> linux (hd0,1)/vmlinuz-VERSION_YOUR_KERNEL root=/dev/mapper/debian--vg-root
+```
+
+##### Set the desired initrd
+
+```sh
+grub> initrd (hd0,1)/initramfs-VERSION_YOUR_KERNEL.img 
+#or
+grub> initrd (hd0,1)/initrd-VERSION_YOUR_KERNEL.img
+```
+
+##### Boot with the selected settings.
+```sh
+grub> boot
 ```
 
 ### 101.3 Change runlevels / boot targets and shutdown or reboot system
