@@ -226,14 +226,6 @@ sudo journalctl -b -2
 
 #### Using the GRUB2 boot prompt(panic kernel case)
 
-In this case, I use filesystem partition with LVM\
-Partition Map:
-
-
-```sh
-
-```
-
 ### 101.3 Change runlevels / boot targets and shutdown or reboot system
 
 #### Important Files of topic 101.3
