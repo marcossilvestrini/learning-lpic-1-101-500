@@ -227,9 +227,11 @@ sudo journalctl -b -2
 #### Using the GRUB2 boot prompt(panic kernel case)
 
 In this case, I use filesystem partition with LVM\
-Partition Map:
 
+Partition Map:\
+![fs_map](https://user-images.githubusercontent.com/62715900/134416632-30661eff-6a50-4ff9-8da7-98b3355f96e3.png)
 
+After you boot the machine and enter in grub shell(press c after power on machine)
 ```sh
 
 ```
