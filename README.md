@@ -73,6 +73,7 @@ Installation and configuration of some packages will also be covered\
 - [PCI ID Repository](https://pci-ids.ucw.cz)
 - [USB ID Repository](http://www.linux-usb.org/usb-ids.html)
 - [Grub Boot](https://docs.fedoraproject.org/en-US/quick-docs/bootloading-with-grub2/)
+- [Force Kernel Panic](https://www.ibm.com/support/pages/forcing-fake-kernel-panic-testing)
 - [LPIC-1 101-500 Objectives](https://www.lpi.org/our-certifications/exam-101-objectives)
 - [Learning Materials LPIC-1 101-500](https://learning.lpi.org/en/learning-materials/101-500/)
 - [Moc Exam By ITexams](https://www.itexams.com/exam/101-500)
@@ -224,7 +225,7 @@ sudo journalctl -b -2
 - init
 - systemd
 
-#### Using the GRUB2 boot prompt(panic kernel case)
+#### Using the GRUB2 boot prompt(kernel panic case)
 
 In this case, I use filesystem partition with LVM\
 Partition Map:
@@ -245,14 +246,15 @@ grub> insmod lvm
 ```sh
 grub> ls
 ```
-![image](https://user-images.githubusercontent.com/62715900/134421176-366c443e-8bfa-49df-83db-daa7f78a7a09.png)
 
+![image](https://user-images.githubusercontent.com/62715900/134421176-366c443e-8bfa-49df-83db-daa7f78a7a09.png)
 
 ##### Examine the output to understand the partition table of the /dev/sda device.The following example shows a DOS partition table with three partitions:
 
 ```sh
 grub> ls -l
 ```
+
 red: LVM partition table\
 green: DOS partition table\
 ![image](https://user-images.githubusercontent.com/62715900/134421568-92bf41dd-7530-416c-acd8-1250e3d169b3.png)
@@ -262,6 +264,7 @@ green: DOS partition table\
 ```sh
 grub> ls (hd0,1)/
 ```
+
 ![image](https://user-images.githubusercontent.com/62715900/134422418-08805d84-727f-49cc-835a-8c79d0b61b21.png)
 
 ##### Set the root partition
@@ -269,6 +272,7 @@ grub> ls (hd0,1)/
 ```sh
 grub> set root=(hd0,1)
 ```
+
 This command tells the bootloader, that the root partition is the first partition on the first drive. This would correspond to the /dev/sda1 device.
 
 ##### Set the desired kernel(set root filesystem in lvm mapper).
@@ -280,8 +284,9 @@ grub> linux (hd0,1)/vmlinuz-VERSION_YOUR_KERNEL root=/dev/mapper/debian--vg-root
 ##### Set the desired initrd
 
 ```sh
-grub> initrd (hd0,1)/initramfs-VERSION_YOUR_KERNEL.img 
+grub> initrd (hd0,1)/initramfs-VERSION_YOUR_KERNEL.img
 #or
+
 grub> initrd (hd0,1)/initrd-VERSION_YOUR_KERNEL.img
 ```
 
@@ -445,7 +450,6 @@ sudo fdisk -l /dev/sda
 ls -l /dev/disk/by-uuid/
 ```
 
-
 - grub-install - install GRUB to a device
 - update-grub, update-grub2 - stub for grub-mkconfig
 - grub-mkconfig
@@ -460,13 +464,40 @@ ls -l /dev/disk/by-uuid/
 
 #### #### Important Files of topic 102.3
 
+/lib
+/lib32
+/lib64
+/usr/lib
+/usr/local/lib
 /etc/ld.so.conf
-LD_LIBRARY_PATH
+ld.so,ld-linux.so
+/etc/ld.so.cache
 
 #### Import Commands\Programs of topic 102.3
 
-- ldd
-- ldconfig
+##### ldconfig - configure dynamic linker run-time bindings
+
+```sh
+#show version, path name and linkers
+sudo ldconfig -v
+
+#print cache
+sudo ldconfig -p
+```
+
+##### ldd - print shared object dependencies
+
+```sh
+#show all dependencies
+ldd /usr/bin/git
+
+#show unused direct dependencies
+ldd -u /usr/bin/git
+```
+
+#### Cited subjects in topic 102.3
+
+LD_LIBRARY_PATH
 
 ### 102.4 Use Debian package management
 
