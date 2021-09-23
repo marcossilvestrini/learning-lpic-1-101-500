@@ -1,0 +1,55 @@
+Guided Exercises
+
+1 - What is the command to install a package named package.deb using dpkg?
+R:
+dpkg -i package.deb
+
+2 - Using dpkg-query, find which package contains a file named 7zr.1.gz.
+R:
+dpkg-query -S 7zr.1.gz
+
+3 - Can you remove a package called unzip from the system using dpkg -r unzip if the package file-roller depends on it?
+If not, what would be the correct way to do it?
+R:
+Não. O dpkg não resolve dependências e não permite remover um pacote se outro pacote instalado depender dele.
+Neste exemplo, podemos primeiro remover file-roller (pressupondo que nada depende dele)
+e em seguida remover unzip, ou remover os dois ao mesmo tempo com
+dpkg -r unzip file-roller
+
+4 - Using apt-file, how can you find out which package contains the file unrar?
+R:
+apt-file search /usr/bin/unrar
+
+5 - Using apt-cache, what is the command to show information for the package gimp?
+R:
+apt-cache show gimp
+
+Explorational Exercises
+
+1 - Consider a repository with Debian source packages for the xenial distribution,
+hosted at http://us.archive.ubuntu.com/ubuntu/ and with packages for the universe component.
+What would be the corresponding line to be added to /etc/apt/sources.list?
+R:
+deb-src http://us.archive.ubuntu.com/ubuntu/ xenial universe
+
+2 - While compiling a program, you come across an error message complaining that the
+header file zzip-io.h is not present in your system. How can you find out with package provides that file?
+R:
+apt-file search zzip-io.h
+
+3 - How can you ignore a dependency warning and remove a package using dpkg,
+even if there are packages that depend on it in the system?
+R:
+O parâmetro --force poderia ser usado, mas isso jamais deve ser feito
+a menos que se saiba exatamente o que se está fazendo, já que existe um risco enorme de que
+o sistema seja deixado em um estado inconsistente ou “quebrado”.
+
+4 - How can you get more information about a package called midori using apt?
+R:
+apt-cache show midori
+
+5 - Before installing or updating packages with apt, which command should be used
+to ensure that the package index is up-to-date?
+R:
+apt-get update deve ser usado. Ele baixa os índices mais recentes do pacote dos repositórios descritos no arquivo
+/etc/apt/sources.list ou no diretório /etc/apt/sources.list.d/.

@@ -73,6 +73,7 @@ Installation and configuration of some packages will also be covered\
 - [PCI ID Repository](https://pci-ids.ucw.cz)
 - [USB ID Repository](http://www.linux-usb.org/usb-ids.html)
 - [Grub Boot](https://docs.fedoraproject.org/en-US/quick-docs/bootloading-with-grub2/)
+- [Debian Free Software Guidelines](https://www.debian.org/social_contract#guidelines)
 - [Force Kernel Panic](https://www.ibm.com/support/pages/forcing-fake-kernel-panic-testing)
 - [LPIC-1 101-500 Objectives](https://www.lpi.org/our-certifications/exam-101-objectives)
 - [Learning Materials LPIC-1 101-500](https://learning.lpi.org/en/learning-materials/101-500/)
@@ -504,13 +505,101 @@ LD_LIBRARY_PATH
 #### Important Files of topic 102.4
 
 - /etc/apt/sources.list
+- /etc/apt/sources.list.d
+- /var/cache/apt/archives
+- /var/cache/apt/archives/partial/
 
 #### Import Commands\Programs of topic 102.4
 
-- dpkg
-- dpkg-reconfigure
-- apt-get
-- apt-cache
+##### dpkg - package manager for Debian
+
+```sh
+#install package
+sudo dpkg -i PACKAGENAME
+
+#remove package
+sudo dpkg -r PACKAGENAME
+
+#remove package and configuration files
+sudo dpkg -P PACKAGENAME
+
+#show all instaled packages
+dpkg --get-selections
+
+#show specific instaled package
+dpkg -L PACKAGENAME
+```
+
+##### dpkg-query - a tool to query the dpkg database
+
+```sh
+#Finding Out Which Package Owns a Specific File
+dpkg-query -S /usr/share/man/man8/update-java-alternatives.8.gz
+
+#show all packages
+dpkg-query -l
+```
+
+##### dpkg-reconfigure
+
+```sh
+#Reconfiguring Installed Packages
+sudo dpkg-reconfigure PACKAGENAME
+```
+
+##### apt-get
+
+```sh
+#update index package
+sudo apt-get update
+
+#install package
+sudo apt-get install git
+
+#remove package
+sudo apt-get remove git
+
+#remove package and configuration files
+sudo apt-get purge git
+sudo apt-get remove --purge git
+
+#fix broken dependences
+apt-get install -f
+
+#update all packages
+sudo apt-get update
+sudo apt-get upgrade
+
+#update specific package
+sudo apt-get update
+sudo apt-get upgrade PACKAGENAME
+
+#clear local package cache
+apt-get clean
+```
+
+##### apt-cache - query the APT cache
+
+```sh
+#find specific package
+apt-cache search ansible
+
+#inspect specific package
+apt-cache show ansible
+```
+
+##### apt-file
+
+```sh
+#update cache
+apt-file update
+
+#show content of package
+apt-file list git
+
+#find file in all instaled packages
+apt-file search libpthread.so.0
+```
 
 ### 102.5 Use RPM and YUM package management
 
