@@ -74,6 +74,7 @@ Installation and configuration of some packages will also be covered\
 - [USB ID Repository](http://www.linux-usb.org/usb-ids.html)
 - [Grub Boot](https://docs.fedoraproject.org/en-US/quick-docs/bootloading-with-grub2/)
 - [Debian Free Software Guidelines](https://www.debian.org/social_contract#guidelines)
+- [Download Packages](https://pkgs.org/)
 - [Force Kernel Panic](https://www.ibm.com/support/pages/forcing-fake-kernel-panic-testing)
 - [LPIC-1 101-500 Objectives](https://www.lpi.org/our-certifications/exam-101-objectives)
 - [Learning Materials LPIC-1 101-500](https://learning.lpi.org/en/learning-materials/101-500/)
@@ -610,10 +611,100 @@ apt-file search libpthread.so.0
 
 #### Import Commands\Programs of topic 102.5
 
-- rpm
+##### rpm - RPM Package Manager
+
+```sh
+#install package
+sudo rpm -ivh PACKAGENAME
+
+#update package
+rpm -U PACKAGENAME
+rpm -F PACKAGENAME
+
+#remove package
+sudo rpm -e PACKAGENAME
+
+#show info package
+rpm -qi PACKANAME
+rpm -qip FILENAME
+
+#show content package
+rpm -ql PACKAGENAME
+rpm -qip FILENAME
+
+#finding out which package has a specific file
+rpm -qf /usr/bin/7za
+```
+
+##### yum - redirecting to DNF Command Reference
+
+```sh
+#find package (YUM - DNF)
+yum serach PACKAGENAME
+dnf serach PACKAGENAME
+
+#install package (YUM - DNF)
+sudo yum install PACKAGENAME
+sudo dnf install PACKAGENAME
+
+#remove package (YUM - DNF)
+sudo yum remove PACKAGENAME
+sudo dnf remove PACKAGENAME
+
+#check if exist update for package
+yum check-update PACKAGENAME
+
+#update all packages (YUM - DNF
+sudo yum update
+sudo dnf update
+
+#update package (YUM - DNF)
+sudo yum update PACKAGENAME
+sudo dnf upgrade PACKAGENAME
+
+#how to find the package that provides a specific file (YUM - DNF)
+yum whatprovides FILENAME
+dnf provides FILENAME
+
+#show all packages info (YUM - DNF)
+yum info --installed
+dnf list --installed
+
+#show specifc package info (YUM - DNF)
+yum info PACKAGENAME
+dnf info PACKAGENAME
+
+#show all repos (YUM - DNF)
+yum repolist all
+dnf repolist all
+
+#add new repo (YUM - DNF)
+sudo yum-config-manager --add-repo https://rpms.remirepo.net/enterprise/remi.repo
+sudo dnf config-manager --add-repo https://rpms.remirepo.net/enterprise/remi.repo
+
+#disable repo (YUM - DNF)
+yum-config-manager --disable updates
+dnf config-manager --set-disable updates
+
+#enable repo (YUM - DNF)
+yum-config-manager --enable updates
+dnf config-manager --set-enabled pdates
+
+```
+
+##### dnf
+
+```sh
+
+```
+
+#### zypper
+
+```sh
+
+```
+
 - rpm2cpio
-- yum
-- zypper
 
 ### 102.6 Linux as a virtualization guest
 
