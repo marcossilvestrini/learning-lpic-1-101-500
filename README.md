@@ -692,19 +692,79 @@ dnf config-manager --set-enabled pdates
 
 ```
 
-##### dnf
+##### zypper - Command-line interface to ZYpp system management library (libzypp)
 
 ```sh
+#update index package
+sudo zypper refresh
 
+#find packages
+zypper search git
+zypper se git
+
+#show all instaled packages
+zypper search -i
+zypper se -i
+
+#find if specific package is it installed
+zypper search -i git
+zypper se -i git
+
+#find if specific package is it  not installed
+zypper search -u git
+zypper se -u git
+
+#install package
+sudo zypper install git
+sudo zypper in git
+sudo zypper in ~/package.rpm
+
+#check updates packages
+zypper list-updates
+
+#update all packages
+sudo zypper update
+
+#remove package
+sudo zypper remove git
+sudo zypper rm git
+sudo zypper rm git*
+
+#finding out which packages have a specific file
+zypper search --provides /usr/lib/git
+zypper se --provides /usr/lib/git
+
+#show info package
+zypper info git
+
+#show repos
+zypper repos
+
+#disable repo
+sudo zypper modifyrepo -d repo-non-oss
+
+#enable repo
+sudo zypper modifyrepo -e repo-non-oss
+
+#disable autorefresh repository
+sudo zypper modifyrepo -F openSUSE-Leap-42.3-Update-Non-Oss
+
+#enable autorefresh repository
+sudo zypper modifyrepo -f openSUSE-Leap-42.3-Update-Non-Oss
+
+#add repo
+sudo zypper addrepo http://packman.inode.at/suse/openSUSE_Leap_15.1/ packman
+
+#remove repo
+sudo zypper removerepo packman
 ```
 
-#### zypper
+##### rpm2cpio - Extract cpio archive from RPM Package Manager (RPM) package.
 
 ```sh
-
+#extrac cpio content and save in txt file
+rpm2cpio rpm-1.1-1.i386.rpm >git-cpio.txt
 ```
-
-- rpm2cpio
 
 ### 102.6 Linux as a virtualization guest
 

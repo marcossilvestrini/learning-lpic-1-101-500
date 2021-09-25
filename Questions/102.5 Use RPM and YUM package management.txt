@@ -1,0 +1,49 @@
+Guided Exercises
+
+1 - Using rpm on a Red Hat Enterprise Linux system, how would you install the
+package file-roller-3.28.1-2.el7.x86_64.rpm showing a progress bar during the installation?
+R:
+Use o parâmetro -i para instalar um pacote e a opção -h para habilitar os “sinais de hash”
+mostrando o progresso da instalação. Assim, a resposta é: rpm -ih file-roller-3.28.1-2.el7.x86_64.rpm.
+
+2 - Using rpm, find out which package contains the file /etc/redhat-release.
+R:
+Estamos solicitando informações sobre um arquivo, por isso usamos o parâmetro -qf: rpm -qf /etc/redhat-release.
+
+3 - How would you use yum to check for updates for all packages in the system?
+R:
+Use a operação check-update sem um nome de pacote: yum check-update.
+
+4 - Using zypper, how would you disable a repository called repo-extras?
+R:
+Use a operação modifyrepo para alterar os parâmetros de um repositório,
+e o parâmetro -d para desabilitá-lo: zypper modifyrepo -d repo-extras.
+
+5 - If you have a .repo file describing a new repository, where this file should
+be put so that it is recognized by DNF?
+R:
+Os arquivos .repo para o DNF devem ser postos no mesmo local usado pelo YUM, dentro de /etc/yum.repos.d/.
+
+Explorational Exercises
+
+1 - How would you use zypper to find out which package owns the file /usr/sbin/swapon?
+R:
+Use o operador se (search) e o parâmetro --provides: zypper se --provides /usr/sbin/swapon.
+
+2 - How can you get a list of all installed packages in the system using dnf?
+R:
+Use o operador list, seguido pelo parâmetro --installed: dnf list --installed.
+
+3 - Using dnf, what is the command to add a repository located at
+https://www.example.url/home:reponame.repo to the system?
+R:
+O trabalho com repositórios é uma “mudança de configurações”, por isso use o config-manager e o
+parâmetro --add_repo: dnf config-manager --add_repo https://www.example.url/home:reponame.repo.
+
+4 - How can you use zypper to check if the package unzip is installed?
+R:
+Precisamos fazer uma busca (se) nos pacotes instalados (-i): zypper se -i unzip.
+
+5 - Using yum, find out which package provides the file /bin/wget.
+R:
+Para descobrir quem fornece um arquivo, use whatprovides e o nome do arquivo: yum whatprovides /bin/wget.
