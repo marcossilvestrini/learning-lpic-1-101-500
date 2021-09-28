@@ -1,0 +1,45 @@
+Exercícios Guiados
+
+1 - Consultando o sistema man, descubra como fazer o apropos mostrar apenas
+uma explicação curta de seu uso e em seguida voltar ao shell.
+
+Rode man apropos e desça a sessão “Options” até encontrar o parágrafo --usage.
+
+2 - Use o sistema man para determinar qual licença de copyright é atribuída ao comando grep.
+
+Rode man grep e desça até a seção “Copyright” do documento.
+Note que o programa usa um copyright da Free Software Foundation.
+
+Exercícios Exploratórios
+
+1- Identifique a arquitetura de hardware e a versão do kernel do Linux que estão sendo
+usadas no seu computador em um formato de saída fácil de ler.
+
+Rode man uname, leia a seção “Description” e identifique os argumentos de comandos
+que permitem exibir somente os resultados exatos que se deseja. Note que -v mostra
+a versão do kernel e -i a plataforma de hardware.
+
+$ man uname
+$ uname -v
+$ uname -i
+
+
+2- Imprima na tela as últimas vinte linhas do banco de dados dinâmico history e do
+arquivo .bash_history para compará-los.
+
+$ history 20
+$ head -n 20 .bash_history
+
+3 - Use a ferramenta apropos para identificar a página man na qual se encontra o comando
+necessário para mostrar o tamanho de um dispositivo de bloco físico conectado em bytes,
+ao invés de megabytes ou gigabytes.
+
+Uma maneira seria executar apropos com o string block, ler os resultados,
+notar que lsblk lista os dispositivos de bloco (e assim seria a ferramenta mais
+provável para dar a resposta que buscamos), rodar man lsblk, descer pela seção
+“Description” e notar que -b exibe o tamanho de um dispositivo em bytes.
+Finalmente, executamos lsblk -b para ver o que aparece.
+
+$ apropos block
+$ man lsblk
+$ lsblk -b

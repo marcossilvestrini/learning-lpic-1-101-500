@@ -74,6 +74,7 @@ Installation and configuration of some packages will also be covered\
 - [USB ID Repository](http://www.linux-usb.org/usb-ids.html)
 - [Grub Boot](https://docs.fedoraproject.org/en-US/quick-docs/bootloading-with-grub2/)
 - [Debian Free Software Guidelines](https://www.debian.org/social_contract#guidelines)
+- [KVM Docs](https://www.linux-kvm.org/page/Documents)
 - [Download Packages](https://pkgs.org/)
 - [Force Kernel Panic](https://www.ibm.com/support/pages/forcing-fake-kernel-panic-testing)
 - [LPIC-1 101-500 Objectives](https://www.lpi.org/our-certifications/exam-101-objectives)
@@ -770,11 +771,37 @@ rpm2cpio rpm-1.1-1.i386.rpm >git-cpio.txt
 
 #### Important Files of topic 102.6
 
-- foo
+- /etc/libvirt/qemu
+- /etc/libvirt/qemu/networks/
+- /var/lib/libvirt/images/
+- /var/lib/dbus/machine-id ->/etc/machine-id
 
 #### Import Commands\Programs of topic 102.6
 
-- foo
+##### dbus-uuidgen - Utility to generate UUIDs
+
+```sh
+#check id exist uuid
+dbus-uuidgen --ensures
+
+#show uuid
+dbus-uuidgen --get
+
+#generate new uuid for virtual machine
+sudo rm -f /etc/machine-id
+sudo dbus-uuidgen --ensure=/etc/machine-id
+```
+
+##### ssh-keygen — authentication key generation, management and conversion
+
+```sh
+#generate a new pair ssh keys
+ssh-keygen
+
+#copy public key for remote server
+ssh-copy-id -i <public_key> user@cloud_server
+
+```
 
 #### Cited subjects in topic 102.6
 
@@ -784,6 +811,41 @@ rpm2cpio rpm-1.1-1.i386.rpm >git-cpio.txt
 - Guest drivers
 - SSH host keys
 - D-Bus machine id
+- Oracle Virtual Box
+- Red Hat Enterprise Virtualization
+- oVirt
+- Cloud Init
+
+##### Use KVM in Debian
+
+Step:1) Check Whether Virtualization Extension is enabled or not:
+
+```sh
+egrep -c '(vmx|svm)' /proc/cpuinfo
+grep -E --color '(vmx|svm)' /proc/cpuinfo
+```
+
+Step:2) Install QEMU-KVM & Libvirt packages along with virt-manager
+
+```sh
+sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system \
+bridge-utils virtinst libvirt-daemon virt-manager -y
+
+```
+
+Step:3) Start default network and add vhost_net module
+
+```sh
+#show network default and Start
+sudo virsh net-list --all
+
+#make it active and auto-restart across the reboot
+sudo virsh net-start default
+sudo virsh net-autostart default
+
+#add “vhost_net” kernel module
+sudo modprobe vhost_net
+```
 
 ## Topic 103: GNU and Unix Commands
 
@@ -791,22 +853,165 @@ rpm2cpio rpm-1.1-1.i386.rpm >git-cpio.txt
 
 #### Important Files of topic 103.1
 
-- .bash_history
+- ~/.bash_history
 
 #### Import Commands\Programs of topic 103.1
 
-- bash
-- echo
-- env
-- export
-- pwd
-- set
-- unset
-- type
-- which
-- man
-- uname
-- history
+##### - pwd - print name of current/working directory
+
+```sh
+#show current directory
+pwd
+```
+
+##### Command touch -  Change file timestamps
+
+```sh
+#create file
+touch foo.txt
+touch arquive{1..5}.txt
+
+#Update the access and modification times of each FILE to the current time
+touch foo.txt
+touch -a foo.txt
+touch -ca foo.txt
+touch -cm foo.txt
+```
+
+##### uname - print system information
+
+```sh
+#show all system information
+uname -a
+
+#show kernel name
+uname -n
+
+#show kernel release
+uname -r
+```
+
+#### Command Man - Manual pager utils
+
+**Path for docs in Linux**\
+/usr/share/doc/
+
+Each man page is divided in maximum of 11 sections, though many of these sections are optional:
+
+|SECTION    | DESCRIPTION|
+|:--------- |:---------|
+|NAME       |Command name and brief description|
+|SYNOPSIS   |Description of the command’s syntax|
+|DESCRIPTION|Description of the effects of the command|
+|OPTIONS    |Available options|
+|ARGUMENTS  |Available arguments|
+|FILES      |Auxiliary Files|
+|EXAMPLES   |A sample of the command line|
+|SEE ALSO   |Cross-reference to the related topics|
+|DIAGNOSTICS|Warnning and Error messages|
+|COPYRIGHT  |Author(s) of the command|
+|BUGS       |Any known limitations of the command
+
+Man pages are organized in eight categories, numbered from 1 to 8:
+
+|CATEGORY   |DESCRIPTION|
+|:----------|:----------|
+|1          |Executable programs or shell commands|
+|2          |System calls (functions provided by the kernel)|
+|3          |Library calls (functions within program libraries)|
+|4          |Special files (usually found in /dev)|
+|5          |File formats and conventions eg /etc/passwd|
+|6          |Games|
+|7          |Miscellaneous (including macro packages and conventions), e.g. man(7), groff(7)|
+|8          |System administration commands (usually only for root)|
+|9          |Kernel routines [Non standard]|
+
+```linux
+
+man [COMMAND]
+
+Examples:
+man ls
+
+# print all ocorrences
+man -a ls
+
+#specific man page
+man 5 passwd
+
+#similar apropos
+man -k ascii
+man -k compiler
+
+#similar whatis
+man -f zip
+
+#file of config man path
+/etc/manpath.config
+
+#list all path of manuals
+manpath
+```
+
+#### apropos - Search the manual page names and descriptions(man -k)
+
+```sh
+apropos pwd
+```
+
+##### Command Type - Display information about command type
+
+```sh
+type echo
+type cp
+type if
+type -t pwd
+type -a ls
+```
+
+##### Command which - shows the full path of (shell) commands
+
+```sh
+which pwd
+#print all matching pathnames of each argument
+which -a python
+```
+
+##### Command History - Display or manipulate the history list
+
+```sh
+history
+
+# clear history
+history -c
+
+The three related environment variables you need to be aware of are
+HISTFILE, HISTFILESIZE, and HISTSIZE.
+
+HISTFILE—/home/<username>/.bash_history
+HISTFILESIZE—1000
+HISTSIZE—1000
+```
+
+##### env - run a program in a modified environment
+
+```sh
+#show all environment variable
+env
+```
+
+##### - echo - display a line of text
+
+```sh
+echo "Hello World"
+echo "This command save this string in file" > ~/example_echo
+echo $PATH
+```
+
+- export: export variable for childrens bash
+- set: print all environment variables
+- unset: unset values of variable
+- bash: enter in children bash
 
 #### Cited subjects in topic 103,1
 
@@ -818,26 +1023,160 @@ rpm2cpio rpm-1.1-1.i386.rpm >git-cpio.txt
 
 #### Import Commands\Programs of topic 103.2
 
+##### cat - concatenate files and print on the standard output
+
+```sh
+cat foo.txt
+cat foo.txt bar.txt
+```
+
+##### GNU diff - compare files line by line
+
+```sh
+diff file1 file2
+```
+
+##### gzip, gunzip, zcat - compress or expand files
+
+```sh
+#view content of gz file
+zcat ftu.gz
+```
+
+#### tail - output the last part of files
+
+```sh
+tail foo.txt
+
+#print N last lines
+tail -n 20 foo.txt
+
+#use -n +K to output lines starting with the K
+tail -n +30 foo.txt
+
+#follow file
+tail -f foo.log
+```
+
+#### head - output the first part of files
+
+```sh
+head foo.txt
+
+#print N first lines in quiet mode
+head -n 2 -q foo.txt
+```
+
+##### - nl
+
+```sh
+sudo head /var/log/syslog | nl
+```
+
+#### wc - print newline, word, and byte counts for each file
+
+```sh
+wc foo.txt
+wc -c bar.txt #bytes
+wc -l foo.txt #lines
+wc -m bar.txt #chars
+wc -w bar.txt #words
+wc -L bar.txt #big line
+```
+
+#### grep, egrep, fgrep - print lines matching a pattern
+
+```sh
+#simple find
+grep Xbox post-ign.txt
+
+#ignore case
+grep -i No post-ign.txt
+
+#per line
+grep -n Xbox post-ign.txt
+grep -n -i Xbox post-ign.txt
+
+#count
+grep -c Xbox post-ign.txt
+
+#regular expression
+grep 'erro.' protheus.log
+grep "2021-0[56]" protheus.log
+grep "2021-06-11T[0-9]" protheus.log
+grep "[[:digit:]]" protheus.log
+grep "2021-06-1[[:digit:]]" protheus.log
+grep "err[[:alpha:]]" protheus.log
+grep "[[:digit:]]\+,[[:digit:]]\*" protheus.log
+grep "[[:digit:]]\+:[[:digit:]]*" protheus.log
+grep "[[:digit:]]\+:?[[:digit:]]\+" protheus.log
+grep "[[:digit:]]\+/[[:digit:]]\+/[[:digit:]]\+" protheus.log
+grep "[[:digit:]]\+[:,\]\?[[:digit:]]\+" protheus.log
+grep "[[:digit:]]\+[:,\]\?[[:digit:]]\+" protheus.log nfe.txt
+
+#find file
+grep -l "[[:digit:]]\+[:,\]\?[[:digit:]]\+" protheus.log nfe.txt
+
+#deny\invert expression
+grep -v "[[:digit:]]\+[:,\]\?[[:digit:]]\+" protheus.log nfe.txt
+zcat ftu.txt.gz | grep -v cat
+
+#recursive
+grep -r  "[[:digit:]]\+[:,\]\?[[:digit:]]\+"
+
+#pipe
+grep erro protheus.log | grep "[[:digit:]]"
+ls | grep "[[:digit:]]"
+ls | grep "[[:punct:]]"
+```
+
+##### sed - stream editor for filtering and transforming text
+
+```sh
+#find specific string
+sed -n /cat/p < ftu.txt
+
+#replace string (cat--->dog)
+sed s/cat/dog/ < ftu.txt
+
+#replace string (cat--->dog) and generate new backup file
+sed -i.backup s/cat/dog/ ftu.txt
+```
+
+##### od - dump files in octal and other formats
+
+```sh
+#show content file in octal
+od foo.txt
+
+#show content file in hexadecimal
+od -x foo.txt
+
+#show all chars (debug mode)
+od -c foo.txt
+od -An -c ftu.txt
+```
+
+- md5sum
+- sha256sum
+
+```sh
+#create hash sha256
+sha256sum foo.txt > sha256.txt
+#check integrity
+ sha256sum -c sha256-foo.txt
+```
+
+- sha512sum
 - less
 - bzcat
-- cat
 - xzcat
-- zcat
 - paste
-- wc
 - cut
 - tr
 - sort
 - split
-- sed
-- head
-- tail
 - uniq
-- nl
-- od
-- md5sum
-- sha256sum
-- sha512sum
 
 #### Cited subjects in topic 103.2
 

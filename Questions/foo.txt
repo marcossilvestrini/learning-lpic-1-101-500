@@ -1,0 +1,327 @@
+Respostas aos Exercícios Guiados
+
+1 - Alguém acaba de doar um laptop para sua escola e você deseja instalar Linux nele.
+Ele veio sem manual e você é obrigado a inicializá-lo a partir de um pen drive USB sem nenhuma interface gráfica.
+Aparece um terminal shell e você sabe que, para cada processador presente, haverá uma linha dedicada no arquivo /proc/cpuinfo:
+
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+
+(linhas puladas)
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+
+(more lines skipped)
+Usando os comandos grep e wc, exiba o número de processadores presentes.
+
+Eis duas opções:
+
+$ cat /proc/cpuinfo | grep processor | wc -l
+$ grep processor /proc/cpuinfo | wc -l
+
+Agora que você sabe que existem várias maneiras de fazer a mesma coisa, quando deve usar uma ou outra?
+Isso depende de vários fatores, sendo os dois mais importantes o desempenho e a legibilidade.
+Na maioria das vezes, usamos comandos de shell dentro de scripts de shell para automatizar tarefas;
+quanto maiores e mais complexos seus scripts se tornam, mais precisamos nos preocupar em mantê-los rápidos.
+
+Faça o mesmo com sed em vez de grep.
+
+Agora, em vez de grep vamos tentar isso com sed:
+
+$ sed -n /processor/p /proc/cpuinfo | wc -l
+Aqui, usamos sed com o parâmetro -n para que sed não imprima nada, exceto o que corresponde à expressão processor,
+ conforme instruído pelo comando p . Como fizemos nas soluções de grep, wc -l conta o número de linhas e, portanto,
+ o número de processadores presentes.
+
+Estude o exemplo a seguir:
+
+$ sed -n /processor/p /proc/cpuinfo | sed -n '$='
+Esta sequência de comando fornece resultados idênticos aos do exemplo anterior, no qual a saída de sed
+foi canalizada para um comando wc. A diferença, aqui, é que em vez de usar wc -l para contar o número de linhas,
+sed é novamente invocado para fornecer uma funcionalidade equivalente. Mais uma vez, estamos suprimindo a saída
+de sed com a opção -n, exceto para a expressão que estamos chamando explicitamente, que é '$='.
+Essa expressão diz ao sed para encontrar uma correspondência para a última linha ($) e então imprimir
+o número dessa linha (=).
+
+2 - Explore seu arquivo local /etc/passwd com os comandos grep, sed, head e tail de acordo com as tarefas descritas abaixo:
+
+Quais usuários têm acesso a um shell Bash?
+
+$ grep ":/bin/bash$" /etc/passwd
+Vamos refinar esta resposta exibindo apenas o nome do usuário que utiliza o shell Bash.
+
+$ grep ":/bin/bash$" /etc/passwd | cut -d: -f1
+O nome do usuário é o primeiro campo (parâmetro -f1 do comando cut) e o arquivo /etc/passwd usa :
+como separadores (-d: parâmetro do comando cut). Nós apenas canalizamos a saída do comando grep para o
+comando cut apropriado.
+
+Muitos dos usuários de seu sistema existem para lidar com programas específicos ou para fins administrativos.
+Eles não têm acesso a um shell. Quantos deles estão presentes no sistema?
+
+A maneira mais fácil de descobrir isso é exibir as linhas correspondentes às contas que não usam o shell Bash:
+
+$ grep -v ":/bin/bash$" /etc/passwd | wc -l
+Quantos usuários e grupos existem em seu sistema (lembre-se: use apenas o arquivo /etc/passwd)?
+
+O primeiro campo de qualquer linha do arquivo /etc/passwd é o nome do usuário, o segundo é tipicamente um x
+indicando que a senha do usuário não está armazenada aqui (ela é criptografada no arquivo /etc/shadow).
+O terceiro é o id do usuário (UID) e o quarto é o id do grupo (GID). Portanto, isso deve nos fornecer o número de usuários:
+
+$ cut -d: -f3 /etc/passwd | wc -l
+Bem, isso funciona na maioria dos casos. No entanto, há situações em que definimos diferentes superusuários
+ou outros tipos especiais de usuários que compartilham o mesmo UID (id de usuário).
+Assim, para ter certeza, vamos canalizar o resultado do comando cut para o comando sort e então contar o número de linhas.
+
+$ cut -d: -f3 /etc/passwd | sort -u | wc -l
+Agora, para o número de grupos:
+
+$ cut -d: -f4 /etc/passwd | sort -u | wc -l
+Liste apenas a primeira, a última e a décima linha do arquivo /etc/passwd.
+
+Podemos fazer assim:
+
+$ sed -n -e '1'p -e '10'p -e '$'p /etc/passwd
+Lembre-se de que o parâmetro -n diz ao sed para não imprimir nada além do que é especificado pelo comando p.
+O cifrão ($) usado aqui é uma expressão regular que representa a última linha do arquivo.
+
+3 - Considere este exemplo do arquivo /etc/passwd. Copie as linhas abaixo para um arquivo local chamado mypasswd
+para este exercício.
+
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+nvidia-persistenced:x:121:128:NVIDIA Persistence Daemon,,,:/nonexistent:/sbin/nologin
+libvirt-qemu:x:64055:130:Libvirt Qemu,,,:/var/lib/libvirt:/usr/sbin/nologin
+libvirt-dnsmasq:x:122:133:Libvirt Dnsmasq,,,:/var/lib/libvirt/dnsmasq:/usr/sbin/nologin
+carol:x:1000:2000:Carol Smith,Finance,,,Main Office:/home/carol:/bin/bash
+dave:x:1001:1000:Dave Edwards,Finance,,,Main Office:/home/dave:/bin/ksh
+emma:x:1002:1000:Emma Jones,Finance,,,Main Office:/home/emma:/bin/bash
+frank:x:1003:1000:Frank Cassidy,Finance,,,Main Office:/home/frank:/bin/bash
+grace:x:1004:1000:Grace Kearns,Engineering,,,Main Office:/home/grace:/bin/ksh
+henry:x:1005:1000:Henry Adams,Sales,,,Main Office:/home/henry:/bin/bash
+john:x:1006:1000:John Chapel,Sales,,,Main Office:/home/john:/bin/bash
+Liste todos os usuários no grupo 1000 (use sed para selecionar apenas o campo apropriado) do arquivo mypasswd.
+
+O GID é o quarto campo do arquivo /etc/passwd. Você pode ter vontade de tentar o seguinte:
+
+$ sed -n /1000/p mypasswd
+Nesse caso, você obterá também esta linha:
+
+carol:x:1000:2000:Carol Smith,Finance,,,Main Office:/home/carol:/bin/bash
+Sabemos que não está correto, pois Carol Smith é membro do GID 2000 e a correspondência foi encontrada por causa do UID.
+No entanto, você deve ter notado que, após o GID, o campo seguinte começa com um caractere maiúsculo.
+Podemos usar uma expressão regular para resolver esse problema.
+
+$ sed -n /:1000:[A-Z]/p mypasswd
+A expressão [A-Z] busca por quaisquer caracteres em maiúsculas. Vamos falar mais sobre isso na lição correspondente.
+
+Liste apenas o nome completo de todos os usuários deste grupo (use sed e cut).
+
+Use a mesma técnica empregada para resolver a primeira parte deste exercício e canalize para um comando cut.
+
+$ sed -n /:1000:[A-Z]/p mypasswd | cut -d: -f5
+Dave Edwards,Finance,,,Main Office
+Emma Jones,Finance,,,Main Office
+Frank Cassidy,Finance,,,Main Office
+Grace Kearns,Engineering,,,Main Office
+Henry Adams,Sales,,,Main Office
+John Chapel,Sales,,,Main Office
+Ainda não chegamos lá! Note como os campos dentro dos resultados podem ser separados por ,.
+Assim, vamos canalizar a saída para outro comando cut, usando , como delimitador.
+
+$ sed -n /:1000:[A-Z]/p mypasswd | cut -d: -f5 | cut -d, -f1
+Dave Edwards
+Emma Jones
+Frank Cassidy
+Grace Kearns
+Henry Adams
+John Chapel
+
+
+Respostas aos Exercícios Exploratórios
+
+
+1 - Usando novamente o arquivo mypasswd dos exercícios anteriores, imagine um comando Bash que selecione um
+indivíduo do Main Office para ganhar uma rifa. Use o comando sed para imprimir apenas as linhas do Main Office e,
+em seguida, uma sequência de comando cut para recuperar o primeiro nome de cada usuário a partir dessas linhas.
+Depois, classifique esses nomes aleatoriamente e imprima apenas o nome principal da lista.
+
+Primeiro, explore como o parâmetro -R manipula a saída do comando sort. Repita esse comando algumas
+vezes em sua máquina (note que será preciso colocare 'Main Office' entre aspas simples para que o sed
+o trate como uma única string):
+
+$ sed -n /'Main Office'/p mypasswd | cut -d: -f5 | cut -d, -f1 | sort -R
+Eis uma solução para o problema:
+
+$ sed -n /'Main Office'/p mypasswd | cut -d: -f5 | cut -d, -f1 | sort -R | head -1
+
+2 - Quantas pessoas trabalham em Finance, Engineering e Sales? Pense em explorar o comando uniq.
+
+Continue incrementando o que você aprendeu nos exercícios anteriores. Tente o seguinte:
+
+$ sed -n /'Main Office'/p mypasswd
+$ sed -n /'Main Office'/p mypasswd | cut -d, -f2
+Note que não nos preocupamos com o delimitador :. Queremos somente o segundo campo quando dividimos
+as linhas pelos caracteres ,.
+
+$ sed -n /'Main Office'/p mypasswd | cut -d, -f2 | uniq -c
+      4 Finance
+      1 Engineering
+      2 Sales
+O comando uniq mostra apenas as linhas únicas (não as linhas repetidas) e o parâmetro -c diz ao uniq
+para contar as ocorrências de linhas iguais. Mas fique esperto: uniq considera apenas as linhas adjacentes.
+Quando esse não for o caso, será preciso usar o comando sort.
+
+3 - Agora, vamos preparar um arquivo CSV (valores separados por vírgula) para poder importar facilmente,
+do arquivo mypasswd do exemplo anterior, o arquivo persons.csv para o LibreOffice.
+O conteúdo do arquivo terá o seguinte formato:
+
+First Name,Last Name,Position
+Carol,Smith,Finance
+...
+John,Chapel,Sales
+Dica: use os comandos sed, cut e paste para obter os resultados desejados. Note que a vírgula (,)
+será o delimitador desse arquivo.
+
+Comece com os comandos sed e cut, incrementando o que aprendemos nos exercícios anteriores:
+
+$ sed -n /'Main Office'/p mypasswd | cut -d: -f5 | cut -d" " -f1 > firstname
+Agora temos o arquivo firstname com o primeiro nome dos funcionários.
+
+$ sed -n /'Main Office'/p mypasswd | cut -d: -f5 | cut -d" " -f2 | cut -d, -f1 > lastname
+Agora temos o arquivo lastname com o sobrenome de cada funcionário.
+
+A seguir, vamos determinar o departamento em que cada funcionário trabalha:
+
+$ sed -n /'Main Office'/p mypasswd | cut -d: -f5 | cut -d, -f2 > department
+Antes de trabalharmos na resposta final, experimente os seguintes comandos para ver que tipo de saída eles geram:
+
+$ cat firstname lastname department
+$ paste firstname lastname department
+E a solução é:
+
+$ paste firstname lastname department | tr '\t' ,
+$ paste firstname lastname department | tr '\t' , > names.csv
+Aqui, usamos o comando tr para traduzir \t, o separador de tabulação, por um ,. tr é bastante útil
+quando precisamos trocar um caractere por outro. Não deixe de ler as páginas de manual de tr e paste.
+Por exemplo, podemos usar a opção -d para o delimitador, para tornar o comando anterior menos complexo:
+
+$ paste -d, firstname lastname department
+Usamos o comando paste aqui para você se acostumar melhor com ele. No entanto, poderíamos ter executado facilmente
+todas as tarefas em uma única cadeia de comando:
+
+$ sed -n /'Main Office'/p mypasswd | cut -d: -f5 | cut -d, -f1,2 | tr ' ' , > names.csv
+
+
+4 - Suponha que a planilha names.csv criada no exercício anterior seja um arquivo importante e queremos ter certeza
+de que ninguém vai adulterá-lo desde o momento do envio até a recepção pelo destinatário.
+Como podemos garantir a integridade desse arquivo usando md5sum?
+
+Se você consultar as páginas de manual de md5sum, sha256sum e sha512sum, verá que todas começam com o seguinte texto:
+
+“compute and check XXX message digest”
+
+Onde “XXX” é o algoritmo que será usado para criar esse message digest (resumo de mensagens).
+
+Usaremos md5sum como exemplo e, mais tarde, você poderá tentar com os outros comandos.
+
+$ md5sum names.csv
+61f0251fcab61d9575b1d0cbf0195e25  names.csv
+Agora, por exemplo, você pode disponibilizar o arquivo através de um serviço de ftp seguro e enviar
+o resumo de mensagens gerado usando outro meio de comunicação seguro. Se o arquivo tiver sido ligeiramente alterado,
+o resumo de mensagens será totalmente diferente. Para comprovar, edite names.csv e troque James por Jones,
+como demonstramos aqui:
+
+$ sed -i.backup s/James/Jones/ names.csv
+$ md5sum names.csv
+f44a0d68cb480466099021bf6d6d2e65  names.csv
+Sempre que você disponibilizar arquivos para download, é aconselhável distribuir também um resumo de mensagens
+correspondente para que as pessoas que baixarem aquele arquivo possam produzir um novo resumo de mensagens
+e comparar com o original. Se você visitar o site https://kernel.org, encontrará a página
+https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc, onde pode obter o sha256sum
+de todos os arquivos disponíveis para download.
+
+5 - Você prometeu a si mesmo que leria 100 linhas por dia de um livro clássico e decidiu começar
+com Mariner and Mystic de Herman Melville. Desenvolva um comando usando split
+para dividir este livro em seções de 100 linhas cada. Para obter o livro em formato de texto simples,
+pesquise em https://www.gutenberg.org.
+
+Primeiro, baixamos o livro completo do site do Project Gutenberg, onde você pode obter este e outros
+livros disponíveis em domínio público.
+
+$ wget https://www.gutenberg.org/files/50461/50461-0.txt
+Pode ser preciso instalar wget se ainda não estiver presente no sistema. Outra alternativa é usar curl.
+Use less para verificar o livro:
+
+$ less 50461-0.txt
+Agora, vamos dividir o livro em trechos de 100 linhas cada:
+
+$ split -l 100 -d 50461-0.txt melville
+50461-0.txt é o arquivo que dividiremos. melville será o prefixo dos arquivos divididos. -l
+100 especifica o número de linhas e a opção -d diz ao split para numerar os arquivos (usando o sufixo fornecido).
+Podemos usar nl em qualquer um dos arquivos divididos (provavelmente não no último)
+e confirmar que todos eles têm 100 linhas.
+
+6 - Usando ls -l no diretório /etc, que tipo de listagem obtemos? Usando o comando cut na saída do comando ls fornecido,
+como exibir apenas os nomes dos arquivos? E quanto ao nome dos arquivos e seu proprietário?
+Junto com os comandos ls -l e cut, utilize o comando tr para espremer diversas ocorrências de um espaço
+em um único espaço para auxiliar na formatação da saída com um comando cut.
+
+O comando ls sozinho fornece apenas os nomes dos arquivos. Podemos, no entanto, preparar
+a saída do ls -l (a lista longa) para extrair informações mais específicas.
+
+$ ls -l /etc | tr -s ' ' ,
+drwxr-xr-x,3,root,root,4096,out,24,16:58,acpi
+-rw-r--r--,1,root,root,3028,dez,17,2018,adduser.conf
+-rw-r--r--,1,root,root,10,out,2,17:38,adjtime
+drwxr-xr-x,2,root,root,12288,out,31,09:40,alternatives
+-rw-r--r--,1,root,root,401,mai,29,2017,anacrontab
+-rw-r--r--,1,root,root,433,out,1,2017,apg.conf
+drwxr-xr-x,6,root,root,4096,dez,17,2018,apm
+drwxr-xr-x,3,root,root,4096,out,24,16:58,apparmor
+drwxr-xr-x,9,root,root,4096,nov,6,20:20,apparmor.d
+O parâmetro -s instrui tr a reduzir os espaços repetidos a uma única instância de um espaço.
+O comando tr funciona para qualquer tipo de caractere repetitivo que você especificar. Em seguida,
+substituímos os espaços por uma vírgula ,. Na verdade, não precisamos substituir os espaços em nosso exemplo,
+então apenas omitiremos ,.
+
+$ ls -l /etc | tr -s ' '
+drwxr-xr-x 3 root root 4096 out 24 16:58 acpi
+-rw-r--r-- 1 root root 3028 dez 17 2018 adduser.conf
+-rw-r--r-- 1 root root 10 out 2 17:38 adjtime
+drwxr-xr-x 2 root root 12288 out 31 09:40 alternatives
+-rw-r--r-- 1 root root 401 mai 29 2017 anacrontab
+-rw-r--r-- 1 root root 433 out 1 2017 apg.conf
+drwxr-xr-x 6 root root 4096 dez 17 2018 apm
+drwxr-xr-x 3 root root 4096 out 24 16:58 apparmor
+Se quisermos apenas os nomes dos arquivos, só precisamos exibir o nono campo:
+
+$ ls -l /etc | tr -s ' ' | cut -d" " -f9
+Para o nome de arquivo e seu proprietário, precisamos do nono e do terceiro campos:
+
+$ ls -l /etc | tr -s ' ' | cut -d" " -f9,3
+E se só precisarmos dos nomes das pastas e seu proprietário?
+
+$ ls -l /etc | grep ^d | tr -s ' ' | cut -d" " -f9,3
+
+7 - Este exercício pressupõe que você está em uma máquina real (não virtual).
+Também é preciso ter um pendrive à mão. Releia as páginas de manual do comando tail e descubra como
+seguir um arquivo conforme adicionamos texto a ele. Enquanto monitora a saída de um comando tail
+no arquivo /var/log/syslog, insira um pendrive. Escreva o comando completo que usaria para obter o
+Produto (Product), o Fabricante (Manufacturer) e a quantidade total de memória (Blocks) do seu pendrive.
+
+$ tail -f /var/log/syslog | grep -i 'product\:\|blocks\|manufacturer'
+Nov  8 06:01:35 brod-avell kernel: [124954.369361] usb 1-4.3: Product: Cruzer Blade
+Nov  8 06:01:35 brod-avell kernel: [124954.369364] usb 1-4.3: Manufacturer: SanDisk
+Nov  8 06:01:37 brod-avell kernel: [124955.419267] sd 2:0:0:0: [sdc] 61056064 512-byte logical blocks: (31.3 GB/29.1 GiB)
+Claro que isto é um exemplo e os resultados podem variar dependendo do fabricante do seu pendrive.
+Observe que agora usamos o parâmetro -i com o comando grep, pois não sabemos
+se as strings que procuramos estão em maiúsculas ou minúsculas. Também usamos | como um OR (ou) lógico,
+então procuramos por linhas contendo product OR blocks OR manufacturer.

@@ -1,0 +1,40 @@
+Exercícios Guiados
+
+1 - Use o comando export para adicionar um novo diretório ao seu caminho (PATH) — ele
+não sobreviverá a uma reinicialização.
+
+Podemos adicionar temporariamente um novo diretório (por exemplo, um chamado myfiles dentro do diretório inicial) ao caminho usando export PATH="/home/yourname/myfiles:$PATH". Crie um script simples no diretório myfiles/, torne-o executável e tente executá-lo a partir de um diretório diferente. Estes comandos pressupõem que você esteja no diretório inicial, que contém um diretório chamado myfiles.
+
+$ touch myfiles/myscript.sh
+$ echo "#!/bin/bash" >> myfiles/myscript.sh
+$ echo "cat Hello" >> myfiles/myscript.sh
+$ chmod +x myfiles/myscript.sh
+$ myfiles.sh
+Hello
+
+2 - Use o comando unset para remover a variável PATH.
+Tente executar um comando (como sudo cat /etc/shadow) usando sudo. O que aconteceu?
+Por quê? (saia do shell para retornar ao estado original.)
+
+O comando unset PATH apaga as configurações de caminho atuais.
+Não será possível invocar um binário sem seu endereço absoluto.
+Por essa razão, se tentarmos rodar um comando usando sudo
+(que por sua vez é um programa binário localizado em /usr/bin/sudo)
+a operação falhará — a menos que especifiquemos a localização absoluta,
+como em: /usr/bin/sudo /bin/cat /etc/shadow. Podemos redefinir o PATH
+usando export ou simplesmente saindo do shell.
+
+Exercícios Exploratórios
+
+1 - Procure na internet a lista completa de caracteres especiais e explore-os.
+
+Eis uma lista: & ; | * ? " ' [ ] ( ) $ < > { } # / \ ! ~.
+
+2 - Tente executar comandos usando strings compostas de caracteres especiais e diversos métodos para escapar deles. Existem diferenças de comportamento entre esses métodos?
+
+O escape com " preserva os valores especiais do cifrão, da crase e da barra invertida. Já o escape com o ' faz com que todos os caracteres sejam interpretados literalmente.
+
+$ echo "$mynewvar"
+goodbye
+$ echo '$mynewvar'
+$mynewvar

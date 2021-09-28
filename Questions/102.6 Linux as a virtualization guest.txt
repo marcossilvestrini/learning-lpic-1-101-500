@@ -1,0 +1,67 @@
+Guided Exercises
+
+1- What CPU extensions are necessary on an x86 based hardware platform that will run fully virtualized guests?
+R:
+VT-x para as CPUs Intel ou AMD-V para CPUs AMD
+
+2 - A mission-critical server installation that will require the fastest performance will
+likely use what type of virtualization?
+R:
+Um sistema operacional que faz uso de paravirtualização, como o Xen,
+pois o sistema operacional convidado poderá fazer melhor uso dos recursos
+de hardware disponíveis com drivers de software projetados para funcionar com o hipervisor.
+
+3 - Two virtual machines that have been cloned from the same template and that utilize
+D-Bus are performing erratically. They both have separate hostnames and network configuration settings.
+What command would be used to determine if each of the virtual machines have different D-Bus Machine IDs?
+dbus-uuidgen --get
+R:
+
+Explorational Exercises
+
+1 - Run the following command to see if your system already has CPU extensions enabled to
+run a virtual machine (your results may vary depending on your CPU):
+
+grep --color -E "vmx|svm" /proc/cpuinfo
+
+Depending on the output, you may have vmx highlighted (for Intel VT-x enabled CPU’s) or svm
+highlighted (for AMD SVM enabled CPU’s). Should you get no results, consult your BIOS or UEFI firmware
+instructions on how to enable virtualization for your processor.
+
+2 - If your processor supports virtualizations, seek out your distribution’s documentation for running a KVM hypervisor.
+
+Install the necessary packages to run a KVM hypervisor.
+
+If you are using a graphical desktop environment, it is recommended to also install
+the virt-manager application which is a graphical front-end that can be used on a KVM installation.
+This will aid in virtual machine installations and management.
+
+Download a Linux distribution ISO image of your choice, and following your distribution’s documentation
+create a new virtual machine using this ISO.
+
+R:
+
+Instale os pacotes necessários para executar um hipervisor KVM.
+
+O método vai variar de acordo com a distribuição, mas aqui estão alguns pontos de partida:
+
+Ubuntu — https://help.ubuntu.com/lts/serverguide/libvirt.html
+
+Fedora — https://docs.fedoraproject.org/en-US/quick-docs/getting-started-with-virtualization/
+
+Arch Linux — https://wiki.archlinux.org/index.php/KVM
+
+Se estiver usando um ambiente de desktop gráfico, é recomendado instalar também o aplicativo virt-manager,
+um front-end gráfico que pode ser usado em uma instalação KVM. Isso ajudará na instalação e gerenciamento
+da máquina virtual.
+
+Mais uma vez, o método vai depender da distribuição. Eis um exemplo usando o Ubuntu:
+
+$ sudo apt install virt-manager
+Baixe a imagem ISO de uma distribuição Linux à sua escolha e, seguindo a documentação da distribuição,
+crie uma nova máquina virtual usando essa ISO.
+
+O pacote virt-manager facilita muito essa tarefa. No entanto, uma máquina virtual pode ser criada
+a partir da linha de comando usando o comando virt-install. Experimente os dois métodos para entender
+como as máquinas virtuais são implementadas.
+
