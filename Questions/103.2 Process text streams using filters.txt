@@ -309,7 +309,7 @@ Para o nome de arquivo e seu proprietário, precisamos do nono e do terceiro cam
 $ ls -l /etc | tr -s ' ' | cut -d" " -f9,3
 E se só precisarmos dos nomes das pastas e seu proprietário?
 
-$ ls -l /etc | grep ^d | tr -s ' ' | cut -d" " -f9,3
+' | cut -d" " -f9,3
 
 7 - Este exercício pressupõe que você está em uma máquina real (não virtual).
 Também é preciso ter um pendrive à mão. Releia as páginas de manual do comando tail e descubra como

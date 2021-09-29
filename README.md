@@ -73,9 +73,10 @@ Installation and configuration of some packages will also be covered\
 - [PCI ID Repository](https://pci-ids.ucw.cz)
 - [USB ID Repository](http://www.linux-usb.org/usb-ids.html)
 - [Grub Boot](https://docs.fedoraproject.org/en-US/quick-docs/bootloading-with-grub2/)
-- [Debian Free Software Guidelines](https://www.debian.org/social_contract#guidelines)
+- [Debian Free Software Guidelines](https://www.debian.org/social_contract#guidelines)-
 - [KVM Docs](https://www.linux-kvm.org/page/Documents)
 - [Download Packages](https://pkgs.org/)
+- [Commands Examples](https://www.geeksforgeeks.org/)
 - [Force Kernel Panic](https://www.ibm.com/support/pages/forcing-fake-kernel-panic-testing)
 - [LPIC-1 101-500 Objectives](https://www.lpi.org/our-certifications/exam-101-objectives)
 - [Learning Materials LPIC-1 101-500](https://learning.lpi.org/en/learning-materials/101-500/)
@@ -828,9 +829,12 @@ grep -E --color '(vmx|svm)' /proc/cpuinfo
 Step:2) Install QEMU-KVM & Libvirt packages along with virt-manager
 
 ```sh
+#install libvirt packages
 sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system \
 bridge-utils virtinst libvirt-daemon virt-manager -y
 
+#check status libvirt
+sudo systemctl status libvirtd.service
 ```
 
 Step:3) Start default network and add vhost_net module
@@ -845,6 +849,67 @@ sudo virsh net-autostart default
 
 #add “vhost_net” kernel module
 sudo modprobe vhost_net
+
+#add user in  libvirt groups
+sudo adduser myuser libvirt
+sudo adduser myuser libvirt-qemu
+
+#to refresh or reload group membership run the followings,
+newgrp libvirt
+libvirt-qemu
+```
+
+Step:4) Create Linux Bridge(br0) for KVM VMs
+
+```sh
+sudo vi /etc/network/interfaces
+```
+
+```sh
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+allow-hotplug ens34
+auto ens34
+iface ens34 inet manual
+
+#Configure bridge and give it a static ip
+auto br0
+iface br0 inet static
+        address 192.168.0.133
+        netmask 255.255.255.0
+        network 192.168.0.1
+        broadcast 192.168.0.255
+        gateway 192.168.0.1
+        bridge_ports ens34
+        bridge_stp off
+        bridge_fd 0
+        bridge_maxwait 0
+        dns-nameservers 1.1.1.1
+
+# This is an autoconfigured IPv6 interface
+iface ens34 inet6 auto
+```
+
+```sh
+#reboot system
+sudo reboot
+
+#check network changes
+ip a s br0
+```
+
+Step:5) Create Virtual Machines either via Virt-Manager (GUI) or virt-install (command line)
+
+```sh
+
 ```
 
 ## Topic 103: GNU and Unix Commands
@@ -1000,7 +1065,7 @@ HISTSIZE—1000
 env
 ```
 
-##### - echo - display a line of text
+##### echo - display a line of text
 
 ```sh
 echo "Hello World"
@@ -1043,6 +1108,18 @@ diff file1 file2
 zcat ftu.gz
 ```
 
+##### bzip2, bunzip2 , bzcat - decompresses files to stdout
+
+```sh
+bzcat foo.bz2
+```
+
+##### xzcat - decompresses files to stdout
+
+```sh
+xzcat bar.xz
+```
+
 #### tail - output the last part of files
 
 ```sh
@@ -1067,9 +1144,10 @@ head foo.txt
 head -n 2 -q foo.txt
 ```
 
-##### - nl
+##### nl - number lines of files
 
 ```sh
+nl foo.txt
 sudo head /var/log/syslog | nl
 ```
 
@@ -1088,37 +1166,27 @@ wc -L bar.txt #big line
 
 ```sh
 #simple find
-grep Xbox post-ign.txt
+sudo grep "OS Version:" /var/log/syslog
 
 #ignore case
-grep -i No post-ign.txt
+sudo grep -i Version /var/log/syslog
 
 #per line
-grep -n Xbox post-ign.txt
-grep -n -i Xbox post-ign.txt
+sudo grep -n "OS Version:" /var/log/syslog
+sudo grep -in Version /var/log/syslog
+
 
 #count
-grep -c Xbox post-ign.txt
+sudo grep -c Version /var/log/syslog
 
 #regular expression
-grep 'erro.' protheus.log
-grep "2021-0[56]" protheus.log
-grep "2021-06-11T[0-9]" protheus.log
-grep "[[:digit:]]" protheus.log
-grep "2021-06-1[[:digit:]]" protheus.log
-grep "err[[:alpha:]]" protheus.log
-grep "[[:digit:]]\+,[[:digit:]]\*" protheus.log
-grep "[[:digit:]]\+:[[:digit:]]*" protheus.log
-grep "[[:digit:]]\+:?[[:digit:]]\+" protheus.log
-grep "[[:digit:]]\+/[[:digit:]]\+/[[:digit:]]\+" protheus.log
-grep "[[:digit:]]\+[:,\]\?[[:digit:]]\+" protheus.log
-grep "[[:digit:]]\+[:,\]\?[[:digit:]]\+" protheus.log nfe.txt
-
-#find file
-grep -l "[[:digit:]]\+[:,\]\?[[:digit:]]\+" protheus.log nfe.txt
+grep 'vers' /var/log/syslog
+grep "Sep 29 09:[0-3]" /var/log/syslog
+grep "[[:digit:]]" /var/log/syslog
+grep "Sep 29 09:[0-3][[:digit:]]" /var/log/syslog
 
 #deny\invert expression
-grep -v "[[:digit:]]\+[:,\]\?[[:digit:]]\+" protheus.log nfe.txt
+grep -v "[[:digit:]]\+[:,\]\?[[:digit:]]\+" /var/log/syslog
 zcat ftu.txt.gz | grep -v cat
 
 #recursive
@@ -1157,30 +1225,185 @@ od -c foo.txt
 od -An -c ftu.txt
 ```
 
-- md5sum
-- sha256sum
+##### md5sum - compute and check MD5 message digest
+
+```sh
+#create hash md5
+md5sum foo.txt >shamd5.txt
+
+#check integrity
+md5sum -c shamd5.txt
+```
+
+##### sha256sum - compute and check SHA256 message digest
 
 ```sh
 #create hash sha256
 sha256sum foo.txt > sha256.txt
 #check integrity
- sha256sum -c sha256-foo.txt
+sha256sum -c sha256-foo.txt
 ```
 
-- sha512sum
+##### sha512sum - compute and check SHA512 message digest
+
+```sh
+#create hash sha512
+sha512sum foo.txt > sha512.txt
+#check integrity
+sha512sum -c sha512-foo.txt
+```
+
+#### paste
+
+```sh
+
+```
+
+##### cut
+
+```sh
+#merge files
+paste file1 file2 file3
+
+#merge file with delimiter
+paste -d\; file1 file2
+```
+
+##### tr - translate or delete characters
+
+```sh
+#replace char x - @
+tr "x" "@" < /etc/passwd
+
+#convert lower case to upper case
+tr "[a-z]" "[A-Z]" < /etc/passwd
+tr "[:lower:]" "[:upper:]" < /etc/passwd
+
+#how to translate white-space to tabs
+echo "Welcome To GeeksforGeeks" | tr [:space:] '\t'
+
+#How to translate braces into parenthesis
+echo "Word: {Hello people}" | tr "{}" "()"
+
+#How to use squeeze repetition of characters using -s
+echo "This   is          spaces " | tr -s [:space:] ' '
+
+#How to delete specified characters using -d option
+echo "Welcome To GeeksforGeeks" | tr -d 'W'
+
+#To remove all the digits from the string, use
+echo "My ID is 1231854874789" | tr -d [:digit:]
+
+#How to complement the sets using -c option
+echo "my ID is 73535" | tr -cd [:digit:]
+```
+
+##### sort
+
+```sh
+#sort by name
+sort < /etc/passwd
+
+#out sort in file
+sort -o new-users users
+
+#Sorting In Reverse Order
+sort -r < /etc/passwd
+
+#sort a file numerically
+sort -n list.txt
+
+#sorte table by colum
+sort -k2 table
+
+#check if the file given is already sorted or not
+sort -c users.txt
+
+#sort and remove duplicates
+sort -u users.txt
+
+#sort by month
+sort -M months.txt
+
+
+```
+
+##### split
+
+```sh
+#split default (1000 lines per file)
+split bigifile
+
+#Split file based on number of lines
+split -l 10 bifile
+split -l 10 bifile --verbose
+
+#Split file size using ‘-b’ option.
+split -b 10000 bifile  --verbose
+
+#Change in suffix length. By default, the suffix length is 2.
+#We can also change it using ‘-a’ option.
+split -l 4 -a 6 bigfile
+
+#Split files created with numeric suffix. In general, the output has a format of x** where
+#** are alphabets. We can change the split files suffix to numeric by using the ‘-d’ option.
+split -l 5 -d bigfile
+
+#Create n chunks output files. If we want to split a file into three chunk
+#output files then use the ‘-n’ option with the split command which limits the number of split output files.
+split -n 5 bigfile
+
+#Split file with customize suffix. With this command, we can create split output files with customizing suffix.
+#Assume, if we want to create split output files with index suffix, execute the following command.
+
+split -n 7 -d bigfile part-
+
+#Avoid zero-sized split files. There are situations when we split a small file into a large number of chunk
+#files and this may lead to zero size split output files. They do not add any value so to avoid it we use the option ‘-e’.
+split -l 2 -e short-file
+
+#Split the file into two files of equal length. To split a file equally into two files,
+#we use the ‘-n’ option. By specifying ‘-n 2’ the file is split equally into two files.
+split -n 2 -d  bigfile part-
+```
+
+##### uniq - report or omit repeated lines
+
+```sh
+#It tells the number of times a line was repeated.
+uniq -c file
+
+#It only prints the repeated lines.
+uniq -d file
+
+#It also prints only duplicate lines but not one per group.
+uniq -D file
+
+#It prints only the unique lines.
+uniq -u file
+
+#As told above, this allows the N fields to be skipped while comparing uniqueness of the lines.
+#This option is helpful when the lines are numbered
+uniq -f 2 f1.txt
+
+#This is similar to -f N option but it skips N characters but not N fields
+uniq -s 3 file
+
+#Similar to the way of skipping characters, we can also ask uniq to limit the comparison to a
+#set number of characters. For this, -w command line option is used.
+uniq -w 3 file
+
+#It is used to make the comparison case-insensitive.
+uniq -i file
+
+#By default, the output uniq produces is newline terminated.
+#However, if you want, you want to have a NULL terminated output instead (useful while dealing with uniq in scripts).
+#This can be made possible using the -z command line option.
+
+uniq -z file
+```
+
 - less
-- bzcat
-- xzcat
-- paste
-- cut
-- tr
-- sort
-- split
-- uniq
-
-#### Cited subjects in topic 103.2
-
-- foo
 
 ### 103.3 Perform basic file management
 
