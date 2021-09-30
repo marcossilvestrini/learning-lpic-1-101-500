@@ -1407,30 +1407,323 @@ uniq -z file
 
 ### 103.3 Perform basic file management
 
-#### Important Files of topic 103.3
-
-- foo
-
 #### Import Commands\Programs of topic 103.3
 
-- cp
-- find
-- mkdir
-- mv
-- ls
-- rm
-- rmdir
-- touch
-- tar
-- cpio
-- dd
-- file
-- gzip
-- gunzip
-- bzip2
-- bunzip2
-- xz
-- unxz
+##### Command ls - List directory contents
+
+```sh
+# Colors in command
+
+Uncolored (white): file or non-filename text (e.g. permissions in the output of ls -l) or multi-hardlink file
+Bold blue: directory
+Bold cyan: symbolic link
+Bold green: executable file
+Bold red: archive file
+Bold magenta: image file, video, graphic, etc. or door or socket
+Cyan: audio file
+Yellow with black background: pipe (AKA FIFO)
+Bold yellow with black background: block device or character device
+Bold red with black background: orphan symlink or missing file
+Uncolored with red background: set-user-ID file
+Black with yellow background: set-group-ID file
+Black with red background: file with capability
+White with blue background: sticky directory
+Blue with green background: other-writable directory
+Black with green background: sticky and other-writable directory
+
+#mark types [*= executables, /=directories, @=symbolik links]
+ls -F
+ls -p
+
+#all infos actual dir
+ls -ld
+ls -ld /etc
+
+#inode
+ls -inode /usr/bin
+ls -i /usr/bin
+
+#list reverse order
+ls --reverse
+ls -r
+
+#view hidden folders\files
+ls -a
+
+#sort size
+ls --sort=size
+ls -S
+
+#sort time
+ls /etc --sort=time
+ls --sort=time  --format=long --reverse
+ls -t /etc
+
+#sort by extension
+ls --sort=extension /etc
+ls -X /etc
+
+#format
+ls /etc --format=long
+ls --sort=size --format=long  /usr/bin
+
+# recursive
+ls --recursive /etc
+ls -R /etc
+
+# Additional ls Options
+
+#Combining long list with human readable file sizes will give us useful suffixes such as M for megabytes or K #for kilobytes.
+ls -lh
+
+
+#The -d option will list directories but not their contents. Combining this with */ will show only #subdirectories and no files.
+ls -d */
+
+
+#Combines long list with the option to sort by modification time. The files with the most recent changes will
+#be at the top, and files with the oldest changes will be at the bottom. But this order can be reversed with:
+ls -lt
+
+#Combines long list with sort by (modification) time, combined with -r which reverses the sort.
+#Now files #with the most recent changes are at the bottom of the list. In addition to sorting by
+#modification time, #files can also be sorted by access time or by status time.
+ls -lrt
+
+#Combines long list with the option to sort by file eXtension. This will, for example, group all files ending
+#with .txt together, all files ending with .jpg together, and so on.
+ls -lX
+```
+
+##### Command cp - Copy files and directories
+
+```sh
+cp /etc/fstab ~/
+cp foo.txt foo2.txt
+cp pictures/*  images
+
+#recursive
+cp -r pictures/  images
+
+#update
+cp -ur pictures  images
+
+#copy files with permissions
+cp -p /etc/fstab /etc/fstab-bkp
+
+#Warnning in user -f !!!!!
+cp -rf pictures  images
+```
+
+##### Command mv - Move,Rename files
+
+```sh
+mv ~/foo ~/bar
+mv foo2.txt foo3.txt
+mv -i file1 ~/foo/file1
+mv -f ~/foo/bar.txt ~/beer.txt
+```
+
+##### Command rm -  Remove files or directories
+
+```sh
+rm ~/foo2.txt
+
+# Warnning in use *, -r, -rf
+echo ~/pictures/*
+rm ~/pictures/*
+
+rm -r ~/pictures
+rm -ri ~/pictures
+rm -rf ~/pictures
+```
+
+##### mkdir
+
+```sh
+mkdir foo
+mkdir -p foo/bar
+```
+
+##### rmdir
+
+```sh
+rmdir images
+rmdir -p ~/foo/bar/beer
+```
+
+##### Find - search for files in a directory hierarchy
+
+```sh
+find .
+find ~/foo -name "*.jpg"
+find ~/foo -name "var"
+find ~/foo -name "log*"
+find ~/foo -name "*log*"
+find ~/foo -name 'picture[3-9].jpg'
+find ~/foo -name 'picture?.jpg'
+
+#find folder
+sudo find /etc -depth -name skel
+sudo find /etc -d -name skel
+
+#find file
+find  /home -type f -name "picture*"
+
+#find link
+find /usr/bin -type l
+
+#find per user
+sudo find / -user vagrant
+sudo find / -user vagrant -type d
+sudo find /  -user vagrant -type f
+
+#find per size
+sudo find / -size +10k
+sudo find / -size -1M
+sudo find / -size +10G
+
+#find per access time
+sudo find / -atime -7
+
+#find per modification time
+find / -mtime -2
+
+#find per change time
+sudo find  / -ctime -2
+
+#find per inode
+sudo find /usr/bin -inum 101245498
+
+# ignore case sensitive
+sudo find / -iname "*log*"
+
+#find whith and, or , not
+sudo find / -name "*log*" -name "*2*"
+sudo find / -name "*picture*" -o -name "*log*"
+sudo find / \( -name "*picture*" -o -name "*log*" \) -a -name "*1*"
+sudo find / \( -name "*picture*" -o -name "*log*" \) -a -type d
+sudo find / \( -name "*picture*" -o -name "*log*" \) -a -type f
+sudo find / \( -name "*picture*" -o -name "*log*" \) -a \(! -type f \)
+sudo find / \( -name "*picture*" -o -name "*log*" \) -a \( ! -type f \)
+
+#find with command exec
+find [options] -exec command [options] "{}" \;
+sudo find / -name "*.log" -type f -exec ls -Rlt "{}" \;
+sudo find / -name "*.log" -type f -exec echo "Find File: "  "{}" \;
+sudo find / -name "*log" -type f -exec rm -i  "{}" \;
+
+#whith option print
+sudo find / -name "*.log" -type f -exec ls -Rlt "{}" \; --print
+
+#whit option delete
+find . -name "*.bak" -delete
+```
+
+##### Tar - An archiving utility
+
+```sh
+# Archiving
+tar -cf scripts.tar foo1.sh foo2.sh
+tar -cvf scripts.tar scripts
+tar -cf scripts.tar scripts/*
+tar cfv  tar-file.tar --wildcards bigfile[1-3]
+
+#redirect file to specific folder
+tar cvf arquive/logs.tar logs/
+
+#view content
+tar -tf scripts.tar
+
+# extract
+tar -xf scripts.tar
+tar -xvf scripts.tar
+
+# extract to specific folder
+tar xvf logs.tar -C new-logs/
+
+#update - Add new version for modify files.Not best practice!
+tar -uvf scripts.tar scripts
+
+#update best practice for update tar files
+tar -cvf scripts.tar scripts
+
+#compress \ descompress with gzip
+tar -czvf scripts.tar.gz scripts
+tar -xzvf scripts.tar.gz
+
+#compress \ descompress with bzip2
+tar -cjvf scripts.tar.bz2 scripts
+tar -xjvf scripts.tar.bz2
+
+#compress \ descompress with xz
+tar -cJvf scripts.tar.xz scripts
+```
+
+##### Gzip - compress or expand files
+
+```sh
+#compress
+gzip -v scripts/script1.sh
+gzip -v1 scripts/script1.sh
+gzip -v9 scripts/script1.sh
+gzip -c scripts/script1.sh > scripts/script1.gz
+
+#descompress
+gzip -dv picture1.jpg.gz
+gunzip -v scripts/script1.gz
+
+#list infos
+gzip -l picture1.jpg.gz
+```
+
+##### Bzip2 - a block-sorting file compressor
+
+```sh
+#compress
+bzip2 -v scripts/script1.sh
+bzip2 -v1 picture1.jpg
+bzip2 -v9 picture1.jpg
+
+#descompress
+bunzip2 -v picture1.jpg.bz2
+bzip2 -dv picture1.jpg.bz2
+```
+
+##### xz - Compress or decompress .xz and .lzma files
+
+```sh
+#compress
+xz script1.sh
+xz -1 bigfile bigfile-xz1
+xz -9 bigfile bigfile-xz9
+
+#descompress
+unxz picture1.xz
+xz -d picture1.xz
+
+```
+
+##### cpio - copy files to and from archives
+
+```sh
+#create file
+ls | cpio -o > archive.cpio
+
+#extract file
+cpio -id < archive.cpio
+```
+
+##### dd - convert and copy a file
+
+```sh
+#copy file file1 to file2
+dd status=progress if=file of=file1
+
+#copy file file1 to file2 and to Uppercase
+dd status=progress if=file1 of=file2 conv=ucase
+
+```
 
 #### Cited subjects in topic 103.3
 

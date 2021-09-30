@@ -1,0 +1,47 @@
+Respostas aos Exercícios Guiados
+Considere a listagem a seguir:
+
+$ find /home/frank/Documents/ -type d
+/home/frank/Documents/
+/home/frank/Documents/animal
+/home/frank/Documents/animal/domestic
+/home/frank/Documents/animal/wild
+Que tipo de arquivos esse comando produziria?
+
+Diretórios.
+
+A busca começaria em qual diretório?
+
+/home/frank/Documents
+
+Um usuário deseja compactar sua pasta de backup. Ele usa o seguinte comando:
+
+$ tar cvf /home/frank/backup.tar.gz /home/frank/dir1
+Qual opção está faltando para compactar o backup usando o algoritmo gzip?
+
+A opção -z.
+
+Respostas aos Exercícios Exploratórios
+O administrador do sistema precisa realizar verificações regulares para remover arquivos volumosos. Esses arquivos volumosos estão localizados em /var e terminam com uma extensão .backup.
+
+Escreva o comando, usando find, para localizar esses arquivos:
+
+$ find /var -name *.backup
+Uma análise do tamanho desses arquivos revela que eles variam de 100M a 1G. Complete o comando anterior com esta nova informação para poder localizar os arquivos de backup variando de 100M a 1G:
+
+$ find /var -name *.backup -size +100M -size -1000M
+Finalmente, complete este comando com a ação delete para remover esses arquivos:
+
+$ find /var -name *.backup -size +100M -size -1000M -delete
+No diretório /var, existem quatro arquivos de backup:
+
+db-jan-2018.backup
+db-feb-2018.backup
+db-march-2018.backup
+db-apr-2018.backup
+Usando o tar, especifique o comando usado para criar um arquivo de pacote com o nome db-first-quarter-2018.backup.tar:
+
+$ tar -cvf db-first-quarter-2018.backup.tar db-jan-2018.backup db-feb-2018.backup db-march-2018.backup db-apr-2018.backup
+Usando o tar, especifique o comando usado para criar o arquivo de pacote e compactá-lo usando o gzip. Note que o nome do arquivo resultante deve terminar com .gz:
+
+$ tar -zcvf db-first-quarter-2018.backup.tar.gz db-jan-2018.backup db-feb-2018.backup db-march-2018.backup db-apr-2018.backup

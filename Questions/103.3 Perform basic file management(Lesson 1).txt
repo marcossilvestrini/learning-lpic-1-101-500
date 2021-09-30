@@ -1,0 +1,92 @@
+Respostas aos Exercícios Guiados
+Considere a listagem abaixo:
+
+$ ls -lh
+total 60K
+drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Desktop
+drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Documents
+drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Downloads
+-rw-r--r--  1   frank   frank     21    Sep 7   12:59   emp_name
+-rw-r--r--  1   frank   frank     20    Sep 7   13:03   emp_salary
+-rw-r--r--  1   frank   frank   8.8K    Apr 1   2018    examples.desktop
+-rw-r--r--  1   frank   frank     10    Sep 1   2018    file1
+-rw-r--r--  1   frank   frank     10    Sep 1   2018    file2
+drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Music
+drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Pictures
+drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Public
+drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Templates
+drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Videos
+O que o caractere d representa na saída?
+
+d é o caractere que identifica um diretório.
+
+Por que os tamanhos são mostrados no formato legível por humanos?
+
+Por causa da opção -h.
+
+Qual seria a diferença na saída se ls fosse usado sem argumento?
+
+Seriam mostrados apenas os nomes dos diretórios e arquivos.
+
+Considere o comando abaixo:
+
+$ cp /home/frank/emp_name /home/frank/backup
+O que aconteceria ao arquivo emp_name se esse comando fosse executado com sucesso?
+
+emp_name seria copiado em backup.
+
+Se emp_name fosse um diretório, qual opção precisaria ser adicionada a cp para executar o comando?
+
+-r
+
+Se cp fosse alterado para mv, quais seriam os resultados esperados?
+
+emp_name seria movido para backup. Ele não estaria mais presente no diretório inicial do usuário frank.
+
+Considere a listagem:
+
+$ ls
+file1.txt file2.txt file3.txt file4.txt
+Qual caractere curinga ajudaria a remover todo o conteúdo deste diretório?
+
+O asterisco *.
+
+Com base na listagem anterior, quais arquivos seriam exibidos com o comando a seguir?
+
+$ ls file*.txt
+Todos eles, já que o asterisco representa qualquer número de caracteres.
+
+Complete o comando adicionando os dígitos e caracteres entre os colchetes, de modo listar todo o conteúdo acima:
+
+$ ls file[].txt
+file[0-9].txt
+
+Respostas aos Exercícios Exploratórios
+Em seu diretório inicial, crie arquivos chamados dog e cat.
+
+$ touch dog cat
+Ainda no diretório inicial, crie um diretório chamado animal. Mova dog e cat para dentro de animal.
+
+$ mkdir animal
+$ mv dog cat -t animal/
+Vá à pasta Documents em seu diretório inicial e, dentro dela, crie o diretório backup.
+
+$ cd ~/Documents
+$ mkdir backup
+Copie animal e seu conteúdo para backup.
+
+$ cp -r animal ~/Documents/backup
+Renomeie animal em backup como animal.bkup.
+
+$ mv animal/ animal.bkup
+O diretório /home/lpi/databases contém muitos arquivos, dentre os quais: db-1.tar.gz, db-2.tar.gz e db-3.tar.gz.
+Qual comando podemos usar para listar apenas os arquivos mencionados acima?
+
+$ ls db-[1-3].tar.gz
+Considere a listagem:
+
+$ ls
+cne1222223.pdf cne12349.txt cne1234.pdf
+Usando um único caractere de globbing, qual comando removeria apenas os arquivos pdf?
+
+$ rm cne*.pdf
