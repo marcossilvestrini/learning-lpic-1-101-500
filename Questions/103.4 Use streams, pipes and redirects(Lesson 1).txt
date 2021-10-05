@@ -1,0 +1,35 @@
+Respostas aos Exercícios Guiados
+Além dos arquivos de texto, o comando cat também pode trabalhar com dados binários, como enviar o conteúdo de um dispositivo de bloco para um arquivo. Usando redirecionamento, como o cat pode enviar o conteúdo do dispositivo /dev/sdc para o arquivo sdc.img no diretório atual?
+
+$ cat /dev/sdc > sdc.img
+Qual é o nome do canal padrão redirecionado pelo comando date 1> now.txt?
+
+Standard output ou stdout
+
+Ao tentar sobrescrever um arquivo usando redirecionamento, um usuário recebe uma mensagem de erro informando que a opção noclobber está habilitada. Como essa opção pode ser desativada para a sessão atual?
+
+set +C ou set +o noclobber
+
+Qual será o resultado do comando cat <<.>/dev/stdout?
+
+O Bash entrará no modo de entrada Heredoc e sairá quando um ponto final aparecer sozinho em uma linha. O texto digitado será redirecionado para stdout (impresso na tela).
+
+Respostas aos Exercícios Exploratórios
+O comando cat /proc/cpu_info exibe uma mensagem de erro porque /proc/cpu_info não existe. Para onde o comando cat /proc/cpu_info 2>1 redireciona a mensagem de erro?
+
+Para um arquivo chamado 1 no diretório atual.
+
+Ainda será possível descartar o conteúdo enviado para /dev/null se a opção noclobber estiver habilitada para a sessão de shell atual?
+
+Sim. /dev/null é um arquivo especial, não afetado por noclobber.
+
+Sem usar echo, como o conteúdo da variável $USER poderia ser redirecionado para o stdin do comando sha1sum?
+
+$ sha1sum <<<$USER
+O kernel do Linux mantém links simbólicos em /proc/PID/fd/ para cada arquivo aberto por um processo, onde PID é o número de identificação do processo correspondente. Como o administrador do sistema poderia usar esse diretório para verificar a localização dos arquivos de log abertos pelo nginx, supondo que seu PID é 1234?
+
+Emitindo o comando ls -l /proc/1234/fd, que exibirá os destinos de cada link simbólico no diretório.
+
+É possível fazer cálculos aritméticos usando apenas comandos internos do shell, mas cálculos de ponto flutuante requerem programas específicos, como o bc (basic calculator). Com o bc é possível até mesmo especificar o número de casas decimais, com o parâmetro escala. No entanto, o bc aceita operações apenas por meio de sua entrada padrão, geralmente inserida no modo interativo. Usando uma Here string, como a operação de ponto flutuante scale=6; 1/3 pode ser enviada para a entrada padrão de bc?
+
+$ bc <<<"scale=6; 1/3"

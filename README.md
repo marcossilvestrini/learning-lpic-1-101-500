@@ -816,101 +816,7 @@ ssh-copy-id -i <public_key> user@cloud_server
 - Red Hat Enterprise Virtualization
 - oVirt
 - Cloud Init
-
-##### Use KVM in Debian
-
-Step:1) Check Whether Virtualization Extension is enabled or not:
-
-```sh
-egrep -c '(vmx|svm)' /proc/cpuinfo
-grep -E --color '(vmx|svm)' /proc/cpuinfo
-```
-
-Step:2) Install QEMU-KVM & Libvirt packages along with virt-manager
-
-```sh
-#install libvirt packages
-sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system \
-bridge-utils virtinst libvirt-daemon virt-manager -y
-
-#check status libvirt
-sudo systemctl status libvirtd.service
-```
-
-Step:3) Start default network and add vhost_net module
-
-```sh
-#show network default and Start
-sudo virsh net-list --all
-
-#make it active and auto-restart across the reboot
-sudo virsh net-start default
-sudo virsh net-autostart default
-
-#add “vhost_net” kernel module
-sudo modprobe vhost_net
-
-#add user in  libvirt groups
-sudo adduser myuser libvirt
-sudo adduser myuser libvirt-qemu
-
-#to refresh or reload group membership run the followings,
-newgrp libvirt
-libvirt-qemu
-```
-
-Step:4) Create Linux Bridge(br0) for KVM VMs
-
-```sh
-sudo vi /etc/network/interfaces
-```
-
-```sh
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-
-source /etc/network/interfaces.d/*
-
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-# The primary network interface
-allow-hotplug ens34
-auto ens34
-iface ens34 inet manual
-
-#Configure bridge and give it a static ip
-auto br0
-iface br0 inet static
-        address 192.168.0.133
-        netmask 255.255.255.0
-        network 192.168.0.1
-        broadcast 192.168.0.255
-        gateway 192.168.0.1
-        bridge_ports ens34
-        bridge_stp off
-        bridge_fd 0
-        bridge_maxwait 0
-        dns-nameservers 1.1.1.1
-
-# This is an autoconfigured IPv6 interface
-iface ens34 inet6 auto
-```
-
-```sh
-#reboot system
-sudo reboot
-
-#check network changes
-ip a s br0
-```
-
-Step:5) Create Virtual Machines either via Virt-Manager (GUI) or virt-install (command line)
-
-```sh
-
-```
+- KVM
 
 ## Topic 103: GNU and Unix Commands
 
@@ -1733,16 +1639,78 @@ dd status=progress if=file1 of=file2 conv=ucase
 
 #### Important Files of topic 103.4
 
-- foo
+- /dev/stdin
+- /dev/stdout
+- /dev/stderr
 
 #### Import Commands\Programs of topic 103.4
 
-- tee
-- xargs
+##### Redirect Standart I/O
 
-#### Cited subjects in topic 103.4
+```sh
+input: stdin(channel 0)
+output:  stdout(channel 1)
+error: stderr(channel 2)
 
-- foo
+#stdin
+zip -@ programs.zip < list_programs.txt
+
+#stdout
+ls > ~/stdout_ls.txt
+echo "Hello World" > echo_hello.txt
+ls >> ~/stdout_ls.txt
+echo "Second Line" >> echo_hello.txt
+
+#stderr
+cd /shgfdjdgfjsdfgjhdfs 2> stderr_cd.txt
+ls -lR / >result.txt 2>error.log
+
+#combination chanels
+#stdout and stderr
+find /home -user vagrant &> newfile
+
+#alter output channel
+cat /shgfdjdgfjsdfgjhdfs >stderr_cat.txt 2>&1
+
+#Here Document
+wc -c <<EOF
+<line 1
+<line 2
+<line 3
+< EOF
+
+#Here String
+wc -c <<<"This is one line in bash"
+```
+
+##### tee - read from standard input and write to standard output and files
+
+```sh
+ grep 'model name' </proc/cpuinfo | uniq | tee cpu_model.txt
+ make | tee log.txt
+ make 2>&1 | tee log.txt
+```
+
+##### Command Substitution
+
+```sh
+#examples
+mkdir `date +%Y-%m-%d`
+mkdir $(date +%Y-%m-%d)
+OS=`uname -o`
+
+```
+
+#### xargs - build and execute command lines from standard input
+
+```sh
+#examples (for details about this commands, use https://explainshell.com/)
+find /usr/share/icons -name 'debian*' | xargs identify -format "%f: %wx%h\n"
+find . -name '*avi' -print0 -o -name '*mp4' -print0 -o -name '*mkv' -print0 | xargs -0 du | sort -n
+find . -mindepth 2 -name '*avi' -print0 -o -name '*mp4' -print0 -o -name '*mkv' -print0 | xargs -0 -I PATH mv PATH ./
+
+cat filelist.txt | xargs -I IMG convert IMG -resize 25% small/IMG
+```
 
 ### 103.5 Create, monitor and kill processes
 
