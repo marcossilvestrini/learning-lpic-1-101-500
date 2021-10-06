@@ -1716,26 +1716,167 @@ cat filelist.txt | xargs -I IMG convert IMG -resize 25% small/IMG
 
 #### Important Files of topic 103.5
 
-- foo
+- ~/nohup.out
 
 #### Import Commands\Programs of topic 103.5
 
-- &
-- bg
-- fg
-- jobs
-- kill
-- nohup
-- ps
-- top
-- free
-- uptime
-- pgrep
-- pkill
-- killall
-- watch
-- screen
-- tmux
+##### jobs
+
+```sh
+#list all jobs
+jobs -l
+
+#list specific job
+jobs %2
+
+#job name start with str
+jobs %str
+
+#job name contain str
+jobs %?str
+```
+
+##### bg
+
+```sh
+#take it to the background with bg
+bg %JOB_ID
+```
+
+##### fg
+
+```sh
+#take it to the foreground with
+fg %JOB_ID
+```
+
+##### kill
+
+```sh
+#kill job
+kill % JOB_ID
+
+#kill process
+kill PID
+
+#force kill
+kill -9 PID
+
+#kill list of process with str
+kill -1 $(pgrep sleep)
+```
+
+##### nohup - run a command immune to hangups, with output to a non-tty
+
+```sh
+#command sintaxe
+nohup COMMAND &
+
+#example
+nohup ping localhost &
+
+#redirect stdout\strerr for file
+nohup ping localhost & >/var/log/my-nohup-command.log
+```
+
+##### watch - execute a program periodically, showing output fullscreen
+
+```sh
+#watch command
+watch uptime
+
+#alter periodically
+watch -n 3 free
+```
+
+##### free - Display amount of free and used memory in the system
+
+```sh
+#display memory infos
+free
+
+#show in mb
+free --mega
+
+#show in gb
+free --giga
+
+#show human-readable output
+free -h
+```
+
+##### uptime - Tell how long the system has been running
+
+```sh
+#examples
+uptime
+uptime -p
+```
+
+##### pgrep - look up or signal processes based on name and other attributes
+
+```sh
+#show process id start with str
+pgrep str
+
+#show process id ans name start with str
+pgrep -l str
+```
+
+##### pkill - look up or signal processes based on name and other attributes
+
+```sh
+#examples
+pkill sleep
+```
+
+##### killall
+
+```sh
+#examples
+killall sleep
+```
+
+##### top - display Linux processes
+
+```sh
+#show default
+top
+
+#show by mermory
+Press M
+
+#show by ID
+Press N
+
+#show by time execution
+Press T
+
+#show by cpu
+Press P
+
+#Sort
+Press R
+
+```
+
+##### ps
+
+```sh
+
+```
+
+##### screen
+
+```sh
+
+```
+
+##### tmux
+
+```sh
+
+```
 
 #### Cited subjects in topic 103.5
 
