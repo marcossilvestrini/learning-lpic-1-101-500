@@ -1858,17 +1858,140 @@ Press P
 #Sort
 Press R
 
+# kill process
+Press k + PID
+
+#only process current user
+Press u ans enter user
+
+#Show programs' absolute paths and differentiate between userspace processes
+#and kernelspace processes (in square brackets)
+Press  c
+
+#Forest/hierarchy view of processes.
+Press  V
+
+#Save configuration settings to ~/.toprc.
+Press  W
+
+#Columns reporting information about the running processes:
+
+PID
+Process identifier.
+
+USER
+User who issued the command that generated the process.
+
+PR
+Priority of process to the kernel.
+
+NI
+Nice value of process. Lower values have a higher priority than higher ones.
+
+VIRT
+Total amount of memory used by process (including Swap).
+
+RES
+RAM memory used by process.
+
+SHR
+Shared memory of the process with other processes.
+
+S
+Status of process. Values include: S (interruptible sleep — waiting for an event to finish), R (runnable — either executing or in the queue to be executed) or Z (zombie — terminated child processes whose data structures have not yet been removed from the process table).
+
+%CPU
+Percentage of CPU used by process.
+
+%MEM
+Percentage of RAM used by process, that is, the RES value expressed as a percentage.
+
+TIME+
+Total time of activity of process.
+
+COMMAND
+Name of command/program which generated the process.
 ```
 
-##### ps
+##### ps - report a snapshot of the current processes.
 
 ```sh
+# show all process
+ps aux
 
+# view all process tty
+ps -a
+
+#show process by user
+ps -u root
+
+#show process by pid
+ps --pid 1111
+
+#Explain the columns of ps aux command:
+
+USER
+Owner of process.
+
+PID
+Process identifier.
+
+%CPU
+Percentage of CPU used.
+
+%MEM
+Percentage of physical memory used.
+
+VSZ
+Virtual memory of process in KiB.
+
+RSS
+Non-swapped physical memory used by process in KiB.
+
+TT
+Terminal (tty) controlling the process.
+
+STAT
+Code representing the state of process. Apart from S, R and Z (that we saw when describing the output of top), other possible values include: D (uninterruptible sleep — usually waiting for I/O), T (stopped — normally by a control signal). Some extra modifier include: < (high-priority — not nice to other processes), N (low-priority — nice to other processes), or + (in the foreground process group).
+
+STARTED
+Time at which the process started.
+
+TIME
+Accumulated CPU time.
+
+COMMAND
+Command that started the process.
 ```
 
-##### screen
+##### screen - screen manager with VT100/ANSI terminal emulation
 
 ```sh
+#create new window
+screen
+
+#add new windows with name
+screen -t WINDOWS_NAME
+
+#list windows
+ctr+a,w
+
+#navegate between windows
+Ctrl+a,n (next)
+Ctrl+a-p (previous)
+Ctrl+a,NUMBER_WINDOWS
+Ctrl+a," "
+
+
+#regions - create horizontal regions\screens
+ctr+a, S
+
+#regions - create vertical regions\screens
+ctr+a, |
+
+#regions - navegate between regions
+ctr+a, tab
+
 
 ```
 
