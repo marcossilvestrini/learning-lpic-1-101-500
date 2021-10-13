@@ -1,0 +1,121 @@
+Respostas aos Exercícios Guiados
+oneko é um programa divertido que mostra um gato perseguindo o cursor do mouse. Se ele ainda não estiver instalado em seu sistema desktop, instale-o usando o gerenciador de pacotes de sua distribuição. Vamos usá-lo para estudar o controle de jobs.
+
+Inicie o programa. Qual o procedimento?
+
+Digitar oneko no terminal.
+
+Mova o cursor do mouse para ver como o gato o persegue. Agora suspenda o processo. Qual o procedimento? Qual é a saída?
+
+Pressionar a combinação de teclas Ctrl+z:
+
+[1]+  Stopped                 oneko
+Verifique quantos jobs estão presentes atualmente. O que você digita? Qual é a saída?
+
+$ jobs
+[1]+  Stopped                 oneko
+Agora envie-o para o segundo plano especificando seu ID de trabalho. Qual é a saída? Como você pode saber se o job está sendo executado em segundo plano?
+
+$ bg %1
+[1]+ oneko &
+O gato está se movendo outra vez.
+
+Finalmente, encerre o job especificando seu ID de trabalho. O que você digita?
+
+$ kill %1
+Descubra o PID de todos os processos gerados pelo servidor web Apache HTTPD (apache2) com dois comandos diferentes:
+
+$ pgrep apache2
+ou
+
+$ pidof apache2
+Encerre todos os processos apache2 sem usar seus PIDs e com dois comandos diferentes:
+
+$ pkill apache2
+ou
+
+$ killall apache2
+Suponha que você tem de encerrar todas as instâncias do apache2 e não tem tempo para descobrir quais são os PIDs correspondentes. Como fazer isso usando kill com o sinal padrão SIGTERM em uma só linha?
+
+$ kill $(pgrep apache2)
+$ kill `pgrep apache2`
+ou
+
+$ kill $(pidof apache2)
+$ kill `pidof apache2`
+Note
+Como SIGTERM (15) é o sinal padrão, não é necessário passar nenhuma opção para kill.
+
+Inicie o top e interaja com ele executando o seguinte:
+
+Exibir uma visão em floresta dos processos:
+
+Pressione V.
+
+Exibir caminhos completos de processos, diferenciando entre espaço de usuário e espaço de kernel:
+
+Pressione c.
+
+Digite o comando ps para exibir todos os processos iniciados pelo usuário do servidor web Apache HTTPD (www-data):
+
+Usando a sintaxe do BSD:
+
+$ ps U www-data
+Usando a sintaxe do UNIX:
+
+$ ps -u www-data
+Usando a sintaxe do GNU:
+
+$ ps --user www-data
+Respostas aos Exercícios Exploratórios
+O sinal SIGHUP pode ser usado como forma de reiniciar certos daemons. Com o servidor web Apache HTTPD — por exemplo — enviar SIGHUP para o processo pai (iniciado por init) elimina seus filhos. O pai, no entanto, relê seus arquivos de configuração, reabre os arquivos de log e gera um novo conjunto de filhos. Execute as seguintes tarefas:
+
+Inicie o servidor web:
+
+$ sudo systemctl start apache2
+Certifique-se de conhecer o PID do processo pai:
+
+$ ps aux | grep apache2
+O processo pai é aquele iniciado pelo usuário root. Em nosso caso, o PID é 1653.
+
+Faça o servidor web Apache HTTPD reiniciar enviando o sinal SIGHUP para o processo pai:
+
+$ kill -SIGHUP 1653
+Verifique se o pai não foi eliminado e se novos filhos foram gerados:
+
+$ ps aux | grep apache2
+Agora você deve ver o processo pai apache2 junto com dois novos filhos.
+
+Embora inicialmente estática, a saída de ps pode ser tornada dinâmica combinando ps e watch. Vamos monitorar as novas conexões do servidor web Apache HTTPD. Antes de realizar as tarefas descritas abaixo, recomendamos ler a descrição da diretiva MaxConnectionsPerChild em Apache MPM Common Directives.
+
+Adicione a diretiva MaxConnectionsPerChild com um valor de 1 no arquivo de configuração de apache2 — no Debian e seus derivativos ele fica em /etc/apache2/apache2.conf; na família CentOS, em /etc/httpd/conf/httpd.conf. Não esqueça de reiniciar apache2 para que as mudanças sejam aplicadas.
+
+A linha a incluir no arquivo de configuração é MaxConnectionsPerChild 1. Uma maneira de reiniciar o servidor web é através de sudo systemctl restart apache2.
+
+Digite um comando que use watch, ps e grep para as conexões do apache2.
+
+$ watch 'ps aux | grep apache2'
+ou
+
+$ watch "ps aux | grep apache2"
+Agora abra um navegador web ou use um navegador de linha de comando como o lynx para estabelecer uma conexão com o servidor web através de seu endereço IP. O que você observa na saída de watch?
+
+Um dos processos filho de propriedade de www-data desaparece.
+
+Como vimos, por padrão, top classifica as tarefas por porcentagem de uso da CPU em ordem decrescente (com os valores mais altos no topo). Esse comportamento pode ser modificado com as teclas interativas M (uso de memória), N (identificador único do processo), T (tempo de execução) e P (porcentagem de tempo de CPU). No entanto, também podemos classificar a lista de tarefas a gosto, iniciando top com a opção -o (para saber mais, verifique a página man de top). Agora, execute as seguintes tarefas:
+
+Inicie o top para que as tarefas sejam classificadas por uso da memória:
+
+$ top -o %MEM
+Verifique se digitou o comando correto destacando a coluna da memória:
+
+Pressione x.
+
+O ps também tem uma opção o para especificar as colunas que você deseja mostrar. Estude esta opção e execute as seguintes tarefas:
+
+Inicie o ps para exibir somente informações sobre o usuário, porcentagem de memória usada, porcentagem de tempo da CPU usado e comando completo:
+
+$ ps o user,%mem,%cpu,cmd
+Agora, inicie o ps para que as únicas informações exibida sejam o usuário e o nome dos programas que ele está usando:
+
+$ ps o user,comm
