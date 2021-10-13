@@ -1985,13 +1985,19 @@ Ctrl+a," "
 
 #regions - create horizontal regions\screens
 ctr+a, S
+```
+![image](https://user-images.githubusercontent.com/62715900/137193729-9338a590-290a-4f4a-9e2c-e8994bb80e24.png)
 
+```sh
 #regions - create vertical regions\screens
 ctr+a, |
 
+```
+![image](https://user-images.githubusercontent.com/62715900/137194590-765fe6cf-967c-47a0-ab7f-bf69c7a0efaf.png)
+
+```sh
 #regions - navegate between regions
 ctr+a, tab
-
 
 ```
 
