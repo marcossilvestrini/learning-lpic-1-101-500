@@ -1952,7 +1952,12 @@ TT
 Terminal (tty) controlling the process.
 
 STAT
-Code representing the state of process. Apart from S, R and Z (that we saw when describing the output of top), other possible values include: D (uninterruptible sleep — usually waiting for I/O), T (stopped — normally by a control signal). Some extra modifier include: < (high-priority — not nice to other processes), N (low-priority — nice to other processes), or + (in the foreground process group).
+Code representing the state of process.\
+Apart from S, R and Z (that we saw when describing the output of\ top),\
+other possible values include: D (uninterruptible sleep — usually waiting for I/O),\
+T (stopped — normally by a control signal).\
+Some extra modifier include: < (high-priority — not nice to other processes),\
+N (low-priority — nice to other processes), or + (in the foreground process group).\
 
 STARTED
 Time at which the process started.
@@ -1982,23 +1987,31 @@ Ctrl+a-p (previous)
 Ctrl+a,NUMBER_WINDOWS
 Ctrl+a," "
 
+#kill window
+ctr+a,k
 
 #regions - create horizontal regions\screens
 ctr+a, S
 ```
+
 ![image](https://user-images.githubusercontent.com/62715900/137193729-9338a590-290a-4f4a-9e2c-e8994bb80e24.png)
 
 ```sh
 #regions - create vertical regions\screens
 ctr+a, |
-
 ```
+
 ![image](https://user-images.githubusercontent.com/62715900/137194590-765fe6cf-967c-47a0-ab7f-bf69c7a0efaf.png)
 
 ```sh
 #regions - navegate between regions
 ctr+a, tab
 
+#terminate the current region
+Ctrl+a,X
+
+#terminate all regions except the current one
+Ctrl+a,Q
 ```
 
 ##### tmux
