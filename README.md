@@ -1717,6 +1717,8 @@ cat filelist.txt | xargs -I IMG convert IMG -resize 25% small/IMG
 #### Important Files of topic 103.5
 
 - ~/nohup.out
+- /etc/screenrc
+- ~/.screenrc
 
 #### Import Commands\Programs of topic 103.5
 
@@ -1972,57 +1974,190 @@ Command that started the process.
 ##### screen - screen manager with VT100/ANSI terminal emulation
 
 ```sh
-#create new window
+#start screen
 screen
 
 #add new windows with name
 screen -t WINDOWS_NAME
 
-#list windows
-ctr+a,w
+#alter windows name
+Ctrl+a-A
 
-#navegate between windows
-Ctrl+a,n (next)
+#list windows
+ctr+a-w
+
+#navigate between windows
+Ctrl+a-n (next)
 Ctrl+a-p (previous)
-Ctrl+a,NUMBER_WINDOWS
-Ctrl+a," "
+Ctrl+a-NUMBER_WINDOWS
+Ctrl+a-"
 
 #kill window
-ctr+a,k
+ctr+a-k
 
 #regions - create horizontal regions\screens
-ctr+a, S
+ctr+a-S
 ```
 
 ![image](https://user-images.githubusercontent.com/62715900/137193729-9338a590-290a-4f4a-9e2c-e8994bb80e24.png)
 
 ```sh
 #regions - create vertical regions\screens
-ctr+a, |
+ctr+a- |
 ```
 
 ![image](https://user-images.githubusercontent.com/62715900/137194590-765fe6cf-967c-47a0-ab7f-bf69c7a0efaf.png)
 
 ```sh
-#regions - navegate between regions
-ctr+a, tab
+#regions - navigate between regions
+ctr+a-tab
 
 #terminate the current region
-Ctrl+a,X
+Ctrl+a-X
 
 #terminate all regions except the current one
-Ctrl+a,Q
+Ctrl+a-Q
+
+#sessions - List sessions
+screen -list
+screen -ls
+
+#sessions - Create new session
+screen -S "second session"
+
+#sessions - Terminate session
+screen -S SESSION-PID -X quit
+
+#sessions - Detached session
+Ctrl+a-d
+
+#sessions - Attached session
+screen -r SESSION-PID
+screen -r SESSION-NAME
+screen -r -RR
+
+#Copy & Paste: Scrollback Mode
+GNU Screen features a copy or scrollback mode. Once entered, you can move the cursor
+in the current window and through the contents of its history using the arrow keys.
+You can mark text and copy it across windows. The steps to follow are:
+
+1 - Enter copy/scrollback mode: Ctrl+a-[.
+
+2 - Move to the beginning of the piece of text you want to copy using the arrow keys.
+
+3 - Mark the beginning of the piece of text you want to copy: Space.
+
+4 - Move to the end of the piece of text you want to copy using the arrow keys.
+
+5 - Mark the end of the piece of text you want to copy: Space.
+
+6 - Go to the window of your choice and paste the piece of text: Ctrl+a-].
+
+
 ```
 
-##### tmux
+##### tmux — terminal multiplexer
 
 ```sh
+#start tmux
+tmux
 
+#create new windows
+Ctrl+b-c
+
+#create new windows with name
+tmux new -s "LPI" -n "Window zero"
+
+#list all windows
+Ctrl+b-w
+
+#rename window
+Ctrl+b-,
+
+#alter index window
+Ctrl+b-.
+
+#find window per name
+Ctrl+b-f
+
+#navigate next windows
+Ctrl+b-n
+
+#navigate previous window
+Ctrl+b-p
+
+#navigate for specific windows number
+Ctrl+b-number
+
+#terminate windows
+Ctrl+b-&
+
+#create horizontal panel
+Ctrl+b-"
+
+#create vertical panel
+Ctrl+b-%
+
+#terminate panel
+Ctrl+b-x
+
+#move between panels
+Ctrl+b-↑,↓,←,→
+
+#move to the last active pane.
+Ctrl+b-;
+
+#resize pane by one line.
+Ctrl+b-Ctrl+arrow key
+
+#resize pane by five lines.
+Ctrl+b-Alt+arrow key
+
+swap panes (current to previous).
+Ctrl+b-{
+
+swap panes (current to next).
+Ctrl+b-}
+
+zoom in/out panel.
+Ctrl+b-z
+
+tmux displays a fancy clock inside the pane (kill it by pressing q).
+Ctrl+b-t
+
+#turn pane into window.
+Ctrl+b-!
+
+
+#list sessions
+Ctrl+b-s:
+tmux ls
+
+#create new session
+Ctrl+b, type in :new
+
+rename session
+Ctrl+b-$
+
+#switch sessions
+Ctrl+b-s
+
+#kill session
+tmux kill-session -t SESSION-NAME
+
+#attach session
+tmux attach -t SESSION-NAME
+tmux a -t SESSION-NAME
+
+#detach session
+Ctrl+b-d:
+
+#select what client to detach.
+Ctrl+b-D
+
+#refresh the client’s terminal.
+Ctrl+b-r
 ```
-
-#### Cited subjects in topic 103.5
-
-- foo
 
 ### 103.6 Modify process execution priorities
 

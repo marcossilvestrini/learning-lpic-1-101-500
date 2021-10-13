@@ -1,0 +1,205 @@
+Respostas aos Exercícios Guiados
+Indique se as seguintes afirmações/recursos correspondem ao GNU Screen, ao tmux ou a ambos:
+
+Recurso/Afirmação	GNU Screen	tmux
+O prefixo dos comandos por padrão é Ctrl+a
+
+x
+
+Modelo Cliente-Servidor
+
+x
+
+Os painéis são pseudo-terminais
+
+x
+
+Eliminar uma região não elimina as janelas associadas
+
+x
+
+As sessões incluem janelas
+
+x
+
+x
+
+As sessões podem ser desanexadas
+
+x
+
+x
+
+Instale o GNU Screen no seu computador (nome do pacote: screen) e realize as seguintes tarefas:
+
+Inicie o programa. Que comando você usa?
+
+screen
+
+Inicie top:
+
+top
+
+Usando o prefixo de teclado de screen, abra uma nova janela; em seguida, abra /etc/screenrc usando vi:
+
+Ctrl+a-c
+
+sudo vi /etc/screenrc
+
+Liste as janelas na parte de baixo da tela:
+
+Ctrl+a-w
+
+Mude o nome da janela atual para vi:
+
+Ctrl+a-A. Depois digitamos vi e pressionamos enter.
+
+Mude o nome da janela restante para top. Para isso, primeiro exiba uma lista de todas as janelas para poder navegar entre elas e selecionar a correta:
+
+Primeiro, digitamos Ctrl+a-". Em seguida usamos as setas do teclado para marcar a janela que diz 0 bash e pressionamos enter. Finalmente, digitamos Ctrl+a-A, em seguida top e pressionamos enter.
+
+Confira se os nomes foram alterados exibindo o nome das janelas novamente na parte de baixo da tela:
+
+Ctrl+a-w
+
+Agora, desanexe a sessão e faça o screen criar uma nova de nome ssh:
+
+Ctrl+a-d screen -S "ssh" e pressione enter.
+
+Desanexe ssh e faça o screen exibir a lista de sessões:
+
+Ctrl+a-d screen -list ou screen -ls.
+
+Agora, anexe-a à primeira sessão usando seu PID:
+
+screen -r PID-OF-SESSION
+
+Você deve ter retornado à janela que está exibindo top. Divida a janela horizontalmente e passe para a nova região vazia:
+
+Ctrl+a-S
+
+Ctrl+a-Tab
+
+Faça o screen listar todas as janelas e selecione vi para ser exibido na nova região vazia:
+
+Usamos Ctrl+a-" para exibir todas as janelas para seleção, marcamos vi e pressionamos enter.
+
+Agora, divida a região atual verticalmente, passe para a nova região vazia e associe-a a uma nova janela:
+
+Ctrl+a-|
+
+Ctrl+a-Tab
+
+Ctrl+a-c
+
+Elimine todas as regiões exceto a atual (lembre-se de que, embora você esteja eliminando as regiões, as janelas ainda estão vivas). Depois, saia de todas as janelas da sessão atual até que a sessão em si seja encerrada:
+
+Ctrl+a-Q. exit (para sair do Bash). Shift+:, depois digitamos quit e pressionamos enter (para sair do vi). Em seguida, digitamos exit (para sair do shell Bash subjacente), q (para encerrar top); depois digitamos exit (para sair do shell Bash subjacente).
+
+Finalmente, faça o screen listar novamente suas sessões, elimine a sessão ssh restante pelo PID e confira se não sobrou nenhuma sessão:
+
+screen -list ou screen -ls
+
+screen -S PID-OF-SESSION -X quit
+
+screen -list ou screen -ls
+
+Instale o tmux em seu computador (nome do pacote: tmux) e realize as tarefas a seguir:
+
+Inicie o programa. Que comando você usa?
+
+tmux
+
+Inicie top (note como — em poucos segundos — o nome da janela na barra de status muda para top):
+
+top
+
+Usando o prefixo de teclado do tmux, abra uma nova janela; em seguida, crie ~/.tmux.conf usando nano:
+
+Ctrl+b-c nano ~/.tmux.conf
+
+Divida a janela verticalmente e reduza o tamanho do novo painel algumas vezes:
+
+Ctrl+b-"
+
+Ctrl+b-Ctrl+↓
+
+Agora mude o nome da janela atual para text editing; em seguida, faça o tmux exibir uma lista de todas as sessões:
+
+Ctrl+b-,. Daí informamos o novo nome e pressionamos enter. Ctrl+b-s ou tmux ls.
+
+Passe para a janela que está rodando top e volte à janela atual usando a mesma combinação de teclas:
+
+Ctrl+b-n or Ctrl+b-p
+
+Desanexe a sessão atual e crie uma nova chamada ssh com uma janela chamada ssh window:
+
+Ctrl+b-d tmux new -s "ssh" -n "ssh window"
+
+Desanexe também a sessão ssh e faça o tmux exibir outra vez a lista de sessões:
+
+Ctrl+b-d tmux ls
+
+Note
+A partir deste ponto, o exercício requer o uso de uma máquina remota para conexões ssh ao seu host local (uma máquina virtual é perfeitamente válida e pode ser muito prática). Certifique-se de ter o openssh-server instalado e rodando em sua máquina local e que pelo menos o openssh-client esteja instalado na máquina remota.
+
+Agora, inicie uma máquina remota e conecte-se via ssh de seu host local. Quando a conexão for estabelecida, procure por sessões do tmux:
+
+No hospedeiro remoto: ssh local-username@local-ipaddress. Depois de conectá-lo à máquina local: tmux ls.
+
+No host remoto, anexe a sessão do ssh pelo nome:
+
+tmux a -t ssh (a pode ser substituído por at ou attach).
+
+De volta à máquina local, anexe a sessão do ssh pelo nome, garantindo que a conexão ao hospedeiro remoto seja encerrada antes:
+
+tmux a -d -t ssh (a pode ser substituído por at ou attach).
+
+Exiba todas as sessões para seleção e vá à primeira sessão ([0]). Uma vez ali, elimine a sessão ssh pelo nome:
+
+Digitamos Ctrl+b-s, usamos as setas do teclado para marcar a sessão 0 e damos enter tmux kill-session -t ssh.
+
+Finalmente, desanexe a sessão atual e elimine-a pelo nome:
+
+Ctrl+b-d tmux kill-session -t 0.
+
+Respostas aos Exercícios Exploratórios
+Tanto screen quanto tmux podem entrar no modo de linha de comando através do atalho prefixo do comando + : (já vimos um breve exemplo com tmux). Faça uma pesquisa e realize as seguintes tarefas em modo de linha de comando:
+
+Faça o screen entrar em modo de cópia:
+
+Ctrl+a-: — depois, digitamos copy.
+
+Faça o tmux renomear a janela atual:
+
+Ctrl+b-: — depois, digitamos rename-window.
+
+Faça o screen fechar todas as janelas e encerrar a sessão:
+
+Ctrl+a-: — depois, digitamos quit.
+
+Faça o tmux dividir um painel em dois:
+
+Ctrl+b-: — depois, digitamos split-window.
+
+Faça o tmux eliminar a janela atual:
+
+Ctrl+b-: — depois, digitamos kill-window.
+
+Quando entramos no modo de cópia no screen, não somente podemos usar as setas do teclado e PgUP or PgDown para navegar na janela atual e no buffer de rolagem; também há a possibilidade de usar um editor de tela completo como o vi. Usando esse editor, realize as seguintes tarefas:
+
+Ecoe (echo) supercalifragilisticexpialidocious em seu terminal de screen:
+
+echo supercalifragilisticexpialidocious
+
+Agora, copie os cinco caracteres consecutivos (da esquerda para a direita) na linha acima de seu cursor:
+
+Para entrar no modo de cópia: Ctrl+a-[ ou Ctrl+a-: e digitamos copy. Daí, passamos para a linha de cima usando k e pressionamos espaço para marcar o início da seleção. Finalmente, avançamos quatro caracteres usando l e pressionamos espaço novamente para marcar o final da seleção.
+
+Finalmente, cole a seleção (stice) em seu prompt de comando:
+
+Ctrl+a-]
+
+Suponha que você quer compartilhar uma sessão do tmux (our_session) com outro usuário. Você criou o socket (/tmp/our_socket) com as permissões corretas, para que você e o outro usuário possam ler e escrever. Quais são as outras duas condições para que o segundo usuário possa anexar com sucesso a sessão usando tmux -S /tmp/our_socket a -t our_session?
+
+Ambos os usuários devem ter um grupo em comum, p. ex. multiplexer. Em seguida o socket também deve ser passado para esse grupo: chgrp multiplexer /tmp/our_socket.
