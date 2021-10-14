@@ -245,7 +245,7 @@ grub> insmod xfs
 grub> insmod lvm
 ```
 
-##### List the drives which GRUB2 sees:
+##### List the drives which GRUB2 sees
 
 ```sh
 grub> ls
@@ -253,7 +253,7 @@ grub> ls
 
 ![image](https://user-images.githubusercontent.com/62715900/134421176-366c443e-8bfa-49df-83db-daa7f78a7a09.png)
 
-##### Examine the output to understand the partition table of the /dev/sda device.The following example shows a DOS partition table with three partitions:
+##### Examine the output to understand the partition table of the /dev/sda device.The following example shows a DOS partition table with three partitions
 
 ```sh
 grub> ls -l
@@ -263,7 +263,7 @@ red: LVM partition table\
 green: DOS partition table\
 ![image](https://user-images.githubusercontent.com/62715900/134421568-92bf41dd-7530-416c-acd8-1250e3d169b3.png)
 
-##### Probe each partition of the drive and locate your vmlinuz and initramfs files.
+##### Probe each partition of the drive and locate your vmlinuz and initramfs files
 
 ```sh
 grub> ls (hd0,1)/
@@ -279,7 +279,7 @@ grub> set root=(hd0,1)
 
 This command tells the bootloader, that the root partition is the first partition on the first drive. This would correspond to the /dev/sda1 device.
 
-##### Set the desired kernel(set root filesystem in lvm mapper).
+##### Set the desired kernel(set root filesystem in lvm mapper)
 
 ```sh
 grub> linux (hd0,1)/vmlinuz-VERSION_YOUR_KERNEL root=/dev/mapper/debian--vg-root
@@ -294,7 +294,8 @@ grub> initrd (hd0,1)/initramfs-VERSION_YOUR_KERNEL.img
 grub> initrd (hd0,1)/initrd-VERSION_YOUR_KERNEL.img
 ```
 
-##### Boot with the selected settings.
+##### Boot with the selected settings
+
 ```sh
 grub> boot
 ```
@@ -761,7 +762,7 @@ sudo zypper addrepo http://packman.inode.at/suse/openSUSE_Leap_15.1/ packman
 sudo zypper removerepo packman
 ```
 
-##### rpm2cpio - Extract cpio archive from RPM Package Manager (RPM) package.
+##### rpm2cpio - Extract cpio archive from RPM Package Manager (RPM) package
 
 ```sh
 #extrac cpio content and save in txt file
@@ -1915,7 +1916,7 @@ COMMAND
 Name of command/program which generated the process.
 ```
 
-##### ps - report a snapshot of the current processes.
+##### ps - report a snapshot of the current processes
 
 ```sh
 # show all process
@@ -2161,20 +2162,69 @@ Ctrl+b-r
 
 ### 103.6 Modify process execution priorities
 
-#### Important Files of topic 103.6
-
-- foo
-
 #### Import Commands\Programs of topic 103.6
 
-- nice
-- ps
-- renice
-- top
+##### Show process priority
 
-#### Cited subjects in topic 103.6
+>Linux reserves static priorities ranging from 0 to 99 for real-time processes and normal processes are assigned to static\
+>priorities ranging from 100 to 139, meaning that there are 39 different priority levels for normal processes.\
+>Lower values mean higher priority.
 
-- foo
+>The PRI column indicates the static priority assigned by the kernel.\
+>Note, however,that the priority value displayed by ps differs from that obtained in the previous example.\
+>Due to historical reasons, priorities displayed by ps range from -40 to 99 by default,\
+>so the actual priority is obtained by adding 40 to it (in particular, 80 + 40 = 120).
+
+>It is also possible to continuously monitor processes currently being managed by the Linux kernel with program top.\
+>As with ps, top also displays the priority value differently.\
+>To make it easier to identify real-time processes, top subtracts the priority value by 100, thus making all real-time\
+>priorities negative, with a negative number or rt identifying them.\
+>Therefore, normal priorities displayed by top range from 0 to 39.
+
+```sh
+#grep process file
+grep ^prio /proc/1/sched
+
+#with ps
+ps -el
+ps -Al
+ps -e -o user,uid,comm,tty,pid,ppid,pri,pmem,pcpu --sort=-pcpu | head
+
+#with top
+top -o +PR
+top -o -PR
+```
+
+>Nice numbers range from -20 (less nice, high priority) to 19 (more nice, low priority).\
+>Linux also allows the ability to assign different nice values to threads within the same process.\
+>The NI column in ps output indicates the nice number.
+
+##### nice - run a program with modified scheduling priority
+
+```sh
+#example
+nice -n 15 tar czf home_backup.tar.gz /home
+sudo nice -n -15 sleep 300 &
+```
+
+##### renice - alter priority of running processes
+
+```sh
+#examples
+renice -NICE_VALUE -p PID
+renice -10 -p 2164
+```
+
+##### schedtool - query and set CPU scheduling parameters
+
+```ssh
+#view infos prority
+schedtool PID
+
+#set priority  vales
+schedtool -R -p 89 1750
+schedtool -R -p VALUE_OF_PRI PID
+```
 
 ### 103.7 Search text files using regular expressions
 
