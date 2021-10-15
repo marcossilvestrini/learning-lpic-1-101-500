@@ -1,0 +1,24 @@
+Respostas aos Exercícios Guiados
+Qual expressão regular estendida corresponderia a qualquer endereço de e-mail, como info@example.org?
+
+egrep "\S+@\S+\.\S+"
+Qual expressão regular estendida corresponderia apenas a qualquer endereço IPv4 no formato pontilhado-quad padrão, como 192.168.15.1?
+
+egrep "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+Como o comando grep pode ser usado para listar o conteúdo do arquivo /etc/services, descartando todos os comentários (linhas começando com #)?
+
+grep -v ^# /etc/services
+O arquivo domains.txt contém uma lista de nomes de domínio, um por linha. Como o comando egrep seria usado para listar apenas domínios .org or .com?
+
+`egrep ".org$|.com$" domains.txt`
+Respostas aos Exercícios Exploratórios
+A partir do diretório atual, como o comando find usaria uma expressão regular estendida para pesquisar todos os arquivos que não contêm um sufixo de arquivo padrão (nomes de arquivo que não terminam em .txt ou .c, por exemplo)?
+
+find . -type f -regextype egrep -not -regex '.*\.[[:alnum:]]{1,}$'
+O comando less é o paginador padrão para exibir arquivos de texto longos no ambiente shell. Ao digitar /, uma expressão regular pode ser inserida no prompt de pesquisa para pular para a primeira correspondência pertinente. Para permanecer na posição atual do documento e destacar apenas as correspondências pertinentes, qual combinação de teclas deve ser inserida no prompt de pesquisa?
+
+Pressionando Ctrl+K antes de inserir a expressão de pesquisa.
+
+Em less, como seria possível filtrar a saída para que apenas as linhas que correspondem a uma expressão regular sejam exibidas?
+
+Pressionando & e inserindo a expressão de pesquisa.
