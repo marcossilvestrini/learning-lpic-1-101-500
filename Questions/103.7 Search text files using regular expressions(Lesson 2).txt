@@ -1,0 +1,60 @@
+Respostas aos Exercícios Guiados
+O comando last mostra uma lista dos últimos usuários logados, incluindo seus IPs de origem. Como o comando egrep poderia ser usado para filtrar a saída de last, mostrando apenas as ocorrências de um endereço IPv4, descartando quaisquer informações adicionais na linha correspondente?
+
+last -i | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'
+
+Qual opção deve ser dada ao grep para filtrar corretamente a saída gerada pelo comando find executado com a opção -print0?
+
+A opção -z or --null-data, como em find . -print0 | grep -z expression.
+
+O comando uptime -s mostra a última data em que o sistema foi ligado, como em 2019-08-05 20:13:22. Qual será o resultado do comando uptime -s | sed -e 's/(.*) (.*)/\1/'?
+
+Ocorrerá um erro. Por padrão, os parênteses devem ser escapados para ser possível usar agrupamentos no sed.
+
+Qual opção deve ser dada ao grep para que ele conte as linhas correspondentes aos termos de pesquisa em vez de exibi-las?
+
+A opção -c.
+
+Respostas aos Exercícios Exploratórios
+A estrutura básica de um arquivo HTML começa com os elementos html, head e body, como por exemplo:
+
+<html>
+<head>
+  <title>News Site</title>
+</head>
+<body>
+  <h1>Headline</h1>
+  <p>Information of interest.</p>
+</body>
+</html>
+Descreva como seria possível usar endereços no sed para exibir apenas o elemento body e seu conteúdo.
+
+Para mostrar apenas body, os endereços deveriam ser /<body>/,/<\/body>/, como em sed -n -e '/<body>/,/<\/body>/p'. A opção -n é dada ao sed para que ele não imprima linhas por padrão, por isso o comando p está no final da expressão de sed para imprimir as linhas correspondentes aos termos da pesquisa.
+
+Qual expressão de sed poderia remover todas as tags de um documento HTML, mantendo apenas o texto?
+
+A expressão do sed s/<[^>]*>//g substitui qualquer conteúdo entre <> por uma string vazia.
+
+Os arquivos com extensão .ovpn são muito populares para configurar clientes VPN, pois contêm não apenas as configurações, mas também o conteúdo de chaves e certificados para o cliente. Essas chaves e certificados estão originalmente em arquivos separados, e portanto precisam ser copiados para o arquivo .ovpn. Dado o seguinte trecho de um modelo .ovpn:
+
+client
+dev tun
+remote 192.168.1.155 1194
+<ca>
+ca.crt
+</ca>
+<cert>
+client.crt
+</cert>
+<key>
+client.key
+</key>
+<tls-auth>
+ta.key
+</tls-auth>
+Supondo-se que os arquivos ca.crt, client.srt, client.key e ta.key estejam no diretório atual, como a configuração do modelo seria modificada pelo sed de forma a substituir cada nome de arquivo pelo seu conteúdo?
+
+O comando
+
+sed -r -e 's/(^[^.]*)\.(crt|key)$/cat \1.\2/e' < client.template > client.ovpn
+substitui qualquer linha que termine em .crt ou .key pelo conteúdo de um arquivo cujo nome seja igual ao da linha. A opção -r diz ao sed para usar expressões regulares estendidas, ao passo que o e no final da expressão diz ao sed para substituir as correspondências pela saída do comando cat \1.\2. Os agrupamentos \1 e \2 correspondem ao nome de arquivo e extensão encontrados na correspondência.

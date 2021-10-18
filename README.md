@@ -2228,14 +2228,82 @@ schedtool -R -p VALUE_OF_PRI PID
 
 ### 103.7 Search text files using regular expressions
 
-#### Important Files of topic 103.7
-
 #### Import Commands\Programs of topic 103.7
 
-- grep
-- egrep
-- fgrep
-- sed
+##### User regular expressions with grep
+
+```sh
+# find line start string options
+grep '^options' /etc/modprobe.d/alsa-base.conf
+
+#find string Disk /dev/sd with a or b
+fdisk -l | grep '^Disk /dev/sd[ab]'
+
+#find string Disk /dev/sd with a or b and count lines
+fdisk -l | grep '^Disk /dev/sd[ab]' -c
+
+#find string 3d modeling and print file occurrence
+find /usr/share/doc -type f -exec grep -i -H '3d modeling' "{}" \; | cut -c -100
+find /usr/share/doc -type f -exec grep -i -H -1 '3d modeling' "{}" \; | cut -c -100
+```
+
+The option can be placed before or after the regular expression. Other important grep options are:
+
+```sh
+-c or --count
+Instead of displaying the search results, only display the total count for how many times a match occurs in any given file.
+
+-i or --ignore-case
+Turn the search case-insensitive.
+
+-f FILE or --file=FILE
+Indicate a file containing the regular expression to use.
+
+-n or --line-number
+Show the number of the line.
+
+-v or --invert-match
+Select every line, except those containing matches.
+
+-H or --with-filename
+Print also the name of the file containing the line.
+
+-z or --null-data
+Rather than have grep treat input and output data streams as separate lines
+(using the newline by default) instead take the input or output as a sequence of lines.
+When combining output from the find command using its -print0 option with the grep command, the -z or --null-data option should be used to process the stream in the same manner.
+```
+
+##### egrep
+
+```sh
+find /usr/share/doc -type f -exec egrep -i -H -1 '3d (modeling|printing)' "{}" \; | cut -c -100
+```
+
+##### fgrep
+
+```sh
+find /etc/passwd -type f -exec fgrep -i -H -1 'vagrant' "{}" \;
+```
+
+##### sed - stream editor for filtering and transforming text(103.7 topic)
+
+```sh
+#delete first line of output factor 12
+factor `seq 12` | sed 1d
+
+#delete interval 1,7 lines of output factor 12
+factor `seq 12` | sed 1,7d
+
+#delete interval 1,7-11 lines of output factor 12
+factor `seq 12` | sed "1,7d;11d"
+
+#delete lines with :2 N
+factor `seq 12` | sed "1d;/:.*2.*/d"
+
+#delete line and replace with string REMOVED
+factor `seq 12` | sed "1d;/:.*2.*/c REMOVED"
+```
 
 #### Cited subjects in topic 103.7
 
