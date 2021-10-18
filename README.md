@@ -2317,8 +2317,94 @@ factor `seq 12` | sed "1d;/:.*2.*/c REMOVED"
 
 #### Import Commands\Programs of topic 103.8
 
-- vi
+##### vim - Vi IMproved, a programmer's text editor
 
+```sh
+#open file
+vi foo.txt
+
+Insert Mode
+
+The insert mode is straightforward: text appears on the screen as it is typed on
+the keyboard. It is the type of interaction most users expect from a text editor,
+but it is not how vi first presents a document. To enter the insert mode, the user must execute an insertion command in the normal mode. The Esc key finishes the insert mode and returns to normal mode, the default vi mode.
+
+Note
+If you are interested to know more on the other execution modes, open vi and type:
+
+:help vim-modes-intro
+
+Normal Mode
+
+Normal mode — also known as command mode — is how vi starts by default. In this mode, keyboard keys are associated with commands for navigation and text manipulation tasks. Most commands in this mode are unique keys. Some of the keys and their functions on normal mode are:
+
+0, $
+Go to the beginning and end of the line.
+
+1G, G
+Go to the beginning and end of the document.
+
+(, )
+Go to the beginning and end of the sentence.
+
+{, }
+Go to the beginning and end of the paragraph.
+
+w, W
+Jump word and jump word including punctuation.
+
+h, j, k, l
+Left, down, up, right.
+
+e or E
+Go to the end of current word.
+
+/, ?
+Search forward and backwards.
+
+i, I
+Enter the insert mode before the current cursor position and at the beginning of the current line.
+
+a, A
+Enter the insert mode after the current cursor position and at the end of the current line.
+
+o, O
+Add a new line and enter the insert mode in the next line or in the previous line.
+
+s, S
+Erase the character under the cursor or the entire line and enter the insert mode.
+
+c
+Change the character(s) under the cursor.
+
+r
+Replace the character under the cursor.
+
+x
+Delete the selected characters or the character under the cursor.
+
+v, V
+Start a new selection with the current character or the entire line.
+
+y, yy
+Copy (yanks) the character(s) or the entire line.
+
+p, P
+Paste copied content, after or before the current position.
+
+u
+Undo the last action.
+
+Ctrl-R
+Redo the last action.
+
+ZZ
+Close and save.
+
+ZQ
+Close and do not save.
+
+```
 #### Cited subjects in topic 103.8
 
 - /, ?

@@ -1,0 +1,29 @@
+Respostas aos Exercícios Guiados
+O vi é usado principalmente como editor de arquivos de configuração e código-fonte, onde a indentação ajuda a identificar seções de texto. Uma seleção pode ser recuada para a esquerda pressionando < e para a direita pressionando >. Quais teclas devem ser pressionadas no modo normal para recuar a seleção atual três passos para a esquerda?
+
+As teclas 3<, que indicam três passos para a esquerda.
+
+Uma linha inteira pode ser selecionada pressionando V no modo normal do vi. No entanto, o caractere de término da nova linha também será incluído. Quais teclas devem ser pressionadas no modo normal para selecionar a partir do caractere inicial até o caractere de nova linha, sem incluí-lo?
+
+As teclas 0v$h, que significam 0 (“pular para o início de uma linha”), v (“iniciar a seleção de caracteres”), $ (“ir ao final da linha”) e h (“voltar uma posição”).
+
+Como o vi deve ser executado na linha de comando para abrir ~/.bash_profile e pular direto para a última linha?
+
+O comando vi + ~/.bash_profile abre o arquivo e posiciona o cursor na última linha.
+
+Quais teclas devem ser pressionadas no modo normal do vi para excluir caracteres desde a posição atual do cursor até o caractere de ponto final seguinte?
+
+As teclas dt., que significam d (“iniciar a exclusão”), t (“pular para o próximo caractere”) and . (caractere de ponto final).
+
+Respostas aos Exercícios Exploratórios
+O vim permite selecionar blocos de texto com largura arbitrária, não apenas seções com linhas inteiras. Ao pressionar Ctrl+V no modo normal, uma seleção é feita movendo o cursor para cima, para baixo, para a esquerda e para a direita. Usando esse método, como excluir um bloco começando no primeiro caractere da linha atual, contendo as próximas oito colunas e cinco linhas de texto?
+
+A combinação 0, Ctrl-V e 8l5jd seleciona e remove o bloco correspondente.
+
+Uma sessão do vi foi interrompida por uma falha de energia inesperada. Ao reabrir o arquivo, o vi pergunta ao usuário se deseja recuperar o arquivo de troca (uma cópia automática feita pelo vi). O que o usuário deve fazer para descartar o arquivo de troca?
+
+Pressionar d quando solicitado pelo vi.
+
+Em uma sessão do vim, uma linha foi previamente copiada para o registro l. Qual combinação de teclas gravaria uma macro no registro a para colar a linha do registro l imediatamente antes da linha atual?
+
+A combinação qa"lPq, que significa q (“iniciar a gravação da macro”), a (“atribuir o registro a à macro”), l (“selecionar o texto no registro l”), P (“colar antes da linha atual”) e q (“encerrar a gravação da macro”).
