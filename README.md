@@ -2427,16 +2427,42 @@ Close and do not save.
 ##### fdisk - manipulate disk partition table
 
 ```sh
-#open editor partition table
+#open editor partition table in specific disk
 sudo fdisk /dev/sdb
 
-#list partitions
+#pint partition table in selected disk
 p
-
+```
 ![image](https://user-images.githubusercontent.com/62715900/137960457-6ec63b67-f20c-4651-8636-62a3224e7ec8.png)
 
-
+```sh
+#create primary partition with 2GB in selected disk
+sudo fdisk /dev/sbd
+n
+p
+1
+2048
++2G
+w
 ```
+
+![image](https://user-images.githubusercontent.com/62715900/137966200-11db0b71-3fd3-4de1-b52c-814ecf80858a.png)
+
+```sh
+#Checking unallocated space
+F
+```
+
+![image](https://user-images.githubusercontent.com/62715900/137966424-09c1ed87-5791-430f-b0ff-74a6bc82f922.png)
+
+```sh
+#delete partition
+d
+```
+
+![image](https://user-images.githubusercontent.com/62715900/137968181-142c4fa1-f786-4b11-b2e3-cceacffe3772.png)
+
+
 
 ##### gdisk
 
