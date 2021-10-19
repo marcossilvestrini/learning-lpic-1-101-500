@@ -2433,6 +2433,8 @@ sudo fdisk /dev/sdb
 #list partitions
 p
 
+![image](https://user-images.githubusercontent.com/62715900/137960457-6ec63b67-f20c-4651-8636-62a3224e7ec8.png)
+
 
 ```
 
