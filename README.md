@@ -2486,11 +2486,49 @@ t
 w
 ```
 
-##### gdisk
+##### gdisk - Interactive GUID partition table (GPT) manipulator
+
+``sh
+#open editor partition table in specific disk
+sudo gdisk /dev/sdc
+
+#print partition table in selected disk
+p
+```
+![image](https://user-images.githubusercontent.com/62715900/137976046-f76417dd-033a-4b32-ba3e-090cc08b8812.png)
 
 ```sh
-
+#list of partition type in hexadecimal
+L
 ```
+![image](https://user-images.githubusercontent.com/62715900/137976456-7aed9399-d315-4123-867f-203398ebbd88.png)
+
+
+```sh
+#create linux partitio(8300)partition with 5GB in selected disk
+sudo gdisk /dev/sbc
+n
+1
+2048
++5G
+8300
+```
+
+![image](https://user-images.githubusercontent.com/62715900/137977479-be086493-5427-4bbe-be50-e7b404c166fb.png)
+
+```sh
+#delete partition
+d
+NUMBER_OF_PARTITION
+```
+
+```sh
+#reorder deleted partition gaps(in case of delete some partition)
+s
+```
+
+![image](https://user-images.githubusercontent.com/62715900/137979305-c27f390e-3ce7-4877-842b-174776916100.png)
+
 
 ##### parted
 
