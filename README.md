@@ -2424,11 +2424,41 @@ Close and do not save.
 
 #### Import Commands\Programs of topic 104.1
 
-- fdisk
-- gdisk
-- parted
-- mkfs
-- mkswap
+##### fdisk - manipulate disk partition table
+
+```sh
+#open editor partition table
+sudo fdisk /dev/sdb
+
+#list partitions
+p
+
+
+```
+
+##### gdisk
+
+```sh
+
+```
+
+##### parted
+
+```sh
+
+```
+
+##### mkfs
+
+```sh
+
+```
+
+##### mkswap
+
+```sh
+
+```
 
 #### Cited subjects in topic 104.1
 
