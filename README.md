@@ -2420,7 +2420,7 @@ Close and do not save.
 
 #### Important Files of topic 104.1
 
-- foo
+- /dev/sd*
 
 #### Import Commands\Programs of topic 104.1
 
@@ -2430,7 +2430,7 @@ Close and do not save.
 #open editor partition table in specific disk
 sudo fdisk /dev/sdb
 
-#pint partition table in selected disk
+#print partition table in selected disk
 p
 ```
 ![image](https://user-images.githubusercontent.com/62715900/137960457-6ec63b67-f20c-4651-8636-62a3224e7ec8.png)
@@ -2443,7 +2443,6 @@ p
 1
 2048
 +2G
-w
 ```
 
 ![image](https://user-images.githubusercontent.com/62715900/137966200-11db0b71-3fd3-4de1-b52c-814ecf80858a.png)
@@ -2462,7 +2461,30 @@ d
 
 ![image](https://user-images.githubusercontent.com/62715900/137968181-142c4fa1-f786-4b11-b2e3-cceacffe3772.png)
 
+```sh
+#list of partition type in hexadecimal
+l
+```
 
+![image](https://user-images.githubusercontent.com/62715900/137970465-db4fdfda-d4ab-477b-bfec-3fa72225c498.png)
+
+
+
+```sh
+#Changing the partition type - Example extended(5) to NTFS(86)
+t
+86
+```
+
+![image](https://user-images.githubusercontent.com/62715900/137971799-01d2e0b3-2da6-43ab-bffa-84eb655747de.png)
+
+
+```sh
+#
+#IMPORTANT: BE VERY CAREFUL WHEN USING THIS OPTION!!!
+#SAVE THE CHANGES MADE IN THE PARTITION TABLE.
+w
+```
 
 ##### gdisk
 
