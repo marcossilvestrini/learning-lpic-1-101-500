@@ -55,3 +55,17 @@ While (!$tcp_test) {
         Start-Sleep 1
     }
 }
+
+
+# Vagrant up
+$putty = "E:\Apps\Putty\putty.exe"
+$plink = "E:\Apps\Putty\plink.exe"
+
+Write-Host "Kill SSH Connections" -BackgroundColor White -ForegroundColor Black
+Get-Process -name putty -ErrorAction SilentlyContinue |
+Stop-Process -ErrorAction SilentlyContinue >$null
+Start-Sleep 3
+
+Write-Host "Open SSH Connection" -BackgroundColor White -ForegroundColor Black
+& $plink -i "E:\Security/priv_key_marcos.silvestrini.ppk" marcos.silvestrini@192.168.0.33 -m "F:\CERTIFICACAO/lpic-1-101500/Scripts/vagrant_up.sh"
+& $putty -load "vagrant-debian"
