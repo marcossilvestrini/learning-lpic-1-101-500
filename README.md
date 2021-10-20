@@ -2488,7 +2488,7 @@ w
 
 ##### gdisk - Interactive GUID partition table (GPT) manipulator
 
-``sh
+```sh
 #open editor partition table in specific disk
 sudo gdisk /dev/sdc
 
@@ -2501,8 +2501,8 @@ p
 #list of partition type in hexadecimal
 L
 ```
-![image](https://user-images.githubusercontent.com/62715900/137976456-7aed9399-d315-4123-867f-203398ebbd88.png)
 
+![image](https://user-images.githubusercontent.com/62715900/137976456-7aed9399-d315-4123-867f-203398ebbd88.png)
 
 ```sh
 #create linux partitio(8300)partition with 5GB in selected disk
