@@ -56,12 +56,6 @@ While (!$tcp_test) {
     }
 }
 
-
 # Vagrant up
 $putty = "E:\Apps\Putty\putty.exe"
-$plink = "E:\Apps\Putty\plink.exe"
-
-Write-Host "Open SSH Connection" -BackgroundColor White -ForegroundColor Black
-& $plink -i "E:\Security/priv_key_marcos.silvestrini.ppk" marcos.silvestrini@192.168.0.33 -m "F:\CERTIFICACAO/lpic-1-101500/Scripts/vagrant_up.sh"
-Start-Sleep 10
 & $putty -load "vagrant-debian"

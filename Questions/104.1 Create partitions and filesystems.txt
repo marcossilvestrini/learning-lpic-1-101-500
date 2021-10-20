@@ -1,0 +1,64 @@
+Respostas aos Exercícios Guiados
+Qual esquema de particionamento deve ser usado para particionar um disco rígido de 3 TB em três partições de 1 GB? Por quê?
+
+GPT, já que o MBR suporta discos rígidos de no máximo 2 TB.
+
+No gdisk, como podemos descobrir quanto espaço está disponível no disco?
+
+Usamos p (print). O espaço livre total será mostrado como a última linha de informação antes da própria tabela de partição.
+
+Qual seria o comando para criar um sistema de arquivos ext3, verificando antes se há setores defeituosos, com o rótulo MyDisk e um UUID aleatório, no dispositivo /dev/sdc1?
+
+O comando seria mkfs.ext3 -c -L MyDisk -U random /dev/sdc1. Também seria possível usar mke2fs -t ext3 em vez de mkfs.ext3.
+
+Usando o parted, qual seria o comando para criar uma partição ext4 de 300 MB, começando com 500 MB no disco?
+
+O comando seria mkpart primary ext4 500m 800m. Lembre-se de que é necessário criar o sistema de arquivos usando mkfs.ext4, já que o parted não faz isso.
+
+Imagine que você tenha 2 partições, uma em /dev/sda1 e outra em /dev/sda2, ambas com 20 GB de tamanho. Como você pode usá-las em um único sistema de arquivos Btrfs, de forma que o conteúdo de uma partição seja automaticamente espelhado na outra, como em uma configuração RAID1? Qual será o tamanho do sistema de arquivos?
+
+O comando seria mkfs.btrfs /dev/sda1 /dev/sdb1 -m raid1. O sistema de arquivos resultante teria um tamanho de 20 GB, já que uma partição age simplesmente como um espelho da outra.
+
+Respostas aos Exercícios Exploratórios
+Considere um disco de 2 GB com uma tabela de partição MBR e o seguinte layout:
+
+Disk /dev/sdb: 1.9 GiB, 1998631936 bytes, 3903578 sectors
+Disk model: DataTraveler 2.0
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x31a83a48
+
+Device     Boot   Start     End Sectors  Size Id Type
+/dev/sdb1          2048 1050623 1048576  512M 83 Linux
+/dev/sdb3       2099200 3147775 1048576  512M 83 Linux
+É possível criar uma partição de 600 MB nele? Por quê?
+
+Não, pois não há espaço contíguo suficiente. A primeira pista de que tem algo “errado” é a lista de dispositivos: temos /dev/sdb1 e /dev/sdb3, mas não /dev/sdb2. Então, algo está faltando.
+
+Em seguida, precisamos ver onde uma partição termina e onde a outra começa. A partição um termina no setor 1050623, e a partição 2 no 2099200. Há uma “lacuna” de 1048577 setores. Como cada setor tem 512 bytes, o total seriam 536.871.424 bytes. Dividindo por 1024, obtemos 524.288 Kilobytes. Dividimos por 1024 novamente e obtemos…​ 512 MB. Esse é o tamanho da “lacuna”.
+
+Se o disco tem 2 GB, resta então um máximo de 512 MB após a partição 3. Mesmo que no total haja cerca de 1 GB não-alocado, o maior bloco contíguo tem 512 MB. Portanto, não há espaço para uma partição de 600 MB.
+
+Em um disco em /dev/sdc, temos uma primeira partição de 1 GB contendo cerca de 256 MB de arquivos. Usando parted, como podemos reduzi-la para que tenha somente espaço suficiente para os arquivos?
+
+Essa operação teria várias etapas. Primeiro, encolhemos o sistema de arquivos usando resize2fs. Ao invés de especificar o novo tamanho diretamente, podemos usar o parâmetro -M para que ele fique “grande o bastante”. Assim: resize2fs -M /dev/sdc1.
+
+Em seguida, redimensionamos a própria partição com o parted usando resizepart. Como se trata da primeira partição, podemos pressupor que ela começa em zero e termina em 241 MB. Assim, o comando seria resizepart 1 241M.
+
+Imagine que você tem um disco em /dev/sdb e deseja criar uma partição swap de 1 GB no início dele. Assim, usando parted, você cria a partição com mkpart primary linux-swap 0 1024M. A seguir, você habilita o swap (troca) nesta partição com swapon /dev/sdb1, mas obtém a seguinte mensagem de erro:
+
+swapon: /dev/sdb1: read swap header failed
+
+O que deu errado?
+
+Você criou uma partição do tipo correto (linux-swap), mas lembre-se de que o mkpart não cria um sistema de arquivos. Você esqueceu de configurar a partição como espaço de troca com mkswap antes de usá-la.
+
+Ao longo desta lição, você experimentou alguns comandos no parted mas, por engano, excluiu a 3ª partição do seu disco rígido. Você sabe que ela vinha depois de uma partição UEFI de 250 MB e de uma partição de troca de 4 GB, e tinha 10 GB de tamanho. Qual comando você pode usar para recuperá-la?
+
+Não entre em pânico, você tem todas as informações necessárias para recuperar a partição. Basta usar rescue e fazer as contas. Você tinha 250 MB + 4096 MB (4*1024) antes, então o ponto inicial deve ser em torno de 4346 MB. Juntando com 10.240 MB (10*1024) de tamanho, ela deve terminar em 14.586 MB. Então, rescue 4346m 14586m deve resolver o problema. Pode ser preciso dar um pouco de “folga” ao rescue, começando um pouco antes e terminando um pouco depois, dependendo da geometria do seu disco.
+
+Imagine que você tenha uma partição não utilizada de 4 GB em /dev/sda3. Usando fdisk, qual seria a sequência de operações para transformá-lo em uma partição swap ativa?
+
+Primeiro, altere o tipo de partição para “Linux Swap” (82), grave suas alterações no disco e saia. Depois, use mkswap para configurar a partição como área de troca. Em seguida, use swapon para habilitá-la.

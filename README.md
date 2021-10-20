@@ -2694,14 +2694,120 @@ Defines the number of physical sectors per cluster of allocation. This must be a
 
 ```sh
 #Example create exFAT filesystem
-mkfs.exfat -n "New-FS-exFAT" 
+mkfs.exfat -n "New-FS-exFAT"
 ```
 ![image](https://user-images.githubusercontent.com/62715900/138113014-937f755a-3626-411d-a265-8f48ff6a8b1e.png)
 
-##### parted
+Btrfs Filesystem
+
+>Package in Debian
+btrfs-progs
 
 ```sh
+#Example create Brtfs filesystem
+mkfs.btrfs -L "New-FS-BTRFS" /dev/sdb5
 
+#create subvolume
+btrfs subvolume create /mnt/disk/BKP
+```
+
+![image](https://user-images.githubusercontent.com/62715900/138141768-a4abd764-eb3b-4982-ac2a-56571445c803.png)
+
+##### GNU Parted - a partition manipulation program
+
+```sh
+#open progran in specific disk
+parted /dev/sdb
+
+#show all partiotions in selected disk
+print
+
+#show all devices
+print devices
+
+#show all devices  and partiotions
+print all
+
+#select disk
+select /dev/sdc
+
+#create partition table MBR or GPT
+mklabel msdos
+mklabel gpt
+```
+
+![image](https://user-images.githubusercontent.com/62715900/138155634-bbfa3fac-9889-4b15-ab30-9ae69f70ca30.png)
+
+
+Creating a Partition
+
+>To create a partition the command mkpart is used, using the syntax
+mkpart PARTTYPE FSTYPE START END, where:
+
+>PARTTYPE
+Is the partition type, which can be primary, logical or extended in case an MBR partition table is used.
+
+>FSTYPE
+Specifies which filesystem will be used on this partition. Note that parted will not create the filesystem. It just sets a flag on the partition which tells the OS what kind of data to expect from it.
+
+>START
+Specifies the exact point on the device where the partition begins. You can use different units to specify this point. 2s can be used to refer to the second sector of the disk, while 1m refers to the beginning of the first megabyte of the disk. Other common units are B (bytes) and % (percentage of the disk).
+
+>END
+Specifies the end of the partition. Note that this is not the size of the partition, this is the point on the disk where it ends. For example, if you specify 100m the partition will end 100 MB after the start of the disk. You can use the same units as in the START parameter.
+
+So, the command:
+
+```sh
+(parted) mkpart primary ext4 1m 100m
+```
+
+>Creates a primary partition of type ext4, starting at the first megabyte of the disk, and ending after the 100th megabyte.
+
+```sh
+#show fre space
+print free
+
+#Removing a Partition
+rm PARTITION_NUMBER
+
+#Recovering Partitions
+rescue START END
+
+#Resizing ext2/3/4 Partitions
+resizepart PARTITION_NUMBER END
+resizepart 3 350m
+
+#Resizing filesystem
+sudo resize2fs /dev/sdb3
+```
+
+Creating Swap Partitions
+
+```sh
+# creation partition
+sudo parted /dev/sdb
+mkpart primary linux-swap 451m 900m
+
+#set partition swap for use
+sudo mkswap /dev/sdb2
+
+#enable swap
+sudo swapon /dev/sdb2
+
+#disable swap
+swapoff /dev/sdb2
+```
+
+![image](https://user-images.githubusercontent.com/62715900/138169732-a71ec805-37d0-4d97-b8e1-c18e99b75070.png)
+
+Create Swap file
+
+```sh
+#create swap file
+sudo dd if=/dev/zero of=myswap bs=1M count=1024
+sudo mkswap myswap
+swapon myswap
 ```
 
 ##### mkswap
