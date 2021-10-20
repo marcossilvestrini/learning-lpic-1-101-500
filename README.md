@@ -2107,13 +2107,23 @@ Ctrl+b-↑,↓,←,→
 
 #move to the last active pane.
 Ctrl+b-;
+```
 
-#resize pane by one line.
-Ctrl+b-Ctrl+arrow key
+>Resize pane
+This assumes that you've hit ctrl + b and : to get to the command prompt
+:resize-pane -L
 
-#resize pane by five lines.
-Ctrl+b-Alt+arrow key
+>Here are some additional tmux pane resizing examples:
+:resize-pane -D (Resizes the current pane down)
+:resize-pane -U (Resizes the current pane upward)
+:resize-pane -L (Resizes the current pane left)
+:resize-pane -R (Resizes the current pane right)
+:resize-pane -D 10 (Resizes the current pane down by 10 cells)
+:resize-pane -U 10 (Resizes the current pane upward by 10 cells)
+:resize-pane -L 10 (Resizes the current pane left by 10 cells)
+:resize-pane -R 10 (Resizes the current pane right by 10 cells)
 
+```sh
 swap panes (current to previous).
 Ctrl+b-{
 
@@ -2128,7 +2138,6 @@ Ctrl+b-t
 
 #turn pane into window.
 Ctrl+b-!
-
 
 #list sessions
 Ctrl+b-s:
@@ -2573,25 +2582,121 @@ mkfs.TYPE TARGET
 mke2fs -t TYPE TARGET
 
 #Example ext2
-mkfs.ext2 /dev/sdc2 
+mkfs.ext2 /dev/sdc2
 mke2fs -t ext2 /dev/sdc2
 
 #Example ext4
 mkfs.ext4 /dev/sdc3
 mke2fs -t ext4 /dev/sdc3
 
-#Exampple create file system, check blocks and copy file in ~/ to new block
+#Exampple create filesystem, check blocks and copy file in ~/ to new block
 mkfs.ext4 -c -d ~/ /dev/sdc3
 
-#Exampple create file system ext3 with size block 4096
+#Exampple create filesystem ext3 with size block 4096
 mkfs.ext4 -b 4096 /dev/sdc4
 
-#Exampple create file system ext3 and define label
+#Exampple create filesystem ext3 and define label
 mkfs.ext2 -L "New-FS_EXT2" /dev/sdc1
 
 ```
+
 ![image](https://user-images.githubusercontent.com/62715900/138095310-97971e22-c852-4816-a412-e769d1178f4c.png)
 
+Filesystem XFS - mkfs.xfs
+
+>mke2fs supports a wide range of command line parameters and options. Here are some of the most significant ones. All of them also apply to mkfs.ext2, mkfs.ext3 and mkfs.ext4:
+
+>Package in debian
+xfsprogs - Utilities for managing the XFS filesystem
+
+>-b SIZE
+Sets the size of the data blocks in the device to SIZE, which can be 1024, 2048 or 4096 bytes per block.
+
+>-c
+Checks the target device for bad blocks before creating the filesystem. You can run a thorough, but much slower check by passing this parameter twice, as in mkfs.ext4 -c -c TARGET.
+
+>-d DIRECTORY
+Copies the contents of the specified directory to the root of the new filesystem. Useful if you need to “pre-populate” the disk with a predefined set of files.
+
+>-F
+Danger, Will Robinson! This option will force mke2fs to create a filesystem, even if the other options passed to it or the target are dangerous or make no sense at all. If specified twice (as in -F -F) it can even be used to create a filesystem on a device which is mounted or in use, which is a very, very bad thing to do.
+
+>-L VOLUME_LABEL
+Will set the volume label to the one specified in VOLUME_LABEL. This label must be at most 16 characters long.
+
+>-n
+This is a truly useful option that simulates the creation of the filesystem, and displays what would be done if executed without the n option. Think of it as a “trial” mode. Good to check things out before actually committing any changes to disk.
+
+>-q
+Quiet mode. mke2fs will run normally, but will not produce any output to the terminal. Useful when running mke2fs from a script.
+
+>-U ID
+This will set the UUID (Universally Unique Identifier) of a partition to the value specified as ID. UUIDs are 128 bit numbers in hexadecimal notation that serve to uniquely identify a partition to the operating system. This number is specified as a 32-digit string in the format 8-4-4-4-12, meaning 8 digits, hyphen, 4 digits, hyphen, 4 digits, hyphen, 4 digits, hyphen, 12 digits, like D249E380-7719-45A1-813C-35186883987E. Instead of an ID you can also specify parameters like clear to clear the filesystem UUID, random, to use a randomly generated UUID, or time to create a time-based UUID.
+
+>-V
+Verbose mode, prints much more information during operation than usual. Useful for debugging purposes.
+
+```sh
+#sintaxe for mkfs.xfs
+mkfs.xfs TARGET
+
+#Example create xfs filesystem
+mkfs.xfs -L "New-FS-XFS" /dev/sdb1
+```
+
+![image](https://user-images.githubusercontent.com/62715900/138098775-2e6dcec5-eb11-4025-8fe5-3e104793a206.png)
+
+FAT Filesystem - mkfs.fat
+
+>Package in Debian:
+dosfstools
+utilities for making and checking MS-DOS FAT filesystems
+
+>-c
+Checks the target device for bad blocks before creating the filesystem.
+
+>-C FILENAME BLOCK_COUNT
+Will create the file specified in FILENAME and then create a FAT filesystem inside it, effectively creating an empty “disk image”, that can be later written to a device using a utility such as dd or mounted as a loopback device. When using this option, the number of blocks in the filesystem (BLOCK_COUNT) must be specified after the device name.
+
+>-F SIZE
+Selects the size of the FAT (File Allocation Table), between 12, 16 or 32, i.e., between FAT12, FAT16 or FAT32. If not specified, mkfs.fat will select the appropriate option based on the filesystem size.
+
+>-n NAME
+Sets the volume label, or name, for the filesystem. This can be up to 11 characters long, and the default is no name.
+
+>-v
+Verbose mode. Prints much more information than usual, useful for debugging.
+
+```sh
+#Example create fat filesystem
+mkfs.fat -n "New-FS-FAT" /dev/sdb6
+```
+
+![image](https://user-images.githubusercontent.com/62715900/138108395-e74a62be-7709-42f6-b0ce-270c46e4336d.png)
+
+exFAT Filesystem
+
+>Package in Debian
+exfat-utils
+utilities to create, check, label and dump exFAT filesystem
+
+>-i VOL_ID
+Sets the Volume ID to the value specified in VOL_ID. This is a 32-Bit hexadecimal number. If not defined, an ID based on the current time is set.
+
+>-n NAME
+Sets the volume label, or name. This can have up to 15 characters, and the default is no name.
+
+>-p SECTOR
+Specifies the first sector of the first partition on the disk. This is an optional value, and the default is zero.
+
+>-s SECTORS
+Defines the number of physical sectors per cluster of allocation. This must be a power of two, like 1, 2, 4, 8, and so on.
+
+```sh
+#Example create exFAT filesystem
+mkfs.exfat -n "New-FS-exFAT" 
+```
+![image](https://user-images.githubusercontent.com/62715900/138113014-937f755a-3626-411d-a265-8f48ff6a8b1e.png)
 
 ##### parted
 
