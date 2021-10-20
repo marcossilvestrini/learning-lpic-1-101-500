@@ -2405,6 +2405,7 @@ ZQ
 Close and do not save.
 
 ```
+
 #### Cited subjects in topic 103.8
 
 - /, ?
@@ -2433,6 +2434,7 @@ sudo fdisk /dev/sdb
 #print partition table in selected disk
 p
 ```
+
 ![image](https://user-images.githubusercontent.com/62715900/137960457-6ec63b67-f20c-4651-8636-62a3224e7ec8.png)
 
 ```sh
@@ -2468,8 +2470,6 @@ l
 
 ![image](https://user-images.githubusercontent.com/62715900/137970465-db4fdfda-d4ab-477b-bfec-3fa72225c498.png)
 
-
-
 ```sh
 #Changing the partition type - Example extended(5) to NTFS(86)
 t
@@ -2477,7 +2477,6 @@ t
 ```
 
 ![image](https://user-images.githubusercontent.com/62715900/137971799-01d2e0b3-2da6-43ab-bffa-84eb655747de.png)
-
 
 ```sh
 #
@@ -2495,6 +2494,7 @@ sudo gdisk /dev/sdc
 #print partition table in selected disk
 p
 ```
+
 ![image](https://user-images.githubusercontent.com/62715900/137976046-f76417dd-033a-4b32-ba3e-090cc08b8812.png)
 
 ```sh
@@ -2529,14 +2529,53 @@ s
 
 ![image](https://user-images.githubusercontent.com/62715900/137979305-c27f390e-3ce7-4877-842b-174776916100.png)
 
+##### mkfs - build a Linux filesystem
 
-##### parted
+Some Importants Command Line Parameters
+
+>mke2fs supports a wide range of command line parameters and options. Here are some of the most significant ones.
+All of them also apply to mkfs.ext2, mkfs.ext3 and mkfs.ext4:
+
+>-b SIZE
+Sets the size of the data blocks in the device to SIZE, which can be 1024, 2048 or 4096 bytes per block.
+
+>-c
+Checks the target device for bad blocks before creating the filesystem. You can run a thorough,
+but much slower check by passing this parameter twice, as in mkfs.ext4 -c -c TARGET.
+
+>-d DIRECTORY
+Copies the contents of the specified directory to the root of the new filesystem. Useful if you need to “pre-populate” the disk with a predefined set of files.
+
+>-F
+Danger, Will Robinson! This option will force mke2fs to create a filesystem, even if the other
+options passed to it or the target are dangerous or make no sense at all. If specified twice
+(as in -F -F) it can even be used to create a filesystem on a device which is mounted or in use,which is a very, very bad thing to do.
+
+>-L VOLUME_LABEL
+Will set the volume label to the one specified in VOLUME_LABEL. This label must be at most 16 characters long.
+
+>-n
+This is a truly useful option that simulates the creation of the filesystem, and displays what would be done if executed without the n option. Think of it as a “trial” mode. Good to check things out before actually committing any changes to disk.
+
+>-q
+Quiet mode. mke2fs will run normally, but will not produce any output to the terminal. Useful when running mke2fs from a script.
+
+>-U ID
+This will set the UUID (Universally Unique Identifier) of a partition to the value specified as ID.UUIDs are 128 bit numbers in hexadecimal notation that serve to uniquely identify a partition to
+the operating system. This number is specified as a 32-digit string in the format 8-4-4-4-12,meaning 8 digits, hyphen, 4 digits, hyphen, 4 digits, hyphen, 4 digits, hyphen, 12 digits, like
+D249E380-7719-45A1-813C-35186883987E. Instead of an ID you can also specify parameters like clearto
+clear the filesystem UUID, random, to use a randomly generated UUID, or time to create a time-based UUID.
+
+>-V
+Verbose mode, prints much more information during operation than usual. Useful for debugging purposes.
 
 ```sh
+#create file system ext2
+
 
 ```
 
-##### mkfs
+##### parted
 
 ```sh
 
