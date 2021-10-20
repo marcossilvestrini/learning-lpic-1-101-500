@@ -2531,8 +2531,6 @@ s
 
 ##### mkfs - build a Linux filesystem
 
-Some Importants Command Line Parameters
-
 >mke2fs supports a wide range of command line parameters and options. Here are some of the most significant ones.
 All of them also apply to mkfs.ext2, mkfs.ext3 and mkfs.ext4:
 
@@ -2570,10 +2568,30 @@ clear the filesystem UUID, random, to use a randomly generated UUID, or time to 
 Verbose mode, prints much more information during operation than usual. Useful for debugging purposes.
 
 ```sh
-#create file system ext2
+#sintaxe for mkfs
+mkfs.TYPE TARGET
+mke2fs -t TYPE TARGET
 
+#Example ext2
+mkfs.ext2 /dev/sdc2 
+mke2fs -t ext2 /dev/sdc2
+
+#Example ext4
+mkfs.ext4 /dev/sdc3
+mke2fs -t ext4 /dev/sdc3
+
+#Exampple create file system, check blocks and copy file in ~/ to new block
+mkfs.ext4 -c -d ~/ /dev/sdc3
+
+#Exampple create file system ext3 with size block 4096
+mkfs.ext4 -b 4096 /dev/sdc4
+
+#Exampple create file system ext3 and define label
+mkfs.ext2 -L "New-FS_EXT2" /dev/sdc1
 
 ```
+![image](https://user-images.githubusercontent.com/62715900/138095310-97971e22-c852-4816-a412-e769d1178f4c.png)
+
 
 ##### parted
 
