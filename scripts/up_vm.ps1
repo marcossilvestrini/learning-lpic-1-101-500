@@ -1,6 +1,8 @@
 # Modules - Execute in Powershll 5 or later
 # Install-Module -Name vmxtoolkit
 # Install-Module -Name VMware.PowerCLI -Scope CurrentUser
+#Import-Module vmxtoolkit
+#Import-Module VMware.PowerCLI
 
 # Variables
 $vmrun = "E:\VMWare\vmrun.exe"
