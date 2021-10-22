@@ -2810,12 +2810,6 @@ sudo mkswap myswap
 swapon myswap
 ```
 
-##### mkswap
-
-```sh
-
-```
-
 #### Cited subjects in topic 104.1
 
 - MBR
@@ -2831,9 +2825,98 @@ swapon myswap
 
 #### Import Commands\Programs of topic 104.2
 
-- du
-- df
-- fsck
+##### du - estimate file space usage
+
+```sh
+#show directory size
+du -h
+du-Sh
+du-Shc
+
+#show files and dirctory size
+du -ha
+
+#set depth
+du -h -d1 /etc
+
+#filter files
+du -ah --exclude="*.log"
+```
+
+##### df - report file system disk space usage
+
+```sh
+#show free space in all filesystem
+df -h
+
+#show inodes infos
+df -hi
+
+#show type of filesystem
+df -hT
+
+#show specific filesystem
+df -ht ext4
+
+#show all filesystem, except TYPE
+df -hx  tmpfs
+df -hTx  tmpfs
+```
+
+You can also customize the output of df, selecting what should be displayed and in which order, using the --output= parameter followed by a comma separated list of fields you wish to display. Some of the available fields are:
+
+>source\
+The device corresponding to the filesystem.
+
+>fstype\
+The filesystem type.
+
+>size\
+The total size of the filesystem.
+
+>used\
+How much space is being used.
+
+>avail\
+How much space is available.
+
+>pcent\
+The usage percentage.
+
+>target\
+Where the filesystem is mounted (mount point).
+
+```sh
+#examples
+df -h --output=target,source,fstype,pcent
+df -h --output=target,source,size,used,avail,pcent | sort
+```
+
+df can also be used to check inode information, by passing the following fields to --output=:
+
+>itotal\
+>The total number of inodes in the filesystem.
+
+>iused\
+>The number of used inodes in the filesystem.
+
+>iavail\
+>The number of available inodes in the filesystem.
+
+>ipcent\
+>The percentage of used inodes in the filesystem.
+
+```sh
+df --output=target,source,fstype,itotal,iused,iavail,ipcent
+
+```
+
+##### fsck
+
+```sh
+
+```
+
 - e2fsck
 - mke2fs
 - tune2fs
