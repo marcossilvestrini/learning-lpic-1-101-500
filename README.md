@@ -2823,6 +2823,8 @@ swapon myswap
 
 #### Important Files of topic 104.2
 
+- /etc/mtab/
+
 #### Import Commands\Programs of topic 104.2
 
 ##### du - estimate file space usage
@@ -2911,22 +2913,83 @@ df --output=target,source,fstype,itotal,iused,iavail,ipcent
 
 ```
 
-##### fsck
+##### fsck - check and repair a Linux filesystem
+
+fsck can take some command-line arguments. These are some of the most common:
+
+>-A\
+This will check all filesystems listed in /etc/fstab.
+
+>-C\
+Displays a progress bar when checking a filesystem. Currently only works on ext2/3/4 filesystems.
+
+>-N\
+This will print what would be done and exit, without actually checking the filesystem.
+
+>-R\
+When used in conjunction with -A, this will skip checking the root filesystem.
+
+>-V\
+Verbose mode, prints more information than usual during operation. This is useful for debugging.
 
 ```sh
+#check defaults filesystem
+fsck /dev/sdb1
 
+#check specific filesystem
+fsck -t vfat /dev/sdc1
 ```
 
-- e2fsck
-- mke2fs
-- tune2fs
-- xfs_repair
-- xfs_fsr
-- xfs_db
+##### e2fsck - check a Linux ext2/ext3/ext4 file system
 
-#### Cited subjects in topic 104.2
+The specific utility for ext2, ext3 and ext4 filesystems is e2fsck,also called fsck.ext2, fsck.ext3 and fsck.ext4 (those three are
+merely links to e2fsck). By default, it runs in interactive mode: when a filesystem error is found, it stops and asks the user what to do. The user must type y to fix the problem, n to leave it unfixed or a to fix the current problem and all subsequent ones.
 
-- foo
+Of course sitting in front of a terminal waiting for e2fsck to ask what to do is not a productive use of your time, especially if you are dealing with a big filesystem. So, there are options that cause e2fsck to run in non-interactive mode:
+
+>-p\
+This will attempt to automatically fix any errors found. If an error that requires intervention from the system administrator is found, e2fsck will provide a description of the problem and exit.
+
+>-y\
+This will answer y (yes) to all questions.
+
+>-n\
+The opposite of -y. Besides answering n (no) to all questions, this will cause the filesystem to be mounted read-only, so it cannot be modified.
+
+>-f\
+Forces e2fsck to check a filesystem even if is marked as “clean”, i.e. has been correctly unmounted.
+
+##### tune2fs  -  adjust  tunable  filesystem  parameters  on  ext2/ext3/ext4 filesystems
+
+```sh
+#show all parameters in specific partition
+tune2fs -l /dev/sdc1
+
+#convert ext2 to ext3
+tune2fs -j /dev/sdc1
+```
+
+###### xfs_repair - repair an XFS filesystem
+
+```sh
+#verify errors
+xfs_repair -n /dev/sdb1
+```
+
+
+##### xfs_db - debug an XFS filesystem
+
+```sh
+#Example debug
+xfs_db /dev/sdb1
+```
+
+##### xfs_fsr - filesystem reorganizer for XFS
+
+```sh
+#Example defrag partition
+xfs_fsr /dev/sdb1
+```
 
 ### 104.3 Control mounting and unmounting of filesystems
 
