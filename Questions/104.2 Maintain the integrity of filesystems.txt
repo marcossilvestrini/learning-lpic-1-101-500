@@ -1,0 +1,60 @@
+Respostas aos Exercícios Guiados
+Usando du, como podemos verificar quanto espaço está sendo usado apenas pelos arquivos no diretório atual?
+
+Primeiro, use o parâmetro -S para separar a saída do diretório atual de seus subdiretórios. Em seguida, use -d 0 para limitar a profundidade da saída a zero, indicando “sem subdiretórios”. Não se esqueça do -h para obter uma saída em formato “legível para humanos”:
+
+$ du -S -h -d 0
+or
+
+$ du -Shd 0
+Usando df, liste as informações de cada sistema de arquivos ext4, incluindo na saída os seguintes campos, nesta ordem: dispositivo, ponto de montagem, número total de inodes, número de inodes disponíveis, porcentagem de espaço livre.
+
+Podemos filtrar sistemas de arquivos com a opção -t seguida pelo nome do sistema de arquivos. Para obter a saída necessária, use --output=source,target,itotal,iavail,pcent. Assim, a resposta é:
+
+$ df -t ext4 --output=source,target,itotal,iavail,pcent
+Qual é o comando para executar o e2fsck em /dev/sdc1 no modo não interativo, tentando corrigir automaticamente a maioria dos erros?
+
+O parâmetro para tentar corrigir automativamente a maioria dos erros é -p. Então, a resposta é:
+
+# e2fsck -p /dev/sdc1
+Suponha que /dev/sdb1 seja um sistema de arquivos ext2. Como podemos convertê-lo para ext3 e, ao mesmo tempo, redefinir sua contagem de montagens e alterar seu rótulo para UserData?
+
+Lembre-se de que para converter um sistema de arquivos ext2 em ext3 basta adicionar um diário, o que pode ser feito com o parâmetro -j. Para redefinir a contagem de montagem, use -c 0. Para alterar o rótulo use -L UserData. A resposta correta é:
+
+# tune2fs -j -c 0 -L UserData /dev/sdb1
+Como verificar se há erros em um sistema de arquivos XFS, sem reparar qualquer dano encontrado?
+
+Use o parâmetro -n parameter, como em xfs -n, seguido pelo dispositivo correspondente.
+
+Respostas aos Exercícios Exploratórios
+Considere um sistema de arquivos ext4 em /dev/sda1 com os parâmetros a seguir, obtidos com tune2fs:
+
+Mount count:              8
+Maximum mount count:      -1
+O que acontecerá na próxima inicialização se o comando tune2fs -c 9 /dev/sda1 for emitido?
+
+O comando define a contagem de montagem máxima do sistema de arquivos para 9. Como atualmente ela está em 8, a próxima inicialização do sistema causará uma verificação do sistema de arquivos.
+
+Considere a saída a seguir de du -h:
+
+$ du -h
+216K	./somedir/anotherdir
+224K	./somedir
+232K	.
+Quanto espaço está ocupado apenas pelos arquivos no diretório atual? Como poderíamos reescrever o comando para mostrar essas informações com mais clareza?
+
+Do total de 232 K usados, 224 K são ocupados pelo diretório somedir e seus subdiretórios. Assim, se excluirmos esses, restam 8K sendo ocupados pelos arquivos no diretório atual. Essa informação pode ser exibida mais claramente com o parâmetro -S, que separa os diretórios na contagem.
+
+O que aconteceria ao sistema de arquivos ext2 /dev/sdb1 se o comando abaixo fosse emitido?
+
+# tune2fs -j /dev/sdb1 -J device=/dev/sdc1 -i 30d
+Um diário seria adicionado a /dev/sdb1, convertendo-o em ext3. O diário será armazenado no dispositivo /dev/sdc1 e o sistema de arquivos será verificado a cada 30 dias.
+
+Como podemos verificar se há erros em um sistema de arquivos XFS em /dev/sda1 que tem uma seção de log em /dev/sdc1, mas sem fazer nenhum reparo?
+
+Use xfs_repair, seguido por -l /dev/sdc1 para indicar o dispositivo que contém a seção de log e -n para evitar que sejam feitas alterações.
+
+# xfs_repair -l /dev/sdc1 -n
+Qual a diferença entre os parâmetros -T e -t do df?
+
+O parâmetro -T inclui o tipo de cada sistema de arquivos na saída de df. -t é um filtro e mostra apenas sistemas de arquivos do tipo solicitado na saída, excluindo todos os outros.

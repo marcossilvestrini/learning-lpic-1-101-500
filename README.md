@@ -2967,6 +2967,9 @@ tune2fs -l /dev/sdc1
 
 #convert ext2 to ext3
 tune2fs -j /dev/sdc1
+
+#alter partition label
+tune2fs -L New-FS-EXT3 /dev/sdc1
 ```
 
 ###### xfs_repair - repair an XFS filesystem
