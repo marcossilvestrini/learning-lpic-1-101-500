@@ -3000,6 +3000,7 @@ xfs_fsr /dev/sdb1
 
 - /etc/fstab
 - /media/
+- /etc/systemd/system/
 
 #### Import Commands\Programs of topic 104.3
 
@@ -3059,7 +3060,7 @@ When unmounting a filesystem, you may encounter an error message stating that th
 
 Mounting Filesystems on Bootup
 
-The file /etc/fstab contains descriptions about the filesystems that can be mounted. This is a text file, where each line describes a filesystem to be mounted, with six fields per line in the following order:
+The file **/etc/fstab** contains descriptions about the filesystems that can be mounted. This is a text file, where each line describes a filesystem to be mounted, with six fields per line in the following order:
 
 ```sh
 FILESYSTEM MOUNTPOINT TYPE OPTIONS DUMP PASS
@@ -3087,53 +3088,174 @@ When non-zero, defines the order in which the filesystems will be checked on boo
 
 The mount options on OPTIONS are a comma-separated list of parameters, which can be generic or filesystem specific. Among the generic ones we have:
 
-atime and noatime
+>atime and noatime\
 By default, every time a file is read the access time information is updated. Disabling this (with noatime) can speed up disk I/O. Do not confuse this with the modification time, which is updated every time a file is written to.
 
-auto and noauto
+>auto and noauto\
 Whether the filesystem can (or can not) be mounted automatically with mount -a.
 
-defaults
+>defaults\
 This will pass the options rw, suid, dev, exec, auto, nouser and async to mount.
 
-dev and nodev
+>dev and nodev\
 Whether character or block devices in the mounted filesystem should be interpreted.
 
-exec and noexec
+>exec and noexec\
 Allow or deny permission to execute binaries on the filesystem.
 
-user and nouser
+>user and nouser\
 Allows (or not) an ordinary user to mount the filesystem.
 
-group
+>group\
 Allows a user to mount the filesystem if the user belongs to the same group which owns the device containing it.
 
-owner
+>owner\
 Allows a user to mount a filesystem if the user owns the device containing it.
 
-suid and nosuid
+>suid and nosuid\
 Allow, or not, SETUID and SETGID bits to take effect.
 
-ro and rw
+>ro and rw\
 Mount a filesystem as read-only or writable.
 
-remount
+>remount\
 This will attempt to remount an already mounted filesystem. This is not used on /etc/fstab, but as a parameter to mount -o. For example, to remount the already mounted partition /dev/sdb1 as read-only, you could use the command mount -o remount,ro /dev/sdb1. When remounting, you do not need to specify the filesystem type, only the device name or the mount point.
 
-sync and async
+>sync and async\
 Whether to do all I/O operations to the filesystem synchronously or asynchronously. async is usually the default. The manual page for mount warns that using sync on media with a limited number of write cycles (like flash drives or memory cards) may shorten the life span of the device.
-##### blkid
+
+##### lsblk - list block devices
 
 ```sh
+#list blocks
+lsblk
 
+#list filesystems
+lsblk -f
+lsblk -f /dev/sdb
+lsblk -f /dev/sdb1
 ```
 
-##### lsblk
+##### blkid - locate/print block device attributes
 
 ```sh
-
+#list all block devices atributes
+blkid
 ```
 
+Mounting Disks with Systemd
+
+Systemd is the init process, the first process to run on many Linux distributions. It is responsible for spawning other processes, starting services and bootstraping the system. Among many other tasks, systemd can also be used to manage the mounting (and automounting) of filesystems.
+
+To use this feature of systemd, you need to create a configuration file called a mount unit. Each volume to be mounted gets its own mount unit and they need to be placed in /etc/systemd/system/
+
+Mount units are simple text files with the .mount extension.\
+The basic format is shown below:
+```sh
+
+[Unit]
+Description=
+
+[Mount]
+What=
+Where=
+Type=
+Options=
+
+[Install]
+WantedBy=
+```
+
+>Description=\
+Short description of the mount unit, something like Mounts the backup disk.
+
+>What=\
+What should be mounted. The volume must be specified as /dev/disk/by-uuid/VOL_UUID where VOL_UUID is the UUID of the volume.
+
+>Where=\
+Should be the full path to where the volume should be mounted.
+
+>Type=\
+The filesystem type.
+
+>Options=\
+Mount options that you may wish to pass, these are the same used with the mount command or in /etc/fstab.
+
+>WantedBy=\
+Used for dependency management. In this case, we will use multi-user.target, which means that whenever the system boots into a multi-user environment (a normal boot) the unit will be mounted.
+
+```sh
+#Example for mount with systemd(init)
+
+#File mnt-external.mount
+[Unit]
+Description=External data disk
+
+[Mount]
+What=/dev/disk/by-uuid/56C11DCC5D2E1334
+Where=/mnt/external
+Type=ntfs
+Options=defaults
+
+[Install]
+WantedBy=multi-user.target
+
+#copy  file mnt-external.mount for /etc/systemd/system/
+
+#reload daemon
+systemctl daemon-reload
+
+#start mount point
+systemctl start mnt-external.mount
+
+#check status mount point
+systemctl status mnt-external.mount
+
+# enable it on every boot
+systemctl enable mnt-external.mount
+```
+
+Automounting a Mount Unit
+
+Mount units can be automounted whenever the mount point is accessed. To do this, you need an .automount file, alongside the .mount file describing the unit. The basic format is:
+
+```sh
+[Unit]
+Description=
+
+[Automount]
+Where=
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Like before, Description= is a short description of the file, and Where= is the mountpoint.\
+For example, an .automount file for our previous example would be:
+
+```sh
+[Unit]
+Description=Automount for the external data disk
+
+[Automount]
+Where=/mnt/external
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Save the file with the same name as the mount point (in this case, mnt-external.automount), reload systemd and start the unit:
+
+```sh
+systemctl daemon-reload
+systemctl start mnt-external.automount
+```
+
+Now whenever the /mnt/external directory is accessed, the disk will be mounted. Like before, to enable the automount on every boot you would use:
+
+```sh
+systemctl enable mnt-external.automount
+```
 
 ### 104.4 Removed(see in: <https://www.lpi.org/our-certifications/exam-101-objectives>)
 
