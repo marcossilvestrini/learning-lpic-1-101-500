@@ -2998,19 +2998,142 @@ xfs_fsr /dev/sdb1
 
 #### Important Files of topic 104.3
 
-- foo
+- /etc/fstab
+- /media/
 
 #### Import Commands\Programs of topic 104.3
 
-- mount
-- umount
-- blkid
-- lsblk
+##### mount - mount a filesystem
 
-#### Cited subjects in topic 104.3
+```sh
+#command sintaxe
+mount -t TYPE DEVICE MOUNTPOINT
 
-- /etc/fstab
-- /media/
+#list mount filsystem
+mount -t ext4
+mount -t brtfs,xfs,swap
+```
+
+There are many command line parameters that can be used with mount. Some of the most used ones are:
+
+>-a\
+This will mount all filesystems listed in the file /etc/fstab (more on that in the next section).
+
+>-o or --options\
+This will pass a list of comma-separated mount options to the mount command, which can change how the filesystem will be mounted. These will also be discussed alongside /etc/fstab.
+
+>-r or -ro\
+This will mount the filesystem as read-only.
+
+>-w or -rw\
+This will the mount filesystem as writable.
+
+##### umount - unmount file systems
+
+```sh
+#umount filesystem
+umount /dev/sdc4
+umount /mnt/fs_ext4
+
+#force
+umount -f /dev/sdc4
+```
+
+Some of the command line parameters to umount are:
+
+>-a\
+This will unmount all filesystems listed in /etc/fstab.
+
+>-f\
+This will force the unmounting of a filesystem. This may be useful if you mounted a remote filesystem that has become unreachable.
+
+>-r\
+If the filesystem cannot be unmounted, this will try to make it read-only.
+
+
+##### lsof - list open files
+
+When unmounting a filesystem, you may encounter an error message stating that the target is busy. This will happen if any files on the filesystem are open. However, it may not be immediately obvious where an open file is located, or what is accessing the filesystem.
+
+![image](https://user-images.githubusercontent.com/62715900/138948112-106def12-8f35-4519-9529-2c145ab80f14.png)
+
+Mounting Filesystems on Bootup
+
+The file /etc/fstab contains descriptions about the filesystems that can be mounted. This is a text file, where each line describes a filesystem to be mounted, with six fields per line in the following order:
+
+```sh
+FILESYSTEM MOUNTPOINT TYPE OPTIONS DUMP PASS
+```
+
+Where:
+
+>FILESYSTEM\
+The device containing the filesystem to be mounted. Instead of the device, you can specify the UUID or label of the partition, something which we will discuss later on.
+
+>MOUNTPOINT\
+Where the filesystem will be mounted.
+
+>TYPE\
+The filesystem type.
+
+>OPTIONS\
+Mount options that will be passed to mount.
+
+>DUMP\
+Indicates whether any ext2, ext3 or ext4 filesystems should be considered for backup by the dump command. Usually it is zero, meaning they should be ignored.
+
+>PASS\
+When non-zero, defines the order in which the filesystems will be checked on bootup. Usually it is zero.
+
+The mount options on OPTIONS are a comma-separated list of parameters, which can be generic or filesystem specific. Among the generic ones we have:
+
+atime and noatime
+By default, every time a file is read the access time information is updated. Disabling this (with noatime) can speed up disk I/O. Do not confuse this with the modification time, which is updated every time a file is written to.
+
+auto and noauto
+Whether the filesystem can (or can not) be mounted automatically with mount -a.
+
+defaults
+This will pass the options rw, suid, dev, exec, auto, nouser and async to mount.
+
+dev and nodev
+Whether character or block devices in the mounted filesystem should be interpreted.
+
+exec and noexec
+Allow or deny permission to execute binaries on the filesystem.
+
+user and nouser
+Allows (or not) an ordinary user to mount the filesystem.
+
+group
+Allows a user to mount the filesystem if the user belongs to the same group which owns the device containing it.
+
+owner
+Allows a user to mount a filesystem if the user owns the device containing it.
+
+suid and nosuid
+Allow, or not, SETUID and SETGID bits to take effect.
+
+ro and rw
+Mount a filesystem as read-only or writable.
+
+remount
+This will attempt to remount an already mounted filesystem. This is not used on /etc/fstab, but as a parameter to mount -o. For example, to remount the already mounted partition /dev/sdb1 as read-only, you could use the command mount -o remount,ro /dev/sdb1. When remounting, you do not need to specify the filesystem type, only the device name or the mount point.
+
+sync and async
+Whether to do all I/O operations to the filesystem synchronously or asynchronously. async is usually the default. The manual page for mount warns that using sync on media with a limited number of write cycles (like flash drives or memory cards) may shorten the life span of the device.
+##### blkid
+
+```sh
+
+```
+
+##### lsblk
+
+```sh
+
+```
+
 
 ### 104.4 Removed(see in: <https://www.lpi.org/our-certifications/exam-101-objectives>)
 

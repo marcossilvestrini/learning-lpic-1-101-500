@@ -61,3 +61,4 @@ While (!$tcp_test) {
 # Vagrant up
 $putty = "E:\Apps\Putty\putty.exe"
 & $putty -load "vagrant-debian"
+exit 0
