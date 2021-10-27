@@ -1,0 +1,13 @@
+#copy this file for: /etc/systemd/system
+
+[Unit]
+Description=External data disk
+
+[Mount]
+What=/dev/disk/by-uuid/56C11DCC5D2E1334
+Where=/mnt/external
+Type=ntfs
+Options=defaults
+
+[Install]
+WantedBy=multi-user.target

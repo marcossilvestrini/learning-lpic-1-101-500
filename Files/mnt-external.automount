@@ -1,0 +1,10 @@
+##copy this file for: /etc/systemd/system
+
+[Unit]
+Description=Automount for the external data disk
+
+[Automount]
+Where=/mnt/external
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,61 @@
+Respostas aos Exercícios Guiados
+Usando mount, como você montaria um sistema de arquivos ext4 em /dev/sdc1 para /mnt/external como somente leitura, usando as opções noatime e async?
+
+# mount -t ext4 -o noatime,async,ro /dev/sdc1 /mnt/external
+Ao desmontar um sistema de arquivos em /dev/sdd2, aparece a mensagem de erro target is busy. Como descobrir quais arquivos do sistema de arquivos estão abertos e quais processos os abriram?
+
+Use lsof seguido pelo nome do dispositivo:
+
+$ lsof /dev/sdd2
+Considere a seguinte entrada em /etc/fstab: /dev/sdb1 /data ext4 noatime,noauto,async. Esse sistema de arquivos será montado se o comando mount -a for emitido? Por quê?
+
+Ele não será montado. A chave é o parâmetro noauto, que indica que esta entrada será ignorada por mount -a.
+
+Como descobrir o UUID de um sistema de arquivos sob /dev/sdb1?
+
+Use lsblk -f, seguido pelo nome do sistema de arquivos:
+
+$ lsblk -f /dev/sdb1
+Como usar mount para remontar como somente leitura um sistema de arquivos exFAT com o UUID 6e2c12e3-472d-4bac-a257-c49ac07f3761, montado em /mnt/data?
+
+Visto que o sistema de arquivos está montado, você não precisa se preocupar com o tipo de sistema de arquivos ou o ID, basta usar a opção remount com o parâmetro ro (somente leitura) e o ponto de montagem:
+
+# mount -o remount,ro /mnt/data
+Como obter uma lista de todos os sistemas de arquivos ext3 e ntfs atualmente montados em um sistema?
+
+Use mount -t, seguido por uma lista separada por vírgula dos sistemas de arquivos:
+
+# mount -t ext3,ntfs
+Respostas aos Exercícios Exploratórios
+Considere a entrada a seguir em /etc/fstab: /dev/sdc1 /backup ext4 noatime,nouser,async. Seria possível um usuário montar esse sistema de arquivos com o comando mount /backup? Por quê?
+
+Não, o parâmetro nouser impede que usuários comuns montem este sistema de arquivos.
+
+Considere um sistema de arquivos remoto montado em /mnt/server que se tornou inacessível devido à perda de conectividade de rede. Como poderíamos forçar a desmontagem, ou montá-lo como somente leitura se isso não for possível?
+
+Passe os parâmetros -f e -r para unmount. O comando seria umount -f -r /mnt/server. Lembre-se de que podemos agrupar parâmetros, então umount -fr /mnt/server também funcionaria.
+
+Escreva uma entrada de /etc/fstab para montar um volume btrfs com o rótulo Backup em /mnt/backup, com opções padrão e sem permitir a execução de binários por ele.
+
+A linha seria LABEL=Backup /mnt/backup btrfs defaults,noexec
+
+Considere a seguinte unidade de montagem do systemd:
+
+[Unit]
+Description=External data disk
+
+[Mount]
+What=/dev/disk/by-uuid/56C11DCC5D2E1334
+Where=/mnt/external
+Type=ntfs
+Options=defaults
+
+[Install]
+WantedBy=multi-user.target
+Qual seria uma entrada equivalente a /etc/fstab neste sistema de arquivos??
+
+A entrada seria: UUID=56C11DCC5D2E1334 /mnt/external ntfs defaults
+
+Qual deve ser o nome de arquivo da unidade acima, para que ela possa ser usada pelo systemd? Onde ela deve ser posta?
+
+O nome de arquivo deve ser idêntico ao do ponto de montagem, no caso mnt-external.mount, posto em /etc/systemd/system.
