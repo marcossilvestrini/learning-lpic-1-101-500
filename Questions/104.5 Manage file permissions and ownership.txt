@@ -1,0 +1,132 @@
+Respostas aos Exercícios Guiados
+Crie um diretório chamado emptydir usando o comando mkdir emptydir. Em seguida, usando ls, liste as permissões do diretório emptydir.
+
+Adicionamos o parâmetro -d a ls para ver os atributos de arquivo de um diretório, em vez de listar seu conteúdo. Assim, a resposta é:
+
+ls -l -d emptydir
+Você ganha pontos extras se tiver juntado os dois parâmetros em um só, como em ls -ld emptydir.
+
+Crie um arquivo vazio chamado emptyfile com o comando touch emptyfile. Em seguida, usando chmod no modo simbólico, adicione permissões de execução ao proprietário do arquivo emptyfile e remova as permissões de gravação e execução para todos os outros. Faça isso usando apenas um comando chmod.
+
+Pense desta maneira:
+
+“Para o usuário que possui o arquivo (u) adicione (+) permissões de execução (x)”, portanto u+x.
+
+“Para o grupo (g) e outros usuários (o), remova (-) permissões de escrita (w) e execução (x)”, portanto go-wx.
+
+Para combinar esses dois conjuntos de permissões, adicionamos uma virgula entre eles. Assim, o resultado final será:
+
+chmod u+x,go-wx emptyfile
+Quais seriam as permissões padrão de um arquivo se o valor de umask for definido como 020?
+
+As permissões seriam rw-r-----
+
+Vamos supor que um arquivo chamado test.sh seja um script do shell com as seguintes permissões e propriedade:
+
+-rwxr-sr-x 1 carol root     33 Dec 11 10:36 test.sh
+Quais são as permissões do proprietário do arquivo?
+
+As permissões do proprietário (2º ao 4º caracteres na saída de ls -l) são rwx, por isso a resposta é: “ler, escrever e executar o arquivo”.
+
+Usando a notação octal, qual seria a sintaxe do chmod para “desfazer” a permissão especial concedida a este arquivo?
+
+Podemos “desfazer” as permissões especiais passando um 4º dígito, 0, para o chmod. As permissões atuais são 755, de modo que o comando seria chmod 0755.
+
+Considere este arquivo:
+
+$ ls -l /dev/sdb1
+brw-rw---- 1 root disk 8, 17 Dec 21 18:51 /dev/sdb1
+Que tipo de arquivo é sdb1? E quem pode escrever nele?
+
+O primeiro caractere da saída de ls -l mostra o tipo de arquivo. b é um dispositivo de bloco, normalmente um disco (interno ou externo), conectado à máquina. O proprietário (root) e todos os usuários do grupo disk podem escrever nele.
+
+Considere os 4 arquivos a seguir:
+
+drwxr-xr-t 2 carol carol 4,0K Dec 20 18:46 Another_Directory
+----r--r-- 1 carol carol    0 Dec 11 10:55 foo.bar
+-rw-rw-r-- 1 carol carol 1,2G Dec 20 18:22 HugeFile.zip
+drwxr-sr-x 2 carol users 4,0K Jan 18 17:26 Sample_Directory
+Escreva as permissões correspondentes a cada arquivo e diretório usando a notação numérica de 4 dígitos.
+
+As permissões correspondentes, em notação numérica, são as seguintes:
+
+Another_Directory
+
+1755. 1 para o sticky bit, 755 para as permissões regulares (rwx para o usuário, r-x para grupo e outros).
+
+foo.bar
+
+0044. Nenhuma permissão especial (por isso o primeiro dígito é 0), sem permissões para o usuário (---) e somente leitura (r—​r--) para grupo e outros.
+
+HugeFile.zip
+
+0664. Nenhuma permissão especial, por isso o primeiro dígito é 0. 6 (rw-) para o usuário e grupo, 4 (r--) para os outros.
+
+Sample_Directory
+
+2755. 2 para o bit SGID, 7 (rwx) para o usuário, 5 (r-x) para o grupo e outros.
+
+Respostas aos Exercícios Exploratórios
+Experimente o seguinte em um terminal: crie um arquivo vazio chamado emptyfile com o comando touch emptyfile. Agora “zere” as permissões do arquivo com chmod 000 emptyfile. O que acontecerá se você mudar as permissões de emptyfile passando apenas um valor de chmod para o modo octal, como em chmod 4 emptyfile? E se usarmos dois, como em chmod 44 emptyfile? O que aprendemos sobre a maneira como chmod interpreta o valor numérico?
+
+Lembre-se de que “zeramos” as permissões de emptyfile. Assim, seu estado inicial seria:
+
+---------- 1 carol carol    0 Dec 11 10:55 emptyfile
+Agora, vamos tentar o primeiro comando, chmod 4 emptyfile:
+
+$ chmod 4 emptyfile
+$ ls -l emptyfile
+-------r-- 1 carol carol 0 Dec 11 10:55 emptyfile
+Viu só? As permissões de outros foram alteradas. E se usássemos dois dígitos, como em chmod 44 emptyfile?
+
+$ chmod 44 emptyfile
+$ ls -l emptyfile
+----r--r-- 1 carol carol 0 Dec 11 10:55 emptyfile
+Agora, as permissões de grupo e outros foram afetadas. A partir disso, concluímos que no modo octal o chmod lê o valor “de trás pra frente”, do dígito menos significativo (outros) para o mais sigbificativo (usuário). Se você passar um dígito, modifica as permissões de outros. Com dois dígitos, modificamos grupo e outros, com três modificamos usuário, grupo e outros e com quatro dígitos modificamos usuário, grupo, outros e as permissões especiais.
+
+Considere as permissões do diretório temporário em um sistema Linux, /tmp:
+
+$ ls -l /tmp
+drwxrwxrwt  19 root root  16K Dec 21 18:58 tmp
+Usuário, grupo e outros têm permissões totais. Mas um usuário regular pode excluir qualquer arquivo dentro deste diretório? Por quê?
+
+/tmp é o que chamamos um diretório escrito por todos, ou seja, qualquer usuário pode escrever nele. Mas não queremos que um usuário modifique arquivos criados por outros, por isso o sticky bit foi definido (como indicado pelo t nas permissões de outros). Graças a isso, um usuário pode excluir arquivos em /tmp, mas somente se tiver criado esses arquivos.
+
+Um arquivo chamado test.sh tem as seguintes permissões: -rwsr-xr-x, o que indica que o bit SUID foi definido. Agora, execute os seguintes comandos:
+
+$ chmod u-x test.sh
+$ ls -l test.sh
+-rwSr-xr-x 1 carol carol 33 Dec 11 10:36 test.sh
+O que nós fizemos? O que significa o S maiúsculo?
+
+Removemos as permissões de execução do usuário dono do arquivo. O s (ou t) toma o lugar do x na saída de ls -l, por isso o sistema precisa de uma maneira de mostrar se o usuário tem permissões de execução ou não. Para isso, ele muda a caixa do caractere especial.
+
+Um s minúsculo no primeiro grupo de permissões indica que o usuário dono do arquivo tem permissões de execução e que o bit SUID foi definido. Um S maiúsculo indica que o usuário dono do arquivo não tem (-) permissões de execução e que o bit SUID foi definido.
+
+Pode-se dizer o mesmo do SGID. Um s minúsculo no segundo grupo de permissões indica que o grupo dono do arquivo tem permissões de execução e que o bit SUID foi definido. Um S maiúsculo indica que o grupo dono do arquivo não tem (-) permissões de execução e que o bit SUID foi definido.
+
+Isso também vale para o sticky bit, representado pelo t No terceiro grupo de permissões. O t minúsculo indica que o sticky bit foi definido e que os outros têm permissões de execução. O T maiúsculo indica que o sticky bit foi definido e que os outros não têm permissões de execução.
+
+Como criar um diretório chamado Box no qual todos os arquivos pertençam automaticamente ao grupo users e só possam ser removidos pelo usuário que os criou?
+
+Este seria um processo de vários passos. O primeiro é criar o diretório:
+
+$ mkdir Box
+Queremos que cada arquivo criado dentro deste diretório seja atribuído automaticamente ao grupo users. Para isso, configuramos esse grupo como proprietário do diretório, depois definimos nele o bit SGID. Também precisamos garantir que qualquer membro do grupo possa escrever nesse diretório.
+
+Como não precisamos nos importar com as outras permissões e queremos apenas “ativar” os bits especiais, faz sentido usar o modo simbólico:
+
+$ chown :users Box/
+$ chmod g+wxs Box/
+Note que se seu usuário atual não pertencer ao grupo users, será necessário usar o comando sudo antes dos comandos acima para fazer a alteração como root.
+
+Para terminar, vamos garantir que somente o usuário criador de um arquivo tem a permissão de excluí-lo. Para isso, definimos o sticky bit (representado por um t) no diretório. Lembre-se de que ele é configurado nas permissões de outros (o).
+
+$ chmod o+t Box/
+As permissões do diretório Box devem aparecer da seguinte maneira:
+
+drwxrwsr-t 2 carol users  4,0K Jan 18 19:09 Box
+Claro que também é possível especificar o bit SGID e o sticky bit usando somente um comando chmod:
+
+$ chmod g+wxs,o+t Box/
+Se você pensou nisso, parabéns!

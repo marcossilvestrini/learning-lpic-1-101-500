@@ -3151,6 +3151,7 @@ To use this feature of systemd, you need to create a configuration file called a
 
 Mount units are simple text files with the .mount extension.\
 The basic format is shown below:
+
 ```sh
 
 [Unit]
@@ -3261,20 +3262,191 @@ systemctl enable mnt-external.automount
 
 ### 104.5 Manage file permissions and ownership
 
-#### Important Files of topic 104.5
+#### Undertanding file permissions
 
-- foo
+```sh
+The file type is one of the following characters:
+-  regular file
+b  block special file
+c  character special file
+C  high performance ("contiguous data") file
+d  directory
+D  door (Solaris 2.5 and up)
+l  symbolic link
+M  off-line ("migrated") file (Cray DMF)
+n  network special file (HP-UX)
+p  FIFO (named pipe)
+P  port (Solaris 10 and up)
+s  socket
+?  some other file type
+```
+
+```sh
+# Example
+1  2   3    4  5  6   7   8     9
+- rw- r-- r--. 1 foo foo  0 Jun 25 19:37 my-personal-file.txt
+
+1: d=directory, -= file, l= link , b=block , c=char ,p=fifo channel, s=socket.
+2: permission owner file
+3: permission owner group
+4: permission others owners
+5: Count of hardlink in file
+6: owner
+7: group
+8: size
+9: data creation
+
+# Symbolic Method
+u: user
+g: group
+o: others
+a: all
+
+r: read
+w: write
+x: execute
+t: Sticky Bit
+s: setuid,setgid
+
++: allow permission
+-: denny permission
+
+# Numeric Method
+0: (000) - There is no permission (---).
+1: (001) - It has only the execute permission (--x).
+2: (010) - It has only the write permission (-w-).
+3: (011) - It has both write and execute permissions (-wx).
+4: (100) - It has only read permission (r--).
+5: (101) - Assigned only read and execute permissions (r-x).
+6: (110) - Only the read and write permissions have been assigned (rw-).
+7: (111) - All permissions. (rwx)
+
+1: - Stick bit(t)
+2: - Set GID(s)
+4: - Set UID(s)
+
+Examples with files:
+
+0600:    --rw-------
+0654:    -rw-r-xr--
+0744:    -rwxr--r--
+
+#special permissions
+1755:   drwxr-xr-t
+2755    drwxr-sr-x
+4745    -rwsr--r-x
+6755    drwsr-sr-x
+7755    drwsr-sr-s
+```
 
 #### Import Commands\Programs of topic 104.5
 
-- chmod
-- umask
-- chown
-- chgrp
+##### chmod - change file mode bits
 
-#### Cited subjects in topic 104.5
+```sh
+# change mode read for others users
+chmod o+r bar.txt
+chmod o-r bar.txt
 
-- foo
+# change mode write for others users
+chmod o+w bar.txt
+chmod o-w bar.txt
+
+# change mode execute for others users
+chmod o+x bar.txt
+chmod o-x bar.txt
+
+# change mode execute for user
+chmod u+x bar.txt
+chmod u-x bar.txt
+
+# change mode read,write for group
+chmod g+rw bar.txt
+chmod g-rw bar.txt
+
+# change mode read,write for user,group and others
+chmod ugo+rw bar.txt
+chmod a+rw bar.txt
+chmod ugo-rw bar.txt
+chmod a-rw bar.txt
+
+#recursive
+chmod -R o+rw terraform
+
+# quotting
+chmod o+x *
+chmod o+x foo/*
+
+# reference
+chmod --reference=foo.txt bar.txt
+
+# others examples
+chmod o=r foo.txt
+chmod u=rw,g=r,o=w foo.txt
+
+# numeric method
+chmod 644 bar.txt
+chmod 777 bar.txt
+chmod 744 bar.txt
+```
+
+##### chown - change file owner and group
+
+```sh
+# file
+sudo chown mark /home/mark/foo.txt
+
+# folder
+sudo chown mark -R   /home/mark/foo
+
+# alter group
+sudo chown :bar foo.txt
+sudo chown mark:bar foo.txt
+```
+
+##### chgrp - change group ownership
+
+```sh
+chgrp users documentos.tar.gz
+```
+
+##### Querying Groups
+
+```sh
+#show all groups
+getent group
+
+#groups a user belongs
+groups mike
+
+#see which users belong to a group
+groupmems -g cdrom -l
+```
+
+#### Default Permissions
+
+>New Files\
+0644
+
+>New Folders\
+0755
+
+##### umask - set file mode creation mask
+
+```sh
+#view defaul permissions - numeric method
+umask
+
+#view defaul permissions - simbolic method
+umask -S
+
+#example for modify default permissions in  current shell session
+umask u=rwx,g=rwx,o=
+```
+
+Here is a table with every value and its respective meaning:
+
+![image](https://user-images.githubusercontent.com/62715900/139114069-74abb0b6-d7dc-40fd-8b7c-a8da0bc25f53.png)
 
 ### 104.6 Create and change hard and symbolic links
 
