@@ -3339,6 +3339,16 @@ Examples with files:
 7755    drwsr-sr-s
 ```
 
+#### View permissions files and flder
+
+```sh
+#files
+ls -l file
+
+#folders
+ls -ld folder
+```
+
 #### Import Commands\Programs of topic 104.5
 
 ##### chmod - change file mode bits
@@ -3450,18 +3460,36 @@ Here is a table with every value and its respective meaning:
 
 ### 104.6 Create and change hard and symbolic links
 
-#### Important Files of topic 104.6
-
-- foo
-
 #### Import Commands\Programs of topic 104.6
 
-- ln
-- ls
+##### ln
 
-#### Cited subjects in topic 104.6
+```sh
+#sintaxe
+ln TARGET LINK_NAME
 
-- foo
+#create a hard link
+ln target.txt /home/carol/Documents/hardlink
+
+#create a soft link
+ln -s target.txt /home/carol/Documents/softlink
+```
+
+##### Managment Links
+
+```sh
+#list hard link
+ls -i hardlink
+
+#remove hard link
+rm hardlink
+
+#list soft link
+ls -lh softlink
+
+#remove soft link
+rm softlink
+````
 
 ### 104.7 Find system files and place files in the correct location
 

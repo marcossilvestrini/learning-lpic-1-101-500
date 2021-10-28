@@ -1,0 +1,115 @@
+Respostas aos Exercícios Guiados
+Imagine que um programa precisa criar um arquivo temporário de uso único, que não será novamente necessário após o encerramento do programa. Qual seria o diretório correto para criar esse arquivo?
+
+Como não precisamos mais do arquivo depois que o programa for encerrado, o diretório correto é /tmp.
+
+Qual é o diretório temporário que deve ser limpo durante o processo de inicialização?
+
+O diretório é /run ou, em certos sistemas, /var/run.
+
+Qual é o parâmetro de chmod no modo simbólico para ativar o sticky bit em um diretório?
+
+O símbolo do sticky bit no modo simbólico é t. Como queremos habilitar (adicionar) essa permissão no diretório, o parâmetro deve ser +t.
+
+Imagine que existe um arquivo chamado document.txt no diretório /home/carol/Documents. Com qual comando criaríamos um link simbólico para ele chamado text.txt no diretório atual?
+
+ln -s é o comando para criar um link simbólico. Como é necessário especificar o caminho completo do arquivo para o qual estamos criando o link, o comando seria:
+
+$ ln -s /home/carol/Documents/document.txt text.txt
+Explique a diferença entre um link físico para um arquivo e uma cópia desse arquivo.
+
+Um link físico é apenas outro nome para um arquivo. Mesmo que pareça uma duplicata do arquivo original, para todos os efeitos, o link e o original são iguais, pois apontam para os mesmos dados no disco. As alterações feitas no conteúdo do link serão refletidas no original e vice-versa. Uma cópia é uma entidade completamente independente, ocupando um lugar diferente no disco. As alterações na cópia não serão refletidas no original e vice-versa.
+
+Respostas aos Exercícios Exploratórios
+Imagine que dentro de um diretório você crie um arquivo chamado recipes.txt. Dentro deste diretório, você também criará um link físico para este arquivo, chamado receitas.txt, e um link simbólico (ou soft) para este chamado rezepte.txt.
+
+$ touch recipes.txt
+$ ln recipes.txt receitas.txt
+$ ln -s recipes.txt rezepte.txt
+O conteúdo do diretório deve aparecer assim:
+
+$ ls -lhi
+total 160K
+5388833 -rw-r--r-- 4 carol carol 77K jun 17 17:25 receitas.txt
+5388833 -rw-r--r-- 4 carol carol 77K jun 17 17:25 recipes.txt
+5388837 lrwxrwxrwx 1 carol carol  12 jun 24 10:12 rezepte.txt -> recipes.txt
+Lembre-se que, por ser um link físico, receitas.txt aponta para o mesmo inode que recipes.txt. O que aconteceria com o link rezepte.txt se o nome receitas.txt fosse excluído? Por quê?
+
+O link simbólico rezepte.txt deixaria de funcionar, porque os links simbólicos apontam para nomes, e não inodes, e o nome receitas.txt não existe mais, mesmo que os dados ainda estejam no disco com o nome recipes.txt.
+
+Imagine que você tem um pendrive conectado ao sistema e montado em /media/youruser/FlashA. Você deseja criar em seu diretório pessoal um link chamado schematics.pdf apontando para o arquivo esquema.pdf no diretório raiz do pendrive. Então, você digita o comando:
+
+$ ln /media/youruser/FlashA/esquema.pdf ~/schematics.pdf
+O que aconteceria? Por quê?
+
+O comando falharia. A mensagem de erro seria Invalid cross-device link (Link inválido entre dispositivos), esclarecendo o motivo: os links físicos não podem apontar para um destino em uma partição ou dispositivo diferente. A única maneira de criar um link como esse é usar um link simbólico ou soft, adicionando o parâmetro -s a ln.
+
+Considere a seguinte saída de ls -lah:
+
+$ ls -lah
+total 3,1M
+drwxr-xr-x 2 carol carol 4,0K jun 17 17:27 .
+drwxr-xr-x 5 carol carol 4,0K jun 17 17:29 ..
+-rw-rw-r-- 1 carol carol 2,8M jun 17 15:45 compressed.zip
+-rw-r--r-- 4 carol carol  77K jun 17 17:25 document.txt
+-rw-rw-r-- 1 carol carol 216K jun 17 17:25 image.png
+-rw-r--r-- 4 carol carol  77K jun 17 17:25 text.txt
+Quantos links apontam para o arquivo document.txt?
+
+Todos os arquivos começam com 1 na contagem de links. Como a contagem de links desse arquivo é 4, existem três links apontando para ele.
+
+Trata-se de links físicos ou simbólicos?
+
+São links físicos, já que os links simbólicos não aumentam a contagem de links de um arquivo.
+
+Qual parâmetro você deveria passar para ls para ver qual inode é ocupado por cada arquivo?
+
+O parâmetro é -i. O inode será mostrado na primeira coluna da saída de ls, como abaixo:
+
+$ ls -lahi
+total 3,1M
+5388773 drwxr-xr-x 2 carol carol 4,0K jun 17 17:27 .
+5245554 drwxr-xr-x 5 carol carol 4,0K jun 17 17:29 ..
+5388840 -rw-rw-r-- 1 carol carol 2,8M jun 17 15:45 compressed.zip
+5388833 -rw-r--r-- 4 carol carol  77K jun 17 17:25 document.txt
+5388837 -rw-rw-r-- 1 carol carol 216K jun 17 17:25 image.png
+5388833 -rw-r--r-- 4 carol carol  77K jun 17 17:25 text.txt
+Imagine que você tem, em seu diretório ~/Documents, um arquivo chamado clients.txt contendo alguns nomes de clientes e um diretório chamado somedir. Dentro dele, existe um arquivo diferente, também chamado clients.txt, contendo nomes diferentes. Para replicar essa estrutura, use os seguintes comandos:
+
+$ cd ~/Documents
+$ echo "John, Michael, Bob" > clients.txt
+$ mkdir somedir
+$ echo "Bill, Luke, Karl" > somedir/clients.txt
+Em seguida você cria um link dentro de somedir chamado partners.txt apontando para esse arquivo, com os comandos:
+
+$ cd somedir/
+$ ln -s clients.txt partners.txt
+Assim, a estrutura do diretório é:
+
+Documents
+|-- clients.txt
+`-- somedir
+    |-- clients.txt
+    `-- partners.txt -> clients.txt
+Agora, você move partners.txt de somedir para ~/Documents, e lista seu conteúdo.
+
+$ cd ~/Documents/
+$ mv somedir/partners.txt .
+$ less partners.txt
+O link ainda funciona? Se sim, qual arquivo terá seu conteúdo listado? Por quê?
+
+Isto é quase uma “pegadinha”, mas o link funcionará e o arquivo listado será o que está em ~/Documents, contendo os nomes John, Michael, Bob.
+
+Lembre-se de que, como não especificamos o caminho completo para o alvo clients.txt ao criar o link simbólico partners.txt, o local do destino será interpretado como sendo relativo ao local do link, que neste caso é o diretório atual.
+
+Quando o link é movido de ~/Documents/somedir para ~/Documents, ele deveria parar de funcionar, já que o destino não estava mais no mesmo diretório do link. Porém, coincidentemente existe um arquivo chamado clients.txt em ~/Documents, de forma que o link apontará para esse arquivo em vez do destino original dentro de ~/somedir.
+
+Para evitar isso, sempre especifique o caminho completo para o destino ao criar um link simbólico.
+
+Considere os arquivos a seguir:
+
+-rw-r--r-- 1 carol carol 19 Jun 24 11:12 clients.txt
+lrwxrwxrwx 1 carol carol 11 Jun 24 11:13 partners.txt -> clients.txt
+Quais são as permissões de acesso de partners.txt? Por quê?
+
+As permissões de acesso de partners.txt são rw-r—​r--, já que os links sempre herdam as mesmas permissões de acesso do alvo.
