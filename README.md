@@ -3499,13 +3499,34 @@ rm softlink
 
 #### Import Commands\Programs of topic 104.7
 
-- find
-- locate
-- updatedb
-- whereis
+##### Locate - Find files by name
+
+```linux
+#update db
+sudo updatedb
+
+#find only existing files
+locate -e file
+
+#globbling
+locate "*arquivo*"
+locate arquivo[2-3].txt
+locate arquivo?.txt
+
+#limited number of outputs
+locate -l 10 passwd
+```
+
+##### Command whereis - Locate the binary, source, and manual page files for a command
+
+```sh
+whereis pwd
+whereis -b python
+whereis -m ls
+whereis -s cd
+```
+
 - which
 - type
-
-#### Cited subjects in topic 104.7
-
-- foo
+- updatedb
+- find

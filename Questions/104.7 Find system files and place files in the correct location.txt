@@ -1,0 +1,49 @@
+Respostas aos Exercícios Guiados
+Usando o find, pesquise apenas no diretório atual por arquivos que são graváveis pelo usuário, foram modificados nos últimos 10 dias e são maiores que 4 GB.
+
+Para isso, precisamos dos parâmetros -writable, -mtime e -size:
+
+find . -writable -mtime -10 -size 4G
+Usando locate, encontre todos os arquivos contendo os padrões report e updated, update ou updating em seus nomes.
+
+Como locate precisa encontrar todos os padrões correspondentes, use a opção -A:
+
+locate -A "report" "updat"
+Como descobrir onde a página de manual para ifconfig está armazenada?
+
+Use o parâmetro -m para o whereis:
+
+whereis -m ifconfig
+Qual variável precisa ser adicionada a /etc/updatedb.conf para que updatedb ignore sistemas de arquivos ntfs?
+
+A variável é PRUNEFS= seguida pelo tipo do sistema de arquivos: PRUNEFS=ntfs
+
+Um administrador de sistema deseja montar um disco interno (/dev/sdc1). De acordo com o FHS, em qual diretório este disco deve ser montado?
+
+Na prática, o disco pode ser montado em qualquer lugar. Porém, o FHS recomenda que montagens temporárias sejam feitas em /mnt
+
+Respostas aos Exercícios Exploratórios
+Quando locate é usado, os resultados são puxados de um banco de dados gerado por updatedb. No entanto, este banco de dados pode estar desatualizado, fazendo com que o locate mostre arquivos que não existem mais. Como fazer com que locate mostre apenas arquivos existentes em sua saída?
+
+Adicione o parâmetro -e a locate, como em locate -e PATTERN.
+
+Encontre qualquer arquivo no diretório ou subdiretórios atuais até 2 níveis abaixo, excluindo sistemas de arquivos montados, que contenham o padrão Status ou statute em seus nomes.
+
+Lembre-se de que para -maxdepth também devemos levar em conta o diretório atual, de forma que queremos três níveis (o atual, mais 2 níveis para baixo):
+
+find . -maxdepth 3  -mount -iname "*statu*"
+Limitando a pesquisa aos sistemas de arquivos ext4, encontre quaisquer arquivos sob /mnt que tenham no mínimo permissões de execução para o grupo, sejam legíveis para o usuário atual e tenham tido qualquer atributo alterado nas últimas 2 horas.
+
+Use o parâmetro -fstype de mount para limitar a pesquisa a tipos específicos de sistemas de arquivos. Um arquivo legível pelo usuário atual teria ao menos 4 no primeiro dígito de permissões, e um executável pelo grupo teria ao menos 1 no segundo dígito. Como não estamos preocupados com as permissões de outros, podemos usar 0 no terceiro dígito. Use -cmin N para filtrar alterações recentes de atributos, lembrando que N é especificado em minutos. Assim:
+
+find /mnt -fstype ext4 -perm -410 -ctime 120
+Encontre arquivos vazios que foram criados há mais de 30 dias e estão pelo menos dois níveis abaixo do diretório atual.
+
+O parâmetro -mindepth N pode ser usado para limitar a pesquisa a pelo menos N níveis abaixo, mas é necessário incluir o diretório atual na contagem. Use -empty para procurar por arquivos vazios e -mtime N para ver a data e hora de modificação. Assim:
+
+find . -empty -mtime +30 -mindepth 3
+Considere que os usuários carol e john fazem parte do grupo mkt. Encontre no diretório pessoal de john quaisquer arquivos que também possam ser lidos por carol.
+
+Considerando que os dois são membros do mesmo grupo, precisamos de pelo menos um r (4) nas permissões de grupo e não estamos preocupados com os outros. Assim:
+
+find /home/john -perm -040
