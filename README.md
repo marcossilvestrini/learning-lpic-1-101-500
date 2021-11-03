@@ -78,6 +78,7 @@ Installation and configuration of some packages will also be covered\
 - [Download Packages](https://pkgs.org/)
 - [Commands Examples](https://www.geeksforgeeks.org/)
 - [Force Kernel Panic](https://www.ibm.com/support/pages/forcing-fake-kernel-panic-testing)
+- [LPIC-1 Wiki](https://wiki.lpi.org/wiki/LPIC-1_Objectives_V5.0#Introduction)
 - [LPIC-1 101-500 Objectives](https://www.lpi.org/our-certifications/exam-101-objectives)
 - [Learning Materials LPIC-1 101-500](https://learning.lpi.org/en/learning-materials/101-500/)
 - [Moc Exam By ITexams](https://www.itexams.com/exam/101-500)
@@ -1629,7 +1630,16 @@ dd status=progress if=file of=file1
 
 #copy file file1 to file2 and to Uppercase
 dd status=progress if=file1 of=file2 conv=ucase
+```
 
+##### file - determine file type
+
+```sh
+#examples
+file /etc/passwd
+file /dev/sda
+file /dev/tty0
+file /sbin/init
 ```
 
 #### Cited subjects in topic 103.3
