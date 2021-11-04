@@ -38,15 +38,16 @@ Set-VMXprocessor  -VMXName $vmxName -config $vmxConfig -Processorcount $processo
 Write-Host "Up Vmware Workstation in path: [$($vmware)]" -BackgroundColor White -ForegroundColor Black
 & $vmware
 
+
 # Power On Virtual Machine
 Write-Host "Power On Virtual Machine: [$($vm)]" -BackgroundColor White -ForegroundColor Black
 & $vmrun start $vm
 
 # Check Status for SHH Connection
-$tcp_test=$false
+$tcp_test = $false
 Write-Host "Check VM Status ..." -BackgroundColor White -ForegroundColor Black
 While (!$tcp_test) {
-    $tcp_test=(Test-NetConnection -ComputerName $ip -RemotePort $port).TcpTestSucceeded
+    $tcp_test = (Test-NetConnection -ComputerName $ip -RemotePort $port).TcpTestSucceeded
     if ($tcp_test) {
         Write-Host "VM is Running!!!" -BackgroundColor White -ForegroundColor Green
         Start-Sleep 2
