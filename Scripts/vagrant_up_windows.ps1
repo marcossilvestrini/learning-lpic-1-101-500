@@ -15,4 +15,3 @@ $Env:VAGRANT_PREFER_SYSTEM_BIN += 0
 
 #open ssh tabs for conect
 wt -p "Windows Powershell" -d "F:\CERTIFICACAO\lpic-1-101500\Vagrant\Debian" --title "Vagrant Debian"; wt -w 0 nt -d "F:\CERTIFICACAO\lpic-1-101500\Vagrant\OracleLinux" --title "Vagrant OracleLinux"
-
