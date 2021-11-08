@@ -6,7 +6,8 @@ $check = $null
 $check = $out | Select-String -Pattern "untracked", "modified"
 If ($null -ne $check ) {
     Write-Host -ForegroundColor Red "Uncommitted files found"
-    $commit = "feat: Add new examples"
+    $commit = Read-Host -Prompt "Enter commet for commit"
+    #$commit = "feat: Add new examples"
     git add .
     git commit -m $commit
     git push origin main
@@ -21,3 +22,4 @@ If ($null -ne $check ) {
         Write-Host -ForegroundColor Green "Commit Success!!!"
     }
 }
+
