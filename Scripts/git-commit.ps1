@@ -1,11 +1,12 @@
 $project = "F:\CERTIFICACAO\lpic-1-101500\"
 Set-Location $project
+git status
 $out = git status
 $check = $null
-$check = $out | Select-String -Pattern "untracked"
+$check = $out | Select-String -Pattern "untracked", "modified"
 If ($null -ne $check ) {
     Write-Host -ForegroundColor Red "Uncommitted files found"
-    $commit = Read-Host -Prompt "Please, enter comment for commit"
+    $commit = "feat: Add new examples"
     git add .
     git commit -m $commit
     git push origin main
