@@ -2820,6 +2820,17 @@ sudo mkswap myswap
 swapon myswap
 ```
 
+##### Delete Partiotion
+
+```sh
+#sintaxe
+wipefs DEVICE
+
+#examples
+wipefs -a /dev/sdd
+dd if=/dev/zero of=/dev/sdd bs=1M count=1
+```
+
 #### Cited subjects in topic 104.1
 
 - MBR

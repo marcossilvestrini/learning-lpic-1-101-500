@@ -56,7 +56,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     "Marvell AQtion 5Gbit Network Adapter"
     ]
 
-
     # Forward Port
     # srv02.vm.network "forwarded_port", guest: 8020, host: 9020, adapter: 1, guest_ip: "192.168.0.133" ,host_ip: "192.168.0.33"
     # srv02.vm.network "forwarded_port", guest: 2234, host: 3234, adapter: 1, guest_ip: "192.168.0.133" ,host_ip: "192.168.0.33"

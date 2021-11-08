@@ -28,7 +28,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     "Marvell AQtion 5Gbit Network Adapter"
     ]
 
-
     # MOUNTS
     debian.vm.synced_folder ".", "/vagrant", disabled: true
     debian.vm.synced_folder "./security", "/security"
