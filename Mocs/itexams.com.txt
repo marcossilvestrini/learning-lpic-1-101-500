@@ -27,3 +27,21 @@ D. Unless a systemd mount unit is created, systemd unmounts the file system afte
 E. systemctl unmount must be used to remove the mount because system opens a file descriptor on the mount point
 
 R: C
+
+Given a log file loga.log with timestamps of the format DD/MM/YYYY:hh:mm:ss,
+which command filters out all log entries in the time period between 8:00 am and 8:59 am?
+
+R:grep -E ':08:[0-9]+:[0-9]+' loga.log
+
+What directory contains configuration files for additional yum repositories? (Specify the full path to the directory.)
+
+R: /etc/yum.repos.d
+
+Which of the following files are found in the /boot/ file system? (Choose two.)
+A. Linux kernel images
+B. Bash shell binaries
+C. systemd target and service units
+D. Initial ramdisk images
+E. fsck binaries
+
+R: AD
