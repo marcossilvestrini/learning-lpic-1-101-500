@@ -3512,6 +3512,16 @@ ls -lh softlink
 rm softlink
 ````
 
+##### stat - display file or file system status
+
+```sh
+#list all properties of file
+start file.txt
+
+#display file system status instead of file status
+start -f file.txt
+```
+
 ### 104.7 Find system files and place files in the correct location
 
 #### Important Files of topic 104.7
