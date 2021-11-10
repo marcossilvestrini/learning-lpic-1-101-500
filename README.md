@@ -3477,7 +3477,7 @@ umask u=rwx,g=rwx,o=
 
 Here is a table with every value and its respective meaning:
 
-![image](https://user-images.githubusercontent.com/62715900/139114069-74abb0b6-d7dc-40fd-8b7c-a8da0bc25f53.png)
+![image](https://user-images.githubusercontent.com/62715900/141180660-b4d05793-7592-426b-800e-3b7e079c608c.png)
 
 ### 104.6 Create and change hard and symbolic links
 
