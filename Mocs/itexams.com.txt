@@ -45,3 +45,49 @@ D. Initial ramdisk images
 E. fsck binaries
 
 R: AD
+
+Which of the following commands display the IDs of all processes owned by root? (Choose two.)
+A. pgrep -c root
+B. pgrep -u root
+C. pgrep -f root
+D. pgrep -U 0
+E. pgrep -c 0
+
+R: BD
+
+Which of the following commands print the current working directory when using a Bash shell? (Choose two.)
+A. echo "${PWD}"
+B. echo "${WD}"
+C. printwd
+D. pwd
+E. echo "${pwd}"
+
+R: AD
+
+
+What is the default nice level when a process is started using the nice command?
+A. -10
+B. 0
+C. 10
+D. 15
+E. 20
+
+R: C
+
+A user accidentally created the subdirectory \dir in his home directory. Which of the following commands will remote that directory?
+A. rmdir ~/\\dir
+B. rmdir "~/\dir"
+C. rmdir ~/"™dir"™
+D. rmdir ~/\dir
+E. rmdir "˜~/\dir"™
+
+R: A
+
+If the gzip compressed tar archive texts.tgz contains the files a.txt and b.txt, which files will be present in the current directory after running gunzip texts.tgz?
+A. Only a.txt, b.txt, and texts.tgz
+B. Only texts.tar and texts.tgz
+C. Only a.txt.gz and b.txt.gz
+D. Only a.txt and b.txt
+E. Only texts.tar
+
+R: E
