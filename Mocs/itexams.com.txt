@@ -90,4 +90,12 @@ C. Only a.txt.gz and b.txt.gz
 D. Only a.txt and b.txt
 E. Only texts.tar
 
-R: E
+
+When booting from the hard disk, a computer successfully loads the Linux kernel and initramfs but hangs during the subsequent startup tasks. The system is booted using a Linux based rescue CD to investigate the problem. Which of the following methods helps to identify the root cause of the problem?
+A. Using the dmesg command from the rescue CD"™s shell to view the original system"™s boot logs.
+B. Investigating the file /proc/kmsg on the computer"™s hard disk for possible errors.
+C. Investigating the file /var/log on the computer"™s hard disk for possible errors.
+D. Using chroot to switch to the file system on the hard disk and use dmesg to view the logs.
+E. Rebooting again from the hard drive since the system successfully booted from the rescue CD.
+
+R: D
