@@ -468,15 +468,15 @@ ls -l /dev/disk/by-uuid/
 
 ### 102.3 Manage shared libraries
 
-#### #### Important Files of topic 102.3
+#### Important Files of topic 102.3
 
-/lib
-/lib32
-/lib64
-/usr/lib
-/usr/local/lib
-/etc/ld.so.conf
-ld.so,ld-linux.so
+/lib\
+/lib32\
+/lib64\
+/usr/lib\
+/usr/local/lib\
+/etc/ld.so.conf\
+ld.so,ld-linux.so\
 /etc/ld.so.cache
 
 #### Import Commands\Programs of topic 102.3
@@ -644,8 +644,8 @@ rpm -qf /usr/bin/7za
 
 ```sh
 #find package (YUM - DNF)
-yum serach PACKAGENAME
-dnf serach PACKAGENAME
+yum search PACKAGENAME
+dnf search PACKAGENAME
 
 #install package (YUM - DNF)
 sudo yum install PACKAGENAME
@@ -681,6 +681,9 @@ dnf info PACKAGENAME
 #show all repos (YUM - DNF)
 yum repolist all
 dnf repolist all
+
+#Install yum-utils
+sudo yum install yum-utils -y
 
 #add new repo (YUM - DNF)
 sudo yum-config-manager --add-repo https://rpms.remirepo.net/enterprise/remi.repo
@@ -785,13 +788,14 @@ rpm2cpio rpm-1.1-1.i386.rpm >git-cpio.txt
 
 ```sh
 #check id exist uuid
-dbus-uuidgen --ensures
+dbus-uuidgen --ensure
 
 #show uuid
 dbus-uuidgen --get
 
 #generate new uuid for virtual machine
 sudo rm -f /etc/machine-id
+sudo rm -f /var/lib/dbus/machine-id
 sudo dbus-uuidgen --ensure=/etc/machine-id
 ```
 
@@ -830,7 +834,7 @@ ssh-copy-id -i <public_key> user@cloud_server
 
 #### Import Commands\Programs of topic 103.1
 
-##### - pwd - print name of current/working directory
+##### pwd - print name of current/working directory
 
 ```sh
 #show current directory
@@ -1161,20 +1165,46 @@ sha512sum foo.txt > sha512.txt
 sha512sum -c sha512-foo.txt
 ```
 
-#### paste
+##### cut - remove sections from each line of files
 
 ```sh
+#cut interval n chars
+cut -c 10 /etc/passwd
+
+# cut interval k-l chars
+cut -c 1-5 /etc/passwd
+
+#cut interval k-l,m-n
+cut -c 1-5,10,15 /etc/passwd
+
+#cut field (-f) n with delimiter (-d) x
+cut -f 1 -d:  /etc/passwd
+cut -f 1,7 -d:  /etc/passwd
+
+#output delimiter
+cut -c 1-5,6-12 --output-delimiter=' - ' /etc/passwd
+cut -f 1,6 -d: --output-delimiter=";" /etc/passwd
+cut -f 1,5 -d: --output-delimiter="|" /etc/passwd
 
 ```
 
-##### cut
+##### paste - merge lines of files
 
 ```sh
-#merge files
-paste file1 file2 file3
+#generate line 1
+cut -f 1 -d: /etc/passwd >passwd.users
+#generate line 2
+cut -f 6 -d:  /etc/passwd >passwd.home
+#merge lines
+paste passwd.users passwd.home > passwd_fmt.txt
 
-#merge file with delimiter
-paste -d\; file1 file2
+#use delimiter
+paste -d: passwd.users passwd.home
+paste -d\;   passwd.users passwd.home
+
+#serial (most use for export for exel,etc)
+paste -s passwd.users passwd.home
+paste -s\;   passwd.users passwd.home
 ```
 
 ##### tr - translate or delete characters
@@ -1419,7 +1449,7 @@ cp -ur pictures  images
 #copy files with permissions
 cp -p /etc/fstab /etc/fstab-bkp
 
-#Warnning in user -f !!!!!
+#Warnning in option -f !!!!!
 cp -rf pictures  images
 ```
 
@@ -1463,6 +1493,7 @@ rmdir -p ~/foo/bar/beer
 ##### Find - search for files in a directory hierarchy
 
 ```sh
+#some examples
 find .
 find ~/foo -name "*.jpg"
 find ~/foo -name "var"
@@ -1472,7 +1503,7 @@ find ~/foo -name 'picture[3-9].jpg'
 find ~/foo -name 'picture?.jpg'
 
 #find folder
-sudo find /etc -depth -name skel
+sudo find /usr -depth -name bin
 sudo find /etc -d -name skel
 
 #find file
