@@ -77,6 +77,7 @@ Installation and configuration of some packages will also be covered\
 - [KVM Docs](https://www.linux-kvm.org/page/Documents)
 - [Download Packages](https://pkgs.org/)
 - [Commands Examples](https://www.geeksforgeeks.org/)
+- [Vim Tutorial](https://www.openvim.com/)
 - [Force Kernel Panic](https://www.ibm.com/support/pages/forcing-fake-kernel-panic-testing)
 - [LPIC-1 Wiki](https://wiki.lpi.org/wiki/LPIC-1_Objectives_V5.0#Introduction)
 - [LPIC-1 101-500 Objectives](https://www.lpi.org/our-certifications/exam-101-objectives)
@@ -476,7 +477,8 @@ ls -l /dev/disk/by-uuid/
 /usr/lib\
 /usr/local/lib\
 /etc/ld.so.conf\
-ld.so,ld-linux.so\
+/etc/ld.so\
+/etc/ld-linux.so\
 /etc/ld.so.cache
 
 #### Import Commands\Programs of topic 102.3
@@ -1877,6 +1879,8 @@ pkill sleep
 ##### killall
 
 ```sh
+#install package psmisc before
+
 #examples
 killall sleep
 ```
@@ -1942,7 +1946,11 @@ SHR
 Shared memory of the process with other processes.
 
 S
-Status of process. Values include: S (interruptible sleep — waiting for an event to finish), R (runnable — either executing or in the queue to be executed) or Z (zombie — terminated child processes whose data structures have not yet been removed from the process table).
+Status of process.\
+Values include: \
+S (interruptible sleep — waiting for an event to finish)\
+R (runnable — either executing or in the queue to be executed)\
+Z (zombie — terminated child processes whose data structures have not yet been removed from the process table).
 
 %CPU
 Percentage of CPU used by process.
@@ -2151,17 +2159,17 @@ Ctrl+b-;
 ```
 
 >Resize pane
-This assumes that you've hit ctrl + b and : to get to the command prompt
+This assumes that you've hit ctrl + b and : to get to the command prompt\
 :resize-pane -L
 
->Here are some additional tmux pane resizing examples:
-:resize-pane -D (Resizes the current pane down)
-:resize-pane -U (Resizes the current pane upward)
-:resize-pane -L (Resizes the current pane left)
-:resize-pane -R (Resizes the current pane right)
-:resize-pane -D 10 (Resizes the current pane down by 10 cells)
-:resize-pane -U 10 (Resizes the current pane upward by 10 cells)
-:resize-pane -L 10 (Resizes the current pane left by 10 cells)
+>Here are some additional tmux pane resizing examples:\
+:resize-pane -D (Resizes the current pane down)\
+:resize-pane -U (Resizes the current pane upward)\
+:resize-pane -L (Resizes the current pane left)\
+:resize-pane -R (Resizes the current pane right)\
+:resize-pane -D 10 (Resizes the current pane down by 10 cells)\
+:resize-pane -U 10 (Resizes the current pane upward by 10 cells)\
+:resize-pane -L 10 (Resizes the current pane left by 10 cells)\
 :resize-pane -R 10 (Resizes the current pane right by 10 cells)
 
 ```sh
@@ -2272,8 +2280,8 @@ renice -10 -p 2164
 schedtool PID
 
 #set priority  vales
-schedtool -R -p 89 1750
 schedtool -R -p VALUE_OF_PRI PID
+schedtool -R -p 89 1750
 ```
 
 ### 103.7 Search text files using regular expressions
@@ -2386,7 +2394,9 @@ If you are interested to know more on the other execution modes, open vi and typ
 
 Normal Mode
 
-Normal mode — also known as command mode — is how vi starts by default. In this mode, keyboard keys are associated with commands for navigation and text manipulation tasks. Most commands in this mode are unique keys. Some of the keys and their functions on normal mode are:
+Normal mode — also known as command mode — is how vi starts by default.\
+In this mode, keyboard keys are associated with commands for navigation and text manipulation tasks.\
+Most commands in this mode are unique keys. Some of the keys and their functions on normal mode are:
 
 0, $
 Go to the beginning and end of the line.
