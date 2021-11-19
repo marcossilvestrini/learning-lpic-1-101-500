@@ -2894,11 +2894,12 @@ dd if=/dev/zero of=/dev/sdd bs=1M count=1
 ```sh
 #show directory size
 du -h
-du-Sh
-du-Shc
+du -Sh
+du -Shc
 
 #show files and dirctory size
 du -ha
+du -ha -d2 / | sort -hu
 
 #set depth
 du -h -d1 /etc
