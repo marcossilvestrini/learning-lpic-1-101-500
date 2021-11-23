@@ -31,6 +31,7 @@ R: C
 Given a log file loga.log with timestamps of the format DD/MM/YYYY:hh:mm:ss,
 which command filters out all log entries in the time period between 8:00 am and 8:59 am?
 
+R: E
 R:grep -E ':08:[0-9]+:[0-9]+' loga.log
 
 What directory contains configuration files for additional yum repositories? (Specify the full path to the directory.)
