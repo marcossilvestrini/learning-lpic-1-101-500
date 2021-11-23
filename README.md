@@ -82,6 +82,7 @@ Installation and configuration of some packages will also be covered\
 - [LPIC-1 Wiki](https://wiki.lpi.org/wiki/LPIC-1_Objectives_V5.0#Introduction)
 - [LPIC-1 101-500 Objectives](https://www.lpi.org/our-certifications/exam-101-objectives)
 - [Learning Materials LPIC-1 101-500](https://learning.lpi.org/en/learning-materials/101-500/)
+- [Moc Certificação Linux](https://www.certificacaolinux.com.br/simulado-prova-lpi-101/)
 - [Moc Exam By ITexams](https://www.itexams.com/exam/101-500)
 
 ## Topic 101: System Architecture
