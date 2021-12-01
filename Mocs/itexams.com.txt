@@ -100,3 +100,5 @@ D. Using chroot to switch to the file system on the hard disk and use dmesg to v
 E. Rebooting again from the hard drive since the system successfully booted from the rescue CD.
 
 R: D
+
+
