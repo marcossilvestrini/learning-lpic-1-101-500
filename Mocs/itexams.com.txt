@@ -91,6 +91,8 @@ C. Only a.txt.gz and b.txt.gz
 D. Only a.txt and b.txt
 E. Only texts.tar
 
+R: E
+
 
 When booting from the hard disk, a computer successfully loads the Linux kernel and initramfs but hangs during the subsequent startup tasks. The system is booted using a Linux based rescue CD to investigate the problem. Which of the following methods helps to identify the root cause of the problem?
 A. Using the dmesg command from the rescue CD"™s shell to view the original system"™s boot logs.
@@ -100,5 +102,29 @@ D. Using chroot to switch to the file system on the hard disk and use dmesg to v
 E. Rebooting again from the hard drive since the system successfully booted from the rescue CD.
 
 R: D
+
+
+Which of the following statements are correct about the initial RAM disk involved in the boot process of Linux? (Choose two.)
+A. An initramfs is a compressed file system archive, which can be unpacked to examine its contents.
+B. An initramfs file contains the MBR, the bootloader and the Linux kernel.
+C. After a successful boot, the initramfs contents are available in /run/initramfs/.
+D. The kernel uses the initramfs temporarily before accessing the real root file system.
+E. An initramfs does not depend on a specific kernel version and is not changed after the initial installation.
+
+R: AD
+
+
+Given the following two symbolic links in a System V init configuration:
+/etc/rc1.d/K01apache2
+/etc/rc2.d/S02apache2
+When are the scripts executed that are referenced by these links? (Choose two.)
+
+A. S02apache2 is run when runlevel 2 is entered.
+B. S02apache2 is run when runlevel 2 is left.
+C. K01apache2 is never run because K indicates a deactivated service.
+D. Both S02apache2 and K01apache2 are run during a system shutdown.
+E. K01apache2 is run when runlevel 1 is entered.
+
+R: AE
 
 
