@@ -504,6 +504,15 @@ ldd /usr/bin/git
 ldd -u /usr/bin/git
 ```
 
+##### objdump - display information from object files
+
+```sh
+#examples
+objdump -p /lib/x86_64-linux-gnu/libc.so.6 | grep NEEDED
+objdump -p /lib/x86_64-linux-gnu/libc.so.6 | grep SONAME
+objdump -p /bin/bash | grep NEEDED
+```
+
 #### Cited subjects in topic 102.3
 
 LD_LIBRARY_PATH
